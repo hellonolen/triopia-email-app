@@ -3,7 +3,7 @@ export default function Footer() {
     <footer className="border-t border-border bg-card px-6 py-4">
       <div className="flex items-center justify-between text-[10px] text-muted-foreground">
         <div>
-          © 2025 Email Business, LLC. All rights reserved.
+          © 2025 Triopia. All rights reserved.
         </div>
         <div className="flex items-center gap-4">
           <a 

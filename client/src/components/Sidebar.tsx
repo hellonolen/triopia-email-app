@@ -1,4 +1,4 @@
-import { Mail, Star, Send, FileText, Archive, Trash2, Calendar, Settings, Plus, BarChart3, Users, TrendingUp, HardDrive, AlertOctagon } from 'lucide-react';
+import { Mail, Star, Send, FileText, Archive, Trash2, Calendar, Settings, Plus, BarChart3, Users, TrendingUp, HardDrive, AlertOctagon, Palette } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import InboxesSection from './InboxesSection';
 import { useState } from 'react';
@@ -61,6 +61,7 @@ export default function Sidebar({ selectedFolder, onFolderSelect, getUnreadCount
 
   const utilities = [
     { id: 'notes', label: 'Notes', icon: FileText },
+    { id: 'appearance', label: 'Appearance', icon: Palette },
     { id: 'analytics', label: 'Analytics', icon: BarChart3 },
     { id: 'settings', label: 'Settings', icon: Settings },
   ];

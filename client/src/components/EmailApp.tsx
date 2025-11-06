@@ -13,6 +13,7 @@ import CommandBar from './CommandBar';
 import KeyboardShortcutsHelp from './KeyboardShortcutsHelp';
 import Storage from './Storage';
 import Notes from './Notes';
+import Appearance from './Appearance';
 import { useKeyboardShortcuts } from '../hooks/useKeyboardShortcuts';
 
 export interface Email {
@@ -305,6 +306,10 @@ export default function EmailApp() {
         ) : selectedFolder === 'notes' ? (
           <div className="flex-1 overflow-hidden">
             <Notes />
+          </div>
+        ) : selectedFolder === 'appearance' ? (
+          <div className="flex-1 overflow-hidden">
+            <Appearance />
           </div>
         ) : (
           <>
