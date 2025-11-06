@@ -4,6 +4,7 @@ import { Button } from '@/components/ui/button';
 import type { Email } from './EmailApp';
 import ContextSidebar from './ContextSidebar';
 import QuickReply from './QuickReply';
+import CalendarInviteActions from './CalendarInviteActions';
 
 interface EmailDetailProps {
   email: Email | null;
@@ -17,6 +18,17 @@ export default function EmailDetail({ email, onArchive, onDelete, onStarToggle }
   const [showSummary, setShowSummary] = useState(false);
   const [isContextOpen, setIsContextOpen] = useState(false);
   const [showQuickReply, setShowQuickReply] = useState(false);
+
+  // Detect if email is a calendar invite
+  const isCalendarInvite = email?.subject.toLowerCase().includes('meeting') || 
+                           email?.subject.toLowerCase().includes('event') ||
+                           email?.subject.toLowerCase().includes('invite') ||
+                           email?.body.toLowerCase().includes('calendar invite');
+
+  const handleCalendarResponse = (response: 'accepted' | 'declined' | 'maybe') => {
+    console.log('Calendar invite response:', response, email);
+    // In a real app, this would update the calendar and notify the organizer
+  };
 
   if (!email) {
     return (
@@ -134,6 +146,17 @@ export default function EmailDetail({ email, onArchive, onDelete, onStarToggle }
             </p>
           ))}
         </div>
+
+        {/* Calendar Invite Actions */}
+        {isCalendarInvite && (
+          <CalendarInviteActions
+            eventTitle={email.subject}
+            eventDate="October 15, 2024"
+            eventTime="2:00 PM"
+            organizer={email.senderEmail}
+            onRespond={handleCalendarResponse}
+          />
+        )}
 
         {/* Reply Button */}
         {!showQuickReply && (

@@ -34,8 +34,15 @@ export default function EmailListItem({
     action();
   };
 
+  const handleDragStart = (e: React.DragEvent) => {
+    e.dataTransfer.setData('application/json', JSON.stringify(email));
+    e.dataTransfer.effectAllowed = 'copy';
+  };
+
   return (
     <li
+      draggable
+      onDragStart={handleDragStart}
       onClick={() => onSelect(email)}
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}

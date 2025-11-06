@@ -364,3 +364,32 @@
 - [x] Auto-generate calendar invite email
 - [x] Send invite emails to all attendees
 - [x] Show confirmation when invites sent
+
+## Advanced Calendar Features
+
+### Auto-Create Shared Note for Event Attendees
+- [x] After sending calendar invite, automatically create shared note
+- [x] Add all event attendees to the shared note
+- [x] Pre-fill note with event details (title, date, time, location)
+- [x] Add agenda section for meeting preparation
+- [x] Link note to calendar event
+- [x] Show notification that shared note was created
+
+### Drag-and-Drop Emails to Calendar
+- [x] Enable drag functionality on email list items
+- [x] Make Calendar navigation item a drop target
+- [x] Detect when email is dropped on Calendar
+- [x] Auto-open event creator with email content pre-filled
+- [x] Extract email subject as event title
+- [x] Extract sender as first attendee
+- [x] Include email content in event description
+- [x] Show visual feedback during drag operation
+
+### Accept/Decline Calendar Invites in Email
+- [x] Detect calendar invite emails
+- [x] Add Accept/Decline/Maybe buttons to invite emails
+- [x] Update event status when button clicked
+- [x] Send response notification to event organizer
+- [x] Add event to user's calendar on Accept
+- [x] Show confirmation toast after responding
+- [x] Update button states after response

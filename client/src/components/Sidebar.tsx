@@ -1,15 +1,43 @@
 import { Mail, Star, Send, FileText, Archive, Trash2, Calendar, Settings, Plus, BarChart3, Users, TrendingUp, HardDrive, AlertOctagon } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import InboxesSection from './InboxesSection';
+import { useState } from 'react';
 
 interface SidebarProps {
   selectedFolder: string;
   onFolderSelect: (folder: string) => void;
   getUnreadCount: (folder: string) => number;
   onCompose?: () => void;
+  onEmailDrop?: (email: any) => void;
 }
 
-export default function Sidebar({ selectedFolder, onFolderSelect, getUnreadCount, onCompose }: SidebarProps) {
+export default function Sidebar({ selectedFolder, onFolderSelect, getUnreadCount, onCompose, onEmailDrop }: SidebarProps) {
+  const [isDragOver, setIsDragOver] = useState(false);
+
+  const handleDragOver = (e: React.DragEvent, folderId: string) => {
+    if (folderId === 'calendar') {
+      e.preventDefault();
+      setIsDragOver(true);
+    }
+  };
+
+  const handleDragLeave = () => {
+    setIsDragOver(false);
+  };
+
+  const handleDrop = (e: React.DragEvent, folderId: string) => {
+    e.preventDefault();
+    setIsDragOver(false);
+    
+    if (folderId === 'calendar' && onEmailDrop) {
+      try {
+        const emailData = JSON.parse(e.dataTransfer.getData('application/json'));
+        onEmailDrop(emailData);
+      } catch (error) {
+        console.error('Failed to parse dropped email data:', error);
+      }
+    }
+  };
   // Mock email accounts - will be populated from settings
   const emailAccounts = [
     { id: 'personal-gmail', name: 'Personal', email: 'you@gmail.com', unreadCount: 4, provider: 'gmail' as const },
@@ -67,6 +95,9 @@ export default function Sidebar({ selectedFolder, onFolderSelect, getUnreadCount
             <button
               key={folder.id}
               onClick={() => onFolderSelect(folder.id)}
+              onDragOver={(e) => handleDragOver(e, folder.id)}
+              onDragLeave={handleDragLeave}
+              onDrop={(e) => handleDrop(e, folder.id)}
               className={`
                 w-full flex items-center justify-between px-3 py-2 rounded-lg
                 transition-all duration-200
@@ -74,6 +105,7 @@ export default function Sidebar({ selectedFolder, onFolderSelect, getUnreadCount
                   ? 'bg-muted font-medium' 
                   : 'hover:bg-muted'
                 }
+                ${folder.id === 'calendar' && isDragOver ? 'bg-primary/20 border-2 border-primary border-dashed' : ''}
               `}
             >
               <div className="flex items-center gap-3">

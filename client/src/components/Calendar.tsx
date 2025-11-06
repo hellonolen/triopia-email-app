@@ -13,6 +13,15 @@ export default function Calendar() {
     // In a real app, this would send email invites to all attendees
   };
 
+  const handleCreateSharedNote = (noteTitle: string, noteContent: string, attendees: string[]) => {
+    console.log('Creating shared note:', { noteTitle, noteContent, attendees });
+    toast.success(`Shared note created for ${attendees.length} attendee(s)`, {
+      description: 'All attendees can now access and edit the meeting notes'
+    });
+    // In a real app, this would create a shared note in the Notes section
+    // and grant edit access to all attendees
+  };
+
   const events = [
     {
       id: 1,
@@ -160,6 +169,7 @@ export default function Calendar() {
         <EventCreator
           onClose={() => setShowEventCreator(false)}
           onSendInvite={handleSendInvite}
+          onCreateSharedNote={handleCreateSharedNote}
         />
       )}
     </>

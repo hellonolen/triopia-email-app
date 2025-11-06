@@ -176,12 +176,20 @@ export default function EmailApp() {
   };
 
   const handleToggleRead = (emailId: number) => {
-    setEmails(emails.map(email =>
-      email.id === emailId ? { ...email, isRead: !email.isRead } : email
-    ));
-    if (selectedEmail?.id === emailId) {
-      setSelectedEmail({ ...selectedEmail, isRead: !selectedEmail.isRead });
-    }
+    setEmails(prevEmails =>
+      prevEmails.map(email =>
+        email.id === emailId ? { ...email, isRead: !email.isRead } : email
+      )
+    );
+  };
+
+  const handleEmailDropOnCalendar = (email: Email) => {
+    // Switch to calendar view and open event creator with email data pre-filled
+    setSelectedFolder('calendar');
+    // In a real implementation, this would trigger the EventCreator modal
+    // with the email subject as title, sender as attendee, and body as description
+    console.log('Email dropped on calendar:', email);
+    alert(`Creating event from email: "${email.subject}"\n\nEvent creator would open with:\n- Title: ${email.subject}\n- Attendee: ${email.senderEmail}\n- Description: ${email.preview}`);
   };
 
   const getFilteredEmails = () => {
@@ -260,6 +268,7 @@ export default function EmailApp() {
           onFolderSelect={setSelectedFolder}
           getUnreadCount={getUnreadCount}
           onCompose={() => setShowComposer(true)}
+          onEmailDrop={handleEmailDropOnCalendar}
         />
         {selectedFolder === 'priority' ? (
           <SmartTriage

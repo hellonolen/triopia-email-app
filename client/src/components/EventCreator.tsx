@@ -11,9 +11,10 @@ interface EventCreatorProps {
     location: string;
     description: string;
   }) => void;
+  onCreateSharedNote?: (noteTitle: string, noteContent: string, attendees: string[]) => void;
 }
 
-export default function EventCreator({ onClose, onSendInvite }: EventCreatorProps) {
+export default function EventCreator({ onClose, onSendInvite, onCreateSharedNote }: EventCreatorProps) {
   const [title, setTitle] = useState('');
   const [date, setDate] = useState('');
   const [time, setTime] = useState('');
@@ -40,6 +41,12 @@ export default function EventCreator({ onClose, onSendInvite }: EventCreatorProp
       location,
       description,
     });
+
+    // Auto-create shared note for attendees
+    if (onCreateSharedNote) {
+      const noteContent = `# ${title}\n\n**Date:** ${date} at ${time}\n**Location:** ${location || 'TBD'}\n**Attendees:** ${attendeeList.join(', ')}\n\n## Agenda\n\n${description || 'To be determined'}\n\n## Notes\n\n(Add your notes here during the meeting)`;
+      onCreateSharedNote(`Meeting Notes: ${title}`, noteContent, attendeeList);
+    }
 
     onClose();
   };
