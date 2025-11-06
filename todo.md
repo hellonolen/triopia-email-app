@@ -256,3 +256,37 @@
 - [ ] Smart email snooze with context
 - [ ] Voice command integration
 - [ ] VIP detection and prioritization
+
+## New User Requests - Compact Design & Features
+
+### Design Refinements
+- [x] Make Priority Inbox more compact (less bulky)
+- [x] Make Calendar more compact and refined
+- [ ] Apply compact design throughout platform
+
+### Navigation Reorganization
+- [x] Reorder navigation: Priority → Inbox → Sent → Contacts → Calendar → Storage
+- [x] Add Storage navigation item (after Calendar)
+
+### Cloud Storage Integration
+- [x] Mega storage integration with login
+- [x] Dropbox integration with login
+- [x] OneDrive (Microsoft) integration with login
+- [x] Allow attaching files from cloud storage to emails
+- [x] Allow saving email attachments to cloud storage
+- [x] No API needed - just login interface
+
+### Notes Feature
+- [x] Add Notes navigation item (above Analytics)
+- [x] Build notes taking interface
+- [x] Add drawing palette with finger/stylus support
+- [x] Add typing capability in notes
+- [ ] Allow notes before composing emails
+
+### Speech-to-Text (Accessibility)
+- [x] Add microphone button in email composer
+- [ ] Add microphone button in email reply
+- [x] Add microphone button in notes
+- [x] Add microphone button everywhere text input exists
+- [x] Implement speech-to-text functionality
+- [x] Support for users with disabilities

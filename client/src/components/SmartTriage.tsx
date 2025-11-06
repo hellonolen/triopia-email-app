@@ -83,15 +83,15 @@ export default function SmartTriage({
   ];
 
   return (
-    <div className="flex-1 overflow-y-auto p-6">
-      <div className="mb-6">
-        <h1 className="text-2xl font-semibold mb-2">Priority Inbox</h1>
-        <p className="text-sm text-muted-foreground">
+    <div className="flex-1 overflow-y-auto p-4">
+      <div className="mb-4">
+        <h1 className="text-xl font-semibold mb-1">Priority Inbox</h1>
+        <p className="text-xs text-muted-foreground">
           Smart triage of your most important emails
         </p>
       </div>
 
-      <div className="space-y-6">
+      <div className="space-y-3">
         {categories.map((category) => {
           const Icon = category.icon;
           
@@ -100,16 +100,16 @@ export default function SmartTriage({
           return (
             <div key={category.id} className="bg-card rounded-lg border border-border overflow-hidden">
               {/* Category Header */}
-              <div className="p-4 border-b border-border bg-muted/30">
-                <div className="flex items-center gap-3">
-                  <div className={`p-2 rounded-lg ${category.bgColor}`}>
-                    <Icon className={`w-5 h-5 ${category.color}`} />
+              <div className="p-3 border-b border-border bg-muted/30">
+                <div className="flex items-center gap-2">
+                  <div className={`p-1.5 rounded-lg ${category.bgColor}`}>
+                    <Icon className={`w-4 h-4 ${category.color}`} />
                   </div>
                   <div className="flex-1">
-                    <h3 className="font-semibold">{category.title}</h3>
+                    <h3 className="text-sm font-semibold">{category.title}</h3>
                     <p className="text-xs text-muted-foreground">{category.description}</p>
                   </div>
-                  <div className="text-sm font-semibold text-muted-foreground">
+                  <div className="text-xs font-semibold text-muted-foreground">
                     {category.emails.length}
                   </div>
                 </div>

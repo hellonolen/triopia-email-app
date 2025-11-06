@@ -33,11 +33,11 @@ export default function Calendar() {
   ];
 
   return (
-    <div className="p-8 space-y-6 max-w-5xl">
+    <div className="p-4 space-y-4 max-w-5xl">
       <div className="flex items-center justify-between">
         <div>
-          <h2 className="text-2xl font-semibold mb-2">Calendar</h2>
-          <p className="text-muted-foreground">Manage your schedule and upcoming events</p>
+          <h2 className="text-xl font-semibold mb-1">Calendar</h2>
+          <p className="text-sm text-muted-foreground">Manage your schedule and upcoming events</p>
         </div>
         <Button className="bg-primary hover:bg-primary/90">
           <CalendarIcon className="w-4 h-4 mr-2" />
@@ -46,7 +46,7 @@ export default function Calendar() {
       </div>
 
       {/* Calendar Grid */}
-      <div className="grid grid-cols-7 gap-2">
+      <div className="grid grid-cols-7 gap-1">
         {['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'].map((day) => (
           <div key={day} className="text-center text-sm font-medium text-muted-foreground py-2">
             {day}
@@ -62,7 +62,7 @@ export default function Calendar() {
             <button
               key={i}
               className={`
-                aspect-square p-2 rounded-lg text-sm transition-all duration-200
+                aspect-square p-1.5 rounded-lg text-xs transition-all duration-200
                 ${day < 1 || day > 31 ? 'text-muted-foreground/40' : ''}
                 ${isToday ? 'bg-primary text-primary-foreground font-semibold' : 'hover:bg-muted'}
                 ${hasEvent && !isToday ? 'bg-primary/10 font-medium' : ''}
@@ -78,14 +78,14 @@ export default function Calendar() {
       </div>
 
       {/* Upcoming Events */}
-      <div className="space-y-4">
-        <h3 className="text-lg font-semibold">Upcoming Events</h3>
+      <div className="space-y-3">
+        <h3 className="text-base font-semibold">Upcoming Events</h3>
         
-        <div className="space-y-3">
+        <div className="space-y-2">
           {events.map((event) => (
             <div
               key={event.id}
-              className="p-4 bg-card border border-border rounded-lg hover:shadow-md transition-all duration-200"
+              className="p-3 bg-card border border-border rounded-lg hover:shadow-md transition-all duration-200"
             >
               <div className="flex items-start justify-between mb-3">
                 <div className="flex-1">

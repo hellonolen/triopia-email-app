@@ -11,6 +11,8 @@ import Contacts from './Contacts';
 import SmartTriage from './SmartTriage';
 import CommandBar from './CommandBar';
 import KeyboardShortcutsHelp from './KeyboardShortcutsHelp';
+import Storage from './Storage';
+import Notes from './Notes';
 import { useKeyboardShortcuts } from '../hooks/useKeyboardShortcuts';
 
 export interface Email {
@@ -267,6 +269,14 @@ export default function EmailApp() {
         ) : selectedFolder === 'contacts' ? (
           <div className="flex-1 overflow-hidden">
             <Contacts />
+          </div>
+        ) : selectedFolder === 'storage' ? (
+          <div className="flex-1 overflow-hidden">
+            <Storage />
+          </div>
+        ) : selectedFolder === 'notes' ? (
+          <div className="flex-1 overflow-hidden">
+            <Notes />
           </div>
         ) : (
           <>

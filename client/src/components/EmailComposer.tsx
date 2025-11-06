@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { X, Send, Paperclip, Image as ImageIcon, Smile, Bold, Italic, Link as LinkIcon, List, AlignLeft } from 'lucide-react';
 import { Button } from '@/components/ui/button';
+import SpeechToText from './SpeechToText';
 
 interface EmailComposerProps {
   onClose: () => void;
@@ -14,6 +15,27 @@ export default function EmailComposer({ onClose, onSend }: EmailComposerProps) {
   const [cc, setCC] = useState('');
   const [bcc, setBCC] = useState('');
   const [showCCBCC, setShowCCBCC] = useState(false);
+  const [activeField, setActiveField] = useState<'to' | 'cc' | 'bcc' | 'subject' | 'body'>('body');
+
+  const handleTranscript = (transcript: string) => {
+    switch (activeField) {
+      case 'to':
+        setTo(prev => prev ? prev + ' ' + transcript : transcript);
+        break;
+      case 'cc':
+        setCC(prev => prev ? prev + ' ' + transcript : transcript);
+        break;
+      case 'bcc':
+        setBCC(prev => prev ? prev + ' ' + transcript : transcript);
+        break;
+      case 'subject':
+        setSubject(prev => prev ? prev + ' ' + transcript : transcript);
+        break;
+      case 'body':
+        setBody(prev => prev ? prev + ' ' + transcript : transcript);
+        break;
+    }
+  };
 
   const handleSend = () => {
     if (to && subject && body) {
@@ -44,6 +66,7 @@ export default function EmailComposer({ onClose, onSend }: EmailComposerProps) {
               type="email"
               value={to}
               onChange={(e) => setTo(e.target.value)}
+              onFocus={() => setActiveField('to')}
               placeholder="recipient@example.com"
               className="flex-1 px-3 py-2 bg-muted/50 border border-border rounded-lg text-sm
                        focus:bg-card focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/20
@@ -66,8 +89,9 @@ export default function EmailComposer({ onClose, onSend }: EmailComposerProps) {
                 <input
                   type="email"
                   value={cc}
-                  onChange={(e) => setCC(e.target.value)}
-                  placeholder="cc@example.com"
+              onChange={(e) => setCC(e.target.value)}
+              onFocus={() => setActiveField('cc')}
+              placeholder="cc@example.com"
                   className="flex-1 px-3 py-2 bg-muted/50 border border-border rounded-lg text-sm
                            focus:bg-card focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/20
                            transition-all duration-200"
@@ -78,8 +102,9 @@ export default function EmailComposer({ onClose, onSend }: EmailComposerProps) {
                 <input
                   type="email"
                   value={bcc}
-                  onChange={(e) => setBCC(e.target.value)}
-                  placeholder="bcc@example.com"
+              onChange={(e) => setBCC(e.target.value)}
+              onFocus={() => setActiveField('bcc')}
+              placeholder="bcc@example.com"
                   className="flex-1 px-3 py-2 bg-muted/50 border border-border rounded-lg text-sm
                            focus:bg-card focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/20
                            transition-all duration-200"
@@ -94,6 +119,7 @@ export default function EmailComposer({ onClose, onSend }: EmailComposerProps) {
               type="text"
               value={subject}
               onChange={(e) => setSubject(e.target.value)}
+              onFocus={() => setActiveField('subject')}
               placeholder="Email subject"
               className="flex-1 px-3 py-2 bg-muted/50 border border-border rounded-lg text-sm
                        focus:bg-card focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/20
@@ -129,6 +155,7 @@ export default function EmailComposer({ onClose, onSend }: EmailComposerProps) {
           <button className="p-2 hover:bg-muted rounded transition-all duration-200" title="Attach File">
             <Paperclip className="w-4 h-4" />
           </button>
+          <SpeechToText onTranscript={handleTranscript} />
         </div>
 
         {/* Email Body */}
@@ -136,6 +163,7 @@ export default function EmailComposer({ onClose, onSend }: EmailComposerProps) {
           <textarea
             value={body}
             onChange={(e) => setBody(e.target.value)}
+            onFocus={() => setActiveField('body')}
             placeholder="Write your message..."
             className="w-full h-full min-h-[300px] bg-transparent border-none resize-none
                      focus:outline-none text-sm leading-relaxed"
