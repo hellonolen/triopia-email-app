@@ -26,10 +26,6 @@ export default function Sidebar({ selectedFolder, onFolderSelect, getUnreadCount
   return (
     <aside className="w-[280px] bg-card border-r border-border flex flex-col h-full p-6">
       <div className="mb-8">
-        <div className="w-8 h-8 bg-primary rounded-lg flex items-center justify-center mb-6">
-          <Mail className="w-5 h-5 text-primary-foreground" />
-        </div>
-
         <Button 
           className="w-full bg-primary hover:bg-primary/90 text-primary-foreground font-medium shadow-sm hover:shadow-md transition-all duration-200 hover:-translate-y-0.5"
           size="lg"

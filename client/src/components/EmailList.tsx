@@ -6,6 +6,7 @@ import EmailListItem from './EmailListItem';
 interface EmailListProps {
   emails: Email[];
   selectedEmail: Email | null;
+  folderName?: string;
   onEmailSelect: (email: Email) => void;
   onStarToggle: (emailId: number) => void;
   onArchive?: (emailId: number) => void;
@@ -17,7 +18,8 @@ interface EmailListProps {
 
 export default function EmailList({ 
   emails, 
-  selectedEmail, 
+  selectedEmail,
+  folderName = 'inbox',
   onEmailSelect, 
   onStarToggle,
   onArchive,
@@ -54,7 +56,7 @@ export default function EmailList({
         </div>
 
         <div className="flex items-center justify-between">
-          <h2 className="text-xl font-semibold">Inbox</h2>
+          <h2 className="text-xl font-semibold capitalize">{folderName}</h2>
           <button className="p-2 hover:bg-muted rounded-lg transition-all duration-200 hover:rotate-90">
             <RefreshCw className="w-5 h-5 text-muted-foreground" />
           </button>

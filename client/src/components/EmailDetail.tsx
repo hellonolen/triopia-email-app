@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Archive, Star, MoreVertical, Trash2, Mail, Loader2, Clock, Info, Reply } from 'lucide-react';
+import { Archive, Star, MoreVertical, Trash2, Mail, Loader2, Clock, Info, Reply, Sparkles } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import type { Email } from './EmailApp';
 import ContextSidebar from './ContextSidebar';
@@ -56,7 +56,7 @@ export default function EmailDetail({ email, onArchive, onDelete, onStarToggle }
             className={`p-2 hover:bg-muted rounded-lg transition-all duration-200 hover:scale-110 ${email.isStarred ? 'text-yellow-400' : ''}`}
             title="Star"
           >
-            <Star className={`w-5 h-5 ${email.isStarred ? 'fill-yellow-400' : 'text-muted-foreground'}`} />
+            <Star className={`w-5 h-5 ${email.isStarred ? 'fill-primary text-primary' : 'text-muted-foreground'}`} />
           </button>
 
           <button
@@ -98,26 +98,18 @@ export default function EmailDetail({ email, onArchive, onDelete, onStarToggle }
             </div>
           </div>
 
-          <Button
+          <button
             onClick={handleSummarize}
             disabled={isSummarizing}
-            variant="outline"
-            className="border-primary text-primary hover:bg-primary hover:text-primary-foreground transition-all duration-200"
+            className="p-2 hover:bg-primary/10 rounded-lg transition-all duration-200 hover:scale-110"
+            title="Summarize email"
           >
             {isSummarizing ? (
-              <>
-                <Loader2 className="w-4 h-4 mr-2 animate-spin" />
-                Summarizing...
-              </>
+              <Loader2 className="w-5 h-5 text-primary animate-spin" />
             ) : (
-              <>
-                <svg className="w-4 h-4 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h10" />
-                </svg>
-                Summarize
-              </>
+              <Sparkles className="w-5 h-5 text-primary" />
             )}
-          </Button>
+          </button>
         </div>
 
         <div className="text-sm text-muted-foreground mb-8">{email.date}</div>

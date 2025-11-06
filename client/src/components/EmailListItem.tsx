@@ -86,9 +86,9 @@ export default function EmailListItem({
                 `}
                 title="Star"
               >
-                <Star 
-                  className={`w-4 h-4 ${email.isStarred ? 'fill-yellow-400 text-yellow-400' : 'text-muted-foreground'}`}
-                />
+                        <Star 
+                            className={`w-4 h-4 ${email.isStarred ? 'fill-primary text-primary' : 'text-muted-foreground'}`}
+                          />
               </button>
             </div>
           </div>
@@ -103,17 +103,15 @@ export default function EmailListItem({
             {email.preview}
           </p>
 
-          {/* Inline Action Bar (appears on hover) */}
+          {/* Inline Action Bar (appears on hover) - Icon Only */}
           {isHovered && (
-            <div className="flex items-center gap-1 pt-2 border-t border-border/50 animate-in fade-in slide-in-from-bottom-1 duration-200">
+            <div className="flex items-center gap-0.5 pt-2 border-t border-border/50 animate-in fade-in slide-in-from-bottom-1 duration-200">
               <button
                 onClick={(e) => handleAction(e, () => onToggleRead?.(email.id))}
-                className="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs rounded-md
-                         bg-muted/50 hover:bg-muted transition-all duration-200 hover:scale-105"
+                className="p-1.5 rounded-md bg-muted/50 hover:bg-muted transition-all duration-200 hover:scale-110"
                 title={email.isRead ? 'Mark as unread' : 'Mark as read'}
               >
                 {email.isRead ? <Mail className="w-3.5 h-3.5" /> : <MailOpen className="w-3.5 h-3.5" />}
-                <span>{email.isRead ? 'Unread' : 'Read'}</span>
               </button>
 
               <button
@@ -121,45 +119,35 @@ export default function EmailListItem({
                   setIsPinned(!isPinned);
                   onPin?.(email.id);
                 })}
-                className={`inline-flex items-center gap-1.5 px-3 py-1.5 text-xs rounded-md
-                         transition-all duration-200 hover:scale-105
+                className={`p-1.5 rounded-md transition-all duration-200 hover:scale-110
                          ${isPinned ? 'bg-primary/10 text-primary' : 'bg-muted/50 hover:bg-muted'}`}
                 title="Pin"
               >
                 <Pin className={`w-3.5 h-3.5 ${isPinned ? 'fill-current' : ''}`} />
-                <span>Pin</span>
               </button>
 
               <button
                 onClick={(e) => handleAction(e, () => onArchive?.(email.id))}
-                className="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs rounded-md
-                         bg-muted/50 hover:bg-muted transition-all duration-200 hover:scale-105"
+                className="p-1.5 rounded-md bg-muted/50 hover:bg-muted transition-all duration-200 hover:scale-110"
                 title="Archive"
               >
                 <Archive className="w-3.5 h-3.5" />
-                <span>Archive</span>
               </button>
 
               <button
                 onClick={(e) => handleAction(e, () => onMarkAsSpam?.(email.id))}
-                className="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs rounded-md
-                         bg-muted/50 hover:bg-destructive/10 hover:text-destructive 
-                         transition-all duration-200 hover:scale-105"
+                className="p-1.5 rounded-md bg-muted/50 hover:bg-destructive/10 hover:text-destructive transition-all duration-200 hover:scale-110"
                 title="Mark as spam"
               >
                 <Flag className="w-3.5 h-3.5" />
-                <span>Spam</span>
               </button>
 
               <button
                 onClick={(e) => handleAction(e, () => onDelete?.(email.id))}
-                className="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs rounded-md
-                         bg-muted/50 hover:bg-destructive/10 hover:text-destructive 
-                         transition-all duration-200 hover:scale-105"
+                className="p-1.5 rounded-md bg-muted/50 hover:bg-destructive/10 hover:text-destructive transition-all duration-200 hover:scale-110"
                 title="Delete"
               >
                 <Trash2 className="w-3.5 h-3.5" />
-                <span>Delete</span>
               </button>
             </div>
           )}

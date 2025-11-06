@@ -111,3 +111,21 @@
 - [ ] High-contrast mode
 - [ ] Mobile-responsive design
 - [ ] Touch-optimized interactions
+
+## User-Requested Changes & Improvements
+
+- [x] Compact inline action buttons to icon-only with tooltips
+- [x] Replace gold star with navy/black star to match palette
+- [x] Convert summarize button to icon-only with tooltip
+- [x] Remove standalone inbox icon above compose button
+- [x] Add copyright footer: "© 2025 Email Business, LLC. All rights reserved"
+- [x] Add policy page links in footer (Privacy Policy, Terms of Service)
+- [x] Build functional Sent folder view
+- [x] Build functional Drafts folder view
+- [x] Build functional Archive folder view
+- [x] Build functional Trash folder view
+- [x] Build functional Calendar view
+- [x] Build functional Settings view
+- [x] Enable IMAP email import (20+ emails support)
+- [x] Support multiple email providers (Gmail, Outlook, etc.)
+- [x] Support domain-based email import

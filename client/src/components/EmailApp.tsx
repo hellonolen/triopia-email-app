@@ -3,6 +3,9 @@ import Sidebar from './Sidebar';
 import EmailList from './EmailList';
 import EmailDetail from './EmailDetail';
 import AnalyticsDashboard from './AnalyticsDashboard';
+import Calendar from './Calendar';
+import Settings from './Settings';
+import Footer from './Footer';
 
 export interface Email {
   id: number;
@@ -17,6 +20,8 @@ export interface Email {
   isRead: boolean;
   priority: 'urgent' | 'high' | 'normal' | 'low';
   category?: string;
+  isArchived?: boolean;
+  isDeleted?: boolean;
 }
 
 export default function EmailApp() {
@@ -113,7 +118,9 @@ export default function EmailApp() {
 
   const handleArchive = (emailId: number) => {
     setTimeout(() => {
-      setEmails(emails.filter(email => email.id !== emailId));
+      setEmails(emails.map(email =>
+        email.id === emailId ? { ...email, isArchived: true } : email
+      ));
       if (selectedEmail?.id === emailId) {
         setSelectedEmail(null);
       }
@@ -122,7 +129,9 @@ export default function EmailApp() {
 
   const handleDelete = (emailId: number) => {
     setTimeout(() => {
-      setEmails(emails.filter(email => email.id !== emailId));
+      setEmails(emails.map(email =>
+        email.id === emailId ? { ...email, isDeleted: true } : email
+      ));
       if (selectedEmail?.id === emailId) {
         setSelectedEmail(null);
       }
@@ -151,6 +160,25 @@ export default function EmailApp() {
     }
   };
 
+  const getFilteredEmails = () => {
+    switch (selectedFolder) {
+      case 'inbox':
+        return emails.filter(e => !e.isArchived && !e.isDeleted);
+      case 'starred':
+        return emails.filter(e => e.isStarred && !e.isDeleted);
+      case 'sent':
+        return []; // Will be populated with sent emails
+      case 'drafts':
+        return []; // Will be populated with draft emails
+      case 'archive':
+        return emails.filter(e => e.isArchived);
+      case 'trash':
+        return emails.filter(e => e.isDeleted);
+      default:
+        return emails;
+    }
+  };
+
   const getUnreadCount = (folder: string) => {
     if (folder === 'inbox') {
       return emails.filter(e => !e.isRead).length;
@@ -165,37 +193,49 @@ export default function EmailApp() {
   };
 
   return (
-    <div className="flex h-screen overflow-hidden bg-background">
-      <Sidebar
-        selectedFolder={selectedFolder}
-        onFolderSelect={setSelectedFolder}
-        getUnreadCount={getUnreadCount}
-      />
-      {selectedFolder === 'analytics' ? (
-        <div className="flex-1 overflow-y-auto">
-          <AnalyticsDashboard />
-        </div>
-      ) : (
-        <>
-          <EmailList
-            emails={emails}
-            selectedEmail={selectedEmail}
-            onEmailSelect={handleEmailSelect}
-            onStarToggle={handleStarToggle}
-            onArchive={handleArchive}
-            onDelete={handleDelete}
-            onPin={handlePin}
-            onMarkAsSpam={handleMarkAsSpam}
-            onToggleRead={handleToggleRead}
-          />
-          <EmailDetail
-            email={selectedEmail}
-            onArchive={handleArchive}
-            onDelete={handleDelete}
-            onStarToggle={handleStarToggle}
-          />
-        </>
-      )}
+    <div className="flex flex-col h-screen overflow-hidden bg-background">
+      <div className="flex flex-1 overflow-hidden">
+        <Sidebar
+          selectedFolder={selectedFolder}
+          onFolderSelect={setSelectedFolder}
+          getUnreadCount={getUnreadCount}
+        />
+        {selectedFolder === 'analytics' ? (
+          <div className="flex-1 overflow-y-auto">
+            <AnalyticsDashboard />
+          </div>
+        ) : selectedFolder === 'calendar' ? (
+          <div className="flex-1 overflow-y-auto">
+            <Calendar />
+          </div>
+        ) : selectedFolder === 'settings' ? (
+          <div className="flex-1 overflow-y-auto">
+            <Settings />
+          </div>
+        ) : (
+          <>
+            <EmailList
+              emails={getFilteredEmails()}
+              selectedEmail={selectedEmail}
+              folderName={selectedFolder}
+              onEmailSelect={handleEmailSelect}
+              onStarToggle={handleStarToggle}
+              onArchive={handleArchive}
+              onDelete={handleDelete}
+              onPin={handlePin}
+              onMarkAsSpam={handleMarkAsSpam}
+              onToggleRead={handleToggleRead}
+            />
+            <EmailDetail
+              email={selectedEmail}
+              onArchive={handleArchive}
+              onDelete={handleDelete}
+              onStarToggle={handleStarToggle}
+            />
+          </>
+        )}
+      </div>
+      <Footer />
     </div>
   );
 }
