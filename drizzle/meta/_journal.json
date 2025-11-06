@@ -15,6 +15,13 @@
       "when": 1762448492078,
       "tag": "0001_dizzy_lady_ursula",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "5",
+      "when": 1762457964355,
+      "tag": "0002_adorable_vargas",
+      "breakpoints": true
     }
   ]
 }

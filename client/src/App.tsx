@@ -10,7 +10,8 @@ import UnifiedInbox from "./pages/UnifiedInbox";
 import Calendar from "./pages/Calendar";
 import Privacy from "./pages/Privacy";
 import Terms from "./pages/Terms";
-import Contact from "./pages/Contact";
+import Contact from "@/pages/Contact";
+import Profile from "@/pages/Profile";
 import AuthCallback from "./pages/AuthCallback";
 
 function Router() {
@@ -22,7 +23,8 @@ function Router() {
       <Route path={"/calendar"} component={Calendar} />
       <Route path={"/privacy"} component={Privacy} />
       <Route path={"/terms"} component={Terms} />
-      <Route path={"/contact"} component={Contact} />
+       <Route path="/contact" component={Contact} />
+      <Route path="/profile" component={Profile} />
       <Route path={"/auth/gmail/callback"} component={AuthCallback} />
       <Route path={"/auth/outlook/callback"} component={AuthCallback} />
       <Route path={"/404"} component={NotFound} />
