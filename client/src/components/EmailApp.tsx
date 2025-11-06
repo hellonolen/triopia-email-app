@@ -7,6 +7,11 @@ import Calendar from './Calendar';
 import Settings from './Settings';
 import Footer from './Footer';
 import EmailComposer from './EmailComposer';
+import Contacts from './Contacts';
+import SmartTriage from './SmartTriage';
+import CommandBar from './CommandBar';
+import KeyboardShortcutsHelp from './KeyboardShortcutsHelp';
+import { useKeyboardShortcuts } from '../hooks/useKeyboardShortcuts';
 
 export interface Email {
   id: number;
@@ -26,9 +31,11 @@ export interface Email {
 }
 
 export default function EmailApp() {
-  const [selectedFolder, setSelectedFolder] = useState('inbox');
+  const [selectedFolder, setSelectedFolder] = useState('priority');
   const [selectedEmail, setSelectedEmail] = useState<Email | null>(null);
   const [showComposer, setShowComposer] = useState(false);
+  const [showCommandBar, setShowCommandBar] = useState(false);
+  const [showKeyboardHelp, setShowKeyboardHelp] = useState(false);
   const [emails, setEmails] = useState<Email[]>([
     {
       id: 1,
@@ -194,6 +201,36 @@ export default function EmailApp() {
     return 0;
   };
 
+  // Keyboard shortcuts
+  useKeyboardShortcuts([
+    { key: 'e', description: 'Archive email', action: () => selectedEmail && handleArchive(selectedEmail.id) },
+    { key: 'r', description: 'Reply to email', action: () => selectedEmail && console.log('Reply') },
+    { key: 'f', description: 'Forward email', action: () => selectedEmail && console.log('Forward') },
+    { key: 's', description: 'Star/unstar email', action: () => selectedEmail && handleStarToggle(selectedEmail.id) },
+    { key: '#', description: 'Delete email', action: () => selectedEmail && handleDelete(selectedEmail.id) },
+    { key: 'c', description: 'Compose new email', action: () => setShowComposer(true) },
+    { key: '/', description: 'Focus search', action: () => (document.querySelector('input[type="text"]') as HTMLInputElement)?.focus() },
+    { key: 'k', ctrl: true, description: 'Open command bar', action: () => setShowCommandBar(true) },
+    { key: '?', description: 'Show keyboard shortcuts', action: () => setShowKeyboardHelp(true) },
+  ], !showComposer && !showCommandBar && !showKeyboardHelp);
+
+  const handleCommandAction = (action: string) => {
+    switch (action) {
+      case 'compose':
+        setShowComposer(true);
+        break;
+      case 'archive-all':
+        console.log('Archive all');
+        break;
+      case 'mark-read':
+        console.log('Mark all as read');
+        break;
+      case 'search':
+        (document.querySelector('input[type="text"]') as HTMLInputElement)?.focus();
+        break;
+    }
+  };
+
   return (
     <div className="flex flex-col h-screen overflow-hidden bg-background">
       <div className="flex flex-1 overflow-hidden">
@@ -203,7 +240,19 @@ export default function EmailApp() {
           getUnreadCount={getUnreadCount}
           onCompose={() => setShowComposer(true)}
         />
-        {selectedFolder === 'analytics' ? (
+        {selectedFolder === 'priority' ? (
+          <SmartTriage
+            emails={emails.filter(e => !e.isArchived && !e.isDeleted)}
+            selectedEmail={selectedEmail}
+            onEmailSelect={handleEmailSelect}
+            onStarToggle={handleStarToggle}
+            onArchive={handleArchive}
+            onDelete={handleDelete}
+            onPin={handlePin}
+            onMarkAsSpam={handleMarkAsSpam}
+            onToggleRead={handleToggleRead}
+          />
+        ) : selectedFolder === 'analytics' ? (
           <div className="flex-1 overflow-y-auto">
             <AnalyticsDashboard />
           </div>
@@ -214,6 +263,10 @@ export default function EmailApp() {
         ) : selectedFolder === 'settings' ? (
           <div className="flex-1 overflow-y-auto">
             <Settings />
+          </div>
+        ) : selectedFolder === 'contacts' ? (
+          <div className="flex-1 overflow-hidden">
+            <Contacts />
           </div>
         ) : (
           <>
@@ -247,6 +300,19 @@ export default function EmailApp() {
             setShowComposer(false);
           }}
         />
+      )}
+      {showCommandBar && (
+        <CommandBar
+          onClose={() => setShowCommandBar(false)}
+          onNavigate={(folder) => {
+            setSelectedFolder(folder);
+            setShowCommandBar(false);
+          }}
+          onAction={handleCommandAction}
+        />
+      )}
+      {showKeyboardHelp && (
+        <KeyboardShortcutsHelp onClose={() => setShowKeyboardHelp(false)} />
       )}
     </div>
   );

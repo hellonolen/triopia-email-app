@@ -1,4 +1,4 @@
-import { Mail, Star, Send, FileText, Archive, Trash2, Calendar, Settings, Plus, BarChart3 } from 'lucide-react';
+import { Mail, Star, Send, FileText, Archive, Trash2, Calendar, Settings, Plus, BarChart3, Users, TrendingUp } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 
 interface SidebarProps {
@@ -10,17 +10,19 @@ interface SidebarProps {
 
 export default function Sidebar({ selectedFolder, onFolderSelect, getUnreadCount, onCompose }: SidebarProps) {
   const folders = [
+    { id: 'priority', label: 'Priority', icon: TrendingUp },
     { id: 'inbox', label: 'Inbox', icon: Mail },
     { id: 'starred', label: 'Starred', icon: Star },
     { id: 'sent', label: 'Sent', icon: Send },
     { id: 'drafts', label: 'Drafts', icon: FileText },
     { id: 'archive', label: 'Archive', icon: Archive },
     { id: 'trash', label: 'Trash', icon: Trash2 },
+    { id: 'calendar', label: 'Calendar', icon: Calendar },
+    { id: 'contacts', label: 'Contacts', icon: Users },
   ];
 
-  const bottomItems = [
+  const utilities = [
     { id: 'analytics', label: 'Analytics', icon: BarChart3 },
-    { id: 'calendar', label: 'Calendar', icon: Calendar },
     { id: 'settings', label: 'Settings', icon: Settings },
   ];
 
@@ -71,7 +73,7 @@ export default function Sidebar({ selectedFolder, onFolderSelect, getUnreadCount
       </nav>
 
       <div className="pt-6 border-t border-border space-y-1">
-        {bottomItems.map((item) => {
+        {utilities.map((item) => {
           const Icon = item.icon;
           return (
             <button

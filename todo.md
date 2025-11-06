@@ -222,3 +222,37 @@
 
 ## Immediate Fix
 - [x] Remove sparkle/star decorative icon completely (no replacement)
+
+## Implementation Plan - All Agentic Features
+
+### Navigation & Structure
+- [x] Move Calendar navigation item up (under Trash)
+- [x] Add Contacts navigation item (under Calendar)
+- [x] Build comprehensive contact management system
+- [ ] Auto-save contacts from email senders
+- [ ] Auto-save contacts from email recipients
+- [ ] Contact import from phone/device
+
+### Phase 1: Core Value & Speed (Immediate)
+- [x] Smart Email Triage Dashboard (Priority Inbox)
+- [x] Keyboard shortcuts system (E, R, F, S, J/K, X, etc.)
+- [x] Contextual Command Bar (Cmd+K)
+- [x] Keyboard shortcut cheat sheet (? key)
+- [ ] Batch actions with floating action bar
+- [ ] 5-second undo toast for batch actions
+
+### Phase 2: Agentic Intelligence
+- [ ] Proactive agent notifications system
+- [ ] Email relationship intelligence graph
+- [ ] Smart scheduling assistant with auto-detection
+- [ ] Sentiment analysis & tone detection
+- [ ] Attachment intelligence with preview
+- [ ] Smart unsubscribe suggestions
+
+### Phase 3: Ultimate Agentic Features
+- [ ] Auto-draft responses based on writing style
+- [ ] Deal room integration per client
+- [ ] Email templates library
+- [ ] Smart email snooze with context
+- [ ] Voice command integration
+- [ ] VIP detection and prioritization
