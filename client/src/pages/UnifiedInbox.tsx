@@ -58,9 +58,9 @@ export default function UnifiedInbox() {
   };
 
   return (
-    <div className="flex h-screen">
+    <div className="flex h-screen bg-background">
       {/* Account Sidebar */}
-      <div className="w-64 border-r bg-muted/30 p-4">
+      <div className="w-64 border-r border-border bg-sidebar p-4">
         <h2 className="text-lg font-semibold mb-4">Email Accounts</h2>
         
         <div className="space-y-2">
@@ -106,7 +106,7 @@ export default function UnifiedInbox() {
       </div>
 
       {/* Folder Navigation */}
-      <div className="w-48 border-r bg-background p-4">
+      <div className="w-48 border-r border-border bg-sidebar p-4">
         <h3 className="text-sm font-semibold mb-3 text-muted-foreground">FOLDERS</h3>
         <div className="space-y-1">
           {folders.map((folder) => (
@@ -115,8 +115,8 @@ export default function UnifiedInbox() {
               onClick={() => setSelectedFolder(folder.id)}
               className={`w-full text-left px-3 py-2 rounded-md text-sm transition-colors ${
                 selectedFolder === folder.id
-                  ? "bg-primary text-primary-foreground"
-                  : "hover:bg-muted"
+                  ? "bg-primary text-primary-foreground font-medium"
+                  : "hover:bg-muted text-foreground"
               }`}
             >
               {folder.label}

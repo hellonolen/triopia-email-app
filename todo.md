@@ -48,14 +48,14 @@
 - [x] Implement account health monitoring
 - [x] Add sync status indicators
 
-### Phase 5: Calendar Integration
-- [ ] Install Google Calendar API SDK
-- [ ] Install Microsoft Graph API SDK
-- [ ] Create Google Calendar OAuth2 flow
-- [ ] Create Outlook Calendar OAuth2 flow
-- [ ] Implement two-way Google Calendar sync
-- [ ] Implement two-way Outlook Calendar sync
-- [ ] Add calendar event notifications
+### Phase 5: Calendar Integration ✅ COMPLETE
+- [x] Google Calendar API integration (uses existing Gmail OAuth)
+- [x] Outlook Calendar API integration (uses existing Outlook OAuth)
+- [x] Two-way Google Calendar sync (fetch, create, update, delete)
+- [x] Two-way Outlook Calendar sync (fetch, create, update, delete)
+- [x] Calendar tRPC router with all endpoints
+- [x] Calendar UI page (/calendar route)
+- [x] Account-based calendar view
 
 ### Phase 6: Real-Time Features
 - [ ] Implement WebSocket authentication

@@ -7,6 +7,7 @@ import { ThemeProvider } from "./contexts/ThemeContext";
 import { TextSizeProvider } from "./contexts/TextSizeContext";
 import EmailApp from "./components/EmailApp";
 import UnifiedInbox from "./pages/UnifiedInbox";
+import Calendar from "./pages/Calendar";
 
 function Router() {
   // make sure to consider if you need authentication for certain routes
@@ -14,6 +15,7 @@ function Router() {
     <Switch>
       <Route path={"/"} component={EmailApp} />
       <Route path={"/inbox"} component={UnifiedInbox} />
+      <Route path={"/calendar"} component={Calendar} />
       <Route path={"/404"} component={NotFound} />
       {/* Final fallback route */}
       <Route component={NotFound} />

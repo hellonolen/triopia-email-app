@@ -11,6 +11,7 @@ import {
 } from "./emailRouters";
 import { emailRouter } from "./routers/emailRouter";
 import { aiRouter } from "./routers/aiRouter";
+import { calendarRouter as calendarRouterNew } from "./routers/calendarRouter";
 
 export const appRouter = router({
     // if you need to use socket.io, read and register route in server/_core/index.ts, all api should start with '/api/' so that the gateway can route correctly
@@ -29,6 +30,7 @@ export const appRouter = router({
   // Email platform routers
   email: emailRouter,
   ai: aiRouter,
+  calendarNew: calendarRouterNew,
   emailAccounts: emailAccountsRouter,
   emails: emailsRouter,
   contacts: contactsRouter,
