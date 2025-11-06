@@ -2,6 +2,8 @@ import { useState } from 'react';
 import { Archive, Star, MoreVertical, Trash2, Mail, Loader2, Clock, Info, Reply } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import type { Email } from './EmailApp';
+import { trpc } from '@/lib/trpc';
+import { toast } from 'sonner';
 import ContextSidebar from './ContextSidebar';
 import QuickReply from './QuickReply';
 import CalendarInviteActions from './CalendarInviteActions';
@@ -16,6 +18,13 @@ interface EmailDetailProps {
 export default function EmailDetail({ email, onArchive, onDelete, onStarToggle }: EmailDetailProps) {
   const [isSummarizing, setIsSummarizing] = useState(false);
   const [showSummary, setShowSummary] = useState(false);
+  const [summary, setSummary] = useState('');
+  const [quickReplyText, setQuickReplyText] = useState('');
+  
+  // AI mutations
+  const summarizeMutation = trpc.ai.summarizeEmail.useMutation();
+  const quickReplyMutation = trpc.ai.generateQuickReply.useMutation();
+  const categorizeMutation = trpc.ai.categorizeEmail.useMutation();
   const [isContextOpen, setIsContextOpen] = useState(false);
   const [showQuickReply, setShowQuickReply] = useState(false);
 
@@ -40,12 +49,50 @@ export default function EmailDetail({ email, onArchive, onDelete, onStarToggle }
     );
   }
 
-  const handleSummarize = () => {
+  const handleSummarize = async () => {
+    if (!email) return;
     setIsSummarizing(true);
-    setTimeout(() => {
-      setIsSummarizing(false);
+    try {
+      const result = await summarizeMutation.mutateAsync({
+        emailId: email.id,
+        style: 'executive'
+      });
+      setSummary(result.summary);
       setShowSummary(true);
-    }, 1500);
+      toast.success('Email summarized');
+    } catch (error) {
+      toast.error('Failed to summarize email');
+    } finally {
+      setIsSummarizing(false);
+    }
+  };
+
+  const handleQuickReply = async (tone: 'professional' | 'casual' | 'formal') => {
+    if (!email) return;
+    try {
+      const result = await quickReplyMutation.mutateAsync({
+        emailId: email.id,
+        tone,
+        context: ''
+      });
+      setQuickReplyText(result.reply);
+      setShowQuickReply(true);
+      toast.success('Quick reply generated');
+    } catch (error) {
+      toast.error('Failed to generate reply');
+    }
+  };
+
+  const handleCategorize = async () => {
+    if (!email) return;
+    try {
+      const result = await categorizeMutation.mutateAsync({
+        emailId: email.id
+      });
+      toast.success(`Categorized as: ${result.category}`);
+    } catch (error) {
+      toast.error('Failed to categorize email');
+    }
   };
 
   return (

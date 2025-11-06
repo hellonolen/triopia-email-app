@@ -8,6 +8,9 @@ import { TextSizeProvider } from "./contexts/TextSizeContext";
 import EmailApp from "./components/EmailApp";
 import UnifiedInbox from "./pages/UnifiedInbox";
 import Calendar from "./pages/Calendar";
+import Privacy from "./pages/Privacy";
+import Terms from "./pages/Terms";
+import Contact from "./pages/Contact";
 
 function Router() {
   // make sure to consider if you need authentication for certain routes
@@ -16,6 +19,9 @@ function Router() {
       <Route path={"/"} component={EmailApp} />
       <Route path={"/inbox"} component={UnifiedInbox} />
       <Route path={"/calendar"} component={Calendar} />
+      <Route path={"/privacy"} component={Privacy} />
+      <Route path={"/terms"} component={Terms} />
+      <Route path={"/contact"} component={Contact} />
       <Route path={"/404"} component={NotFound} />
       {/* Final fallback route */}
       <Route component={NotFound} />

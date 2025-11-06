@@ -15,6 +15,8 @@ import Storage from './Storage';
 import Notes from './Notes';
 import Appearance from './Appearance';
 import { useKeyboardShortcuts } from '../hooks/useKeyboardShortcuts';
+import { trpc } from '@/lib/trpc';
+import { useEffect } from 'react';
 
 export interface Email {
   id: number;
@@ -40,6 +42,14 @@ export default function EmailApp() {
   const [showComposer, setShowComposer] = useState(false);
   const [showCommandBar, setShowCommandBar] = useState(false);
   const [showKeyboardHelp, setShowKeyboardHelp] = useState(false);
+  // Fetch emails from backend API
+  const { data: emailAccounts } = trpc.email.listAccounts.useQuery();
+  const { data: backendEmails, refetch: refetchEmails } = trpc.email.getEmailsByAccount.useQuery(
+    { accountId: emailAccounts?.[0]?.id || '' },
+    { enabled: !!emailAccounts?.[0]?.id }
+  );
+
+  // Mock data for now - will be replaced by backend
   const [emails, setEmails] = useState<Email[]>([
     {
       id: 1,
@@ -112,6 +122,30 @@ export default function EmailApp() {
       category: 'Notifications',
     },
   ]);
+
+  // Sync backend emails when available
+  useEffect(() => {
+    if (backendEmails && backendEmails.length > 0) {
+      const mappedEmails = backendEmails.map(e => ({
+        id: e.id,
+        sender: e.from.split('<')[0].trim(),
+        senderEmail: e.from.match(/<(.+)>/)?.[1] || e.from,
+        subject: e.subject,
+        preview: e.body.substring(0, 100),
+        body: e.body,
+        timestamp: new Date(e.receivedAt).toLocaleTimeString(),
+        date: new Date(e.receivedAt).toLocaleString(),
+        isStarred: e.isStarred,
+        isRead: e.isRead,
+        priority: 'normal' as const,
+        category: e.category || undefined,
+        isArchived: e.folder === 'archive',
+        isDeleted: e.folder === 'trash',
+        isSpam: e.folder === 'spam',
+      }));
+      setEmails(mappedEmails);
+    }
+  }, [backendEmails]);
 
   const handleEmailSelect = (email: Email) => {
     setSelectedEmail(email);
