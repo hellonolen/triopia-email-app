@@ -119,18 +119,9 @@ export default function EmailDetail({ email, onArchive, onDelete, onStarToggle }
           </button>
 
           <button
-            onClick={() => setShowSnoozeModal(true)}
-            className="p-2 hover:bg-muted rounded-lg transition-all duration-200 hover:scale-110"
-            title="Snooze"
-          >
-            <AlarmClock className="w-5 h-5 text-muted-foreground" />
-          </button>
-
-          <button
             className="p-2 hover:bg-muted rounded-lg transition-all duration-200 hover:scale-110"
             title="More"
           >
-
             <MoreVertical className="w-5 h-5 text-muted-foreground" />
           </button>
 
@@ -258,120 +249,6 @@ export default function EmailDetail({ email, onArchive, onDelete, onStarToggle }
       )}
     </div>
     <ContextSidebar email={email} isOpen={isContextOpen} onClose={() => setIsContextOpen(false)} />
-    
-    {/* Snooze Modal */}
-    {showSnoozeModal && (
-      <div className="fixed inset-0 bg-background/80 flex items-center justify-center z-50">
-        <div className="bg-card border border-border rounded-lg p-6 w-full max-w-md">
-          <h3 className="text-lg font-semibold mb-4">Snooze Email</h3>
-          <p className="text-sm text-muted-foreground mb-4">
-            Choose when you want this email to reappear in your inbox
-          </p>
-          
-          <div className="space-y-3 mb-6">
-            <Button
-              variant="outline"
-              className="w-full justify-start"
-              onClick={() => {
-                const date = new Date();
-                date.setHours(date.getHours() + 3);
-                setSnoozeDate(date.toISOString());
-              }}
-            >
-              <Clock className="w-4 h-4 mr-2" />
-              Later today (3 hours)
-            </Button>
-            <Button
-              variant="outline"
-              className="w-full justify-start"
-              onClick={() => {
-                const date = new Date();
-                date.setDate(date.getDate() + 1);
-                date.setHours(9, 0, 0, 0);
-                setSnoozeDate(date.toISOString());
-              }}
-            >
-              <Clock className="w-4 h-4 mr-2" />
-              Tomorrow morning (9 AM)
-            </Button>
-            <Button
-              variant="outline"
-              className="w-full justify-start"
-              onClick={() => {
-                const date = new Date();
-                date.setDate(date.getDate() + 2);
-                date.setHours(9, 0, 0, 0);
-                setSnoozeDate(date.toISOString());
-              }}
-            >
-              <Clock className="w-4 h-4 mr-2" />
-              In 2 days
-            </Button>
-            <Button
-              variant="outline"
-              className="w-full justify-start"
-              onClick={() => {
-                const date = new Date();
-                const dayOfWeek = date.getDay();
-                const daysUntilMonday = dayOfWeek === 0 ? 1 : 8 - dayOfWeek;
-                date.setDate(date.getDate() + daysUntilMonday);
-                date.setHours(9, 0, 0, 0);
-                setSnoozeDate(date.toISOString());
-              }}
-            >
-              <Clock className="w-4 h-4 mr-2" />
-              Next Monday
-            </Button>
-            
-            <div>
-              <label className="block text-sm font-medium mb-2">Custom date & time</label>
-              <input
-                type="datetime-local"
-                value={snoozeDate ? new Date(snoozeDate).toISOString().slice(0, 16) : ''}
-                onChange={(e) => setSnoozeDate(new Date(e.target.value).toISOString())}
-                className="w-full px-3 py-2 border border-border rounded-lg bg-background"
-              />
-            </div>
-          </div>
-          
-          <div className="flex gap-2">
-            <Button
-              variant="outline"
-              onClick={() => {
-                setShowSnoozeModal(false);
-                setSnoozeDate('');
-              }}
-              className="flex-1"
-            >
-              Cancel
-            </Button>
-            <Button
-              onClick={async () => {
-                if (!snoozeDate) {
-                  toast.error('Please select a date and time');
-                  return;
-                }
-                try {
-                  await snoozeMutation.mutateAsync({
-                    emailId: email.id,
-                    snoozeUntil: snoozeDate
-                  });
-                  toast.success('Email snoozed');
-                  setShowSnoozeModal(false);
-                  setSnoozeDate('');
-                  onArchive(email.id); // Archive the email from current view
-                } catch (error) {
-                  toast.error('Failed to snooze email');
-                }
-              }}
-              className="flex-1"
-            >
-              Snooze
-            </Button>
-          </div>
-        </div>
-      </div>
-    )}
     </>
   );
 }

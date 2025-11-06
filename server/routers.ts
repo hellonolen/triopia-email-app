@@ -12,9 +12,6 @@ import {
 import { emailRouter } from "./routers/emailRouter";
 import { aiRouter } from "./routers/aiRouter";
 import { calendarRouter as calendarRouterNew } from "./routers/calendarRouter";
-import { templatesRouter } from "./routers/templatesRouter";
-import { preferencesRouter } from "./routers/preferencesRouter";
-import { snoozeRouter } from "./routers/snoozeRouter";
 
 export const appRouter = router({
     // if you need to use socket.io, read and register route in server/_core/index.ts, all api should start with '/api/' so that the gateway can route correctly
@@ -39,9 +36,6 @@ export const appRouter = router({
   contacts: contactsRouter,
   calendar: calendarRouter,
   notes: notesRouter,
-  templates: templatesRouter,
-  preferences: preferencesRouter,
-  snooze: snoozeRouter,
 });
 
 export type AppRouter = typeof appRouter;

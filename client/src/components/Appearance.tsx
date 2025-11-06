@@ -1,8 +1,6 @@
 import { useState } from 'react';
-import { trpc } from '@/lib/trpc';
-import { toast } from 'sonner';
 import { Button } from '@/components/ui/button';
-import { Plus, Mail, Briefcase, Calendar as CalendarIcon, Heart, DollarSign, AlertCircle, Trash2 } from 'lucide-react';
+import { Plus, Mail, Briefcase, Calendar as CalendarIcon, Heart, DollarSign, AlertCircle } from 'lucide-react';
 
 interface EmailTemplate {
   id: string;
@@ -15,12 +13,6 @@ interface EmailTemplate {
 
 export default function Appearance() {
   const [selectedTemplate, setSelectedTemplate] = useState<EmailTemplate | null>(null);
-  const [showCreateModal, setShowCreateModal] = useState(false);
-  const [templateForm, setTemplateForm] = useState({ name: '', subject: '', body: '', category: 'general' });
-  
-  const { data: customTemplates, refetch } = trpc.templates.list.useQuery();
-  const createTemplateMutation = trpc.templates.create.useMutation();
-  const deleteTemplateMutation = trpc.templates.delete.useMutation();
 
   const templates: EmailTemplate[] = [
     {
@@ -200,8 +192,7 @@ Best regards,
       </div>
 
       <div className="p-6 border-b border-border">
-        <div className="flex gap-2 items-center justify-between">
-          <div className="flex gap-2">
+        <div className="flex gap-2">
           {categories.map((category) => (
             <Button
               key={category}
@@ -212,53 +203,8 @@ Best regards,
               {category}
             </Button>
           ))}
-          </div>
-          <Button onClick={() => setShowCreateModal(true)} size="sm">
-            <Plus className="w-4 h-4 mr-2" />
-            Create Custom
-          </Button>
         </div>
       </div>
-
-      {/* Custom Templates Section */}
-      {customTemplates && customTemplates.length > 0 && (
-        <div className="p-6 border-b border-border">
-          <h3 className="text-lg font-semibold mb-4">My Custom Templates</h3>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-            {customTemplates.map((template) => (
-              <div
-                key={template.id}
-                className="p-4 border border-border rounded-lg hover:shadow-md transition-shadow"
-              >
-                <div className="flex items-start justify-between mb-2">
-                  <div>
-                    <h4 className="font-semibold">{template.name}</h4>
-                    <p className="text-sm text-muted-foreground">{template.category}</p>
-                  </div>
-                  <button
-                    onClick={async (e) => {
-                      e.stopPropagation();
-                      if (confirm('Delete this template?')) {
-                        await deleteTemplateMutation.mutateAsync({ id: template.id });
-                        toast.success('Template deleted');
-                        refetch();
-                      }
-                    }}
-                    className="text-destructive hover:bg-muted p-1 rounded"
-                  >
-                    <Trash2 className="w-4 h-4" />
-                  </button>
-                </div>
-                {template.subject && (
-                  <p className="text-sm text-muted-foreground mb-2">Subject: {template.subject}</p>
-                )}
-                <p className="text-sm text-muted-foreground line-clamp-2">{template.body}</p>
-                <p className="text-xs text-muted-foreground mt-2">Used {template.usageCount} times</p>
-              </div>
-            ))}
-          </div>
-        </div>
-      )}
 
       <div className="flex-1 overflow-hidden flex">
         {/* Template List */}
@@ -359,87 +305,3 @@ Best regards,
     </div>
   );
 }
-
-
-      {/* Create Template Modal */}
-      {showCreateModal && (
-        <div className="fixed inset-0 bg-background/80 flex items-center justify-center z-50">
-          <div className="bg-card border border-border rounded-lg p-6 w-full max-w-2xl max-h-[90vh] overflow-y-auto">
-            <h2 className="text-xl font-semibold mb-4">Create Custom Template</h2>
-            <div className="space-y-4">
-              <div>
-                <label className="block text-sm font-medium mb-2">Template Name *</label>
-                <input
-                  type="text"
-                  value={templateForm.name}
-                  onChange={(e) => setTemplateForm({ ...templateForm, name: e.target.value })}
-                  className="w-full px-3 py-2 border border-border rounded-lg bg-background"
-                  placeholder="e.g., Weekly Update"
-                />
-              </div>
-              <div>
-                <label className="block text-sm font-medium mb-2">Category</label>
-                <select
-                  value={templateForm.category}
-                  onChange={(e) => setTemplateForm({ ...templateForm, category: e.target.value })}
-                  className="w-full px-3 py-2 border border-border rounded-lg bg-background"
-                >
-                  <option value="general">General</option>
-                  <option value="work">Work</option>
-                  <option value="personal">Personal</option>
-                  <option value="sales">Sales</option>
-                  <option value="support">Support</option>
-                </select>
-              </div>
-              <div>
-                <label className="block text-sm font-medium mb-2">Subject</label>
-                <input
-                  type="text"
-                  value={templateForm.subject}
-                  onChange={(e) => setTemplateForm({ ...templateForm, subject: e.target.value })}
-                  className="w-full px-3 py-2 border border-border rounded-lg bg-background"
-                  placeholder="Email subject line"
-                />
-              </div>
-              <div>
-                <label className="block text-sm font-medium mb-2">Body *</label>
-                <textarea
-                  value={templateForm.body}
-                  onChange={(e) => setTemplateForm({ ...templateForm, body: e.target.value })}
-                  className="w-full px-3 py-2 border border-border rounded-lg bg-background resize-none"
-                  rows={10}
-                  placeholder="Email body content..."
-                />
-              </div>
-              <div className="flex gap-2 pt-4">
-                <Button
-                  variant="outline"
-                  onClick={() => {
-                    setShowCreateModal(false);
-                    setTemplateForm({ name: '', subject: '', body: '', category: 'general' });
-                  }}
-                  className="flex-1"
-                >
-                  Cancel
-                </Button>
-                <Button
-                  onClick={async () => {
-                    if (!templateForm.name || !templateForm.body) {
-                      toast.error('Name and body are required');
-                      return;
-                    }
-                    await createTemplateMutation.mutateAsync(templateForm);
-                    toast.success('Template created');
-                    setShowCreateModal(false);
-                    setTemplateForm({ name: '', subject: '', body: '', category: 'general' });
-                    refetch();
-                  }}
-                  className="flex-1"
-                >
-                  Create Template
-                </Button>
-              </div>
-            </div>
-          </div>
-        </div>
-      )}
