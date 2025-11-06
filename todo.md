@@ -350,3 +350,17 @@
 - [x] Replace all semi-transparent backgrounds with solid colors
 - [x] Ensure all modals have solid backgrounds
 - [x] Ensure all overlays have solid backgrounds
+
+## Calendar Invite Feature
+
+- [x] Add "New Event" button to Calendar view
+- [x] Create event creation form modal
+- [x] Add event title field
+- [x] Add date & time picker
+- [x] Add attendees field (email addresses)
+- [x] Add location field
+- [x] Add description/notes field
+- [x] Implement "Send Invite" functionality
+- [x] Auto-generate calendar invite email
+- [x] Send invite emails to all attendees
+- [x] Show confirmation when invites sent

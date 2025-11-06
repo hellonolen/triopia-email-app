@@ -45,7 +45,7 @@ export default function EmailComposer({ onClose, onSend }: EmailComposerProps) {
   };
 
   return (
-    <div className="fixed inset-0 bg-background  z-50 flex items-center justify-center p-4 animate-in fade-in duration-200">
+    <div className="fixed inset-0 bg-background z-50 flex items-center justify-center p-4 animate-in fade-in duration-200" style={{ backgroundColor: 'rgb(255, 255, 255)' }}>
       <div className="bg-card border border-border rounded-lg shadow-2xl w-full max-w-3xl max-h-[90vh] flex flex-col animate-in zoom-in-95 duration-300">
         {/* Header */}
         <div className="flex items-center justify-between p-4 border-b border-border">

@@ -1,7 +1,18 @@
-import { Calendar as CalendarIcon, Clock, MapPin, Video, Users } from 'lucide-react';
+import { Calendar as CalendarIcon, Clock, MapPin, Users, Video } from 'lucide-react';
 import { Button } from '@/components/ui/button';
+import { useState } from 'react';
+import EventCreator from './EventCreator';
+import { toast } from 'sonner';
 
 export default function Calendar() {
+  const [showEventCreator, setShowEventCreator] = useState(false);
+
+  const handleSendInvite = (event: any) => {
+    console.log('Sending calendar invite:', event);
+    toast.success(`Calendar invite sent to ${event.attendees.length} attendee(s)`);
+    // In a real app, this would send email invites to all attendees
+  };
+
   const events = [
     {
       id: 1,
@@ -33,13 +44,17 @@ export default function Calendar() {
   ];
 
   return (
+    <>
     <div className="p-4 space-y-4 max-w-5xl">
       <div className="flex items-center justify-between">
         <div>
           <h2 className="text-xl font-semibold mb-1">Calendar</h2>
           <p className="text-sm text-muted-foreground">Manage your schedule and upcoming events</p>
         </div>
-        <Button className="bg-primary hover:bg-primary">
+        <Button 
+          className="bg-primary hover:bg-primary"
+          onClick={() => setShowEventCreator(true)}
+        >
           <CalendarIcon className="w-4 h-4 mr-2" />
           New Event
         </Button>
@@ -139,5 +154,14 @@ export default function Calendar() {
         </div>
       </div>
     </div>
+
+      {/* Event Creator Modal */}
+      {showEventCreator && (
+        <EventCreator
+          onClose={() => setShowEventCreator(false)}
+          onSendInvite={handleSendInvite}
+        />
+      )}
+    </>
   );
 }
