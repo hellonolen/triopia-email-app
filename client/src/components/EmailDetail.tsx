@@ -1,7 +1,9 @@
 import { useState } from 'react';
-import { Archive, Star, MoreVertical, Trash2, Mail, Loader2, Clock } from 'lucide-react';
+import { Archive, Star, MoreVertical, Trash2, Mail, Loader2, Clock, Info, Reply } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import type { Email } from './EmailApp';
+import ContextSidebar from './ContextSidebar';
+import QuickReply from './QuickReply';
 
 interface EmailDetailProps {
   email: Email | null;
@@ -13,6 +15,8 @@ interface EmailDetailProps {
 export default function EmailDetail({ email, onArchive, onDelete, onStarToggle }: EmailDetailProps) {
   const [isSummarizing, setIsSummarizing] = useState(false);
   const [showSummary, setShowSummary] = useState(false);
+  const [isContextOpen, setIsContextOpen] = useState(false);
+  const [showQuickReply, setShowQuickReply] = useState(false);
 
   if (!email) {
     return (
@@ -33,7 +37,8 @@ export default function EmailDetail({ email, onArchive, onDelete, onStarToggle }
   };
 
   return (
-    <div className="flex-1 bg-card flex flex-col h-full animate-in fade-in duration-500">
+    <>
+    <div className="flex-1 bg-card flex flex-col h-full animate-in fade-in duration-500 relative">
       <div className="p-6 border-b border-border flex items-center justify-between">
         <h2 className="text-2xl font-semibold">{email.subject}</h2>
 
@@ -59,6 +64,16 @@ export default function EmailDetail({ email, onArchive, onDelete, onStarToggle }
             title="More"
           >
             <MoreVertical className="w-5 h-5 text-muted-foreground" />
+          </button>
+
+          <button
+            onClick={() => setIsContextOpen(!isContextOpen)}
+            className={`p-2 rounded-lg transition-all duration-200 hover:scale-110 ${
+              isContextOpen ? 'bg-primary text-primary-foreground' : 'hover:bg-muted'
+            }`}
+            title="Show context"
+          >
+            <Info className="w-5 h-5" />
           </button>
 
           <button
@@ -127,7 +142,33 @@ export default function EmailDetail({ email, onArchive, onDelete, onStarToggle }
             </p>
           ))}
         </div>
+
+        {/* Reply Button */}
+        {!showQuickReply && (
+          <div className="mt-8 pt-6 border-t border-border">
+            <Button
+              onClick={() => setShowQuickReply(true)}
+              className="bg-primary hover:bg-primary/90"
+            >
+              <Reply className="w-4 h-4 mr-2" />
+              Reply
+            </Button>
+          </div>
+        )}
       </div>
+
+      {/* Quick Reply Section */}
+      {showQuickReply && (
+        <QuickReply
+          onSend={(message) => {
+            console.log('Sending reply:', message);
+            setShowQuickReply(false);
+          }}
+          onClose={() => setShowQuickReply(false)}
+        />
+      )}
     </div>
+    <ContextSidebar email={email} isOpen={isContextOpen} onClose={() => setIsContextOpen(false)} />
+    </>
   );
 }

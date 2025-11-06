@@ -1,4 +1,4 @@
-import { Mail, Star, Send, FileText, Archive, Trash2, Calendar, Settings, Plus } from 'lucide-react';
+import { Mail, Star, Send, FileText, Archive, Trash2, Calendar, Settings, Plus, BarChart3 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 
 interface SidebarProps {
@@ -18,6 +18,7 @@ export default function Sidebar({ selectedFolder, onFolderSelect, getUnreadCount
   ];
 
   const bottomItems = [
+    { id: 'analytics', label: 'Analytics', icon: BarChart3 },
     { id: 'calendar', label: 'Calendar', icon: Calendar },
     { id: 'settings', label: 'Settings', icon: Settings },
   ];

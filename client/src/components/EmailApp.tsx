@@ -2,6 +2,7 @@ import { useState } from 'react';
 import Sidebar from './Sidebar';
 import EmailList from './EmailList';
 import EmailDetail from './EmailDetail';
+import AnalyticsDashboard from './AnalyticsDashboard';
 
 export interface Email {
   id: number;
@@ -14,6 +15,8 @@ export interface Email {
   date: string;
   isStarred: boolean;
   isRead: boolean;
+  priority: 'urgent' | 'high' | 'normal' | 'low';
+  category?: string;
 }
 
 export default function EmailApp() {
@@ -31,6 +34,8 @@ export default function EmailApp() {
       date: 'Oct 8, 12:28 PM',
       isStarred: true,
       isRead: false,
+      priority: 'high',
+      category: 'Work',
     },
     {
       id: 2,
@@ -43,6 +48,8 @@ export default function EmailApp() {
       date: 'Oct 8, 11:45 AM',
       isStarred: false,
       isRead: true,
+      priority: 'normal',
+      category: 'Personal',
     },
     {
       id: 3,
@@ -55,6 +62,8 @@ export default function EmailApp() {
       date: 'Oct 7, 10:15 AM',
       isStarred: false,
       isRead: true,
+      priority: 'normal',
+      category: 'Notifications',
     },
     {
       id: 4,
@@ -67,6 +76,8 @@ export default function EmailApp() {
       date: 'Oct 6, 9:20 AM',
       isStarred: false,
       isRead: true,
+      priority: 'low',
+      category: 'Work',
     },
     {
       id: 5,
@@ -79,6 +90,8 @@ export default function EmailApp() {
       date: 'Oct 5, 4:30 PM',
       isStarred: false,
       isRead: true,
+      priority: 'low',
+      category: 'Notifications',
     },
   ]);
 
@@ -116,6 +129,28 @@ export default function EmailApp() {
     }, 300);
   };
 
+  const handlePin = (emailId: number) => {
+    console.log('Pin email:', emailId);
+  };
+
+  const handleMarkAsSpam = (emailId: number) => {
+    setTimeout(() => {
+      setEmails(emails.filter(email => email.id !== emailId));
+      if (selectedEmail?.id === emailId) {
+        setSelectedEmail(null);
+      }
+    }, 300);
+  };
+
+  const handleToggleRead = (emailId: number) => {
+    setEmails(emails.map(email =>
+      email.id === emailId ? { ...email, isRead: !email.isRead } : email
+    ));
+    if (selectedEmail?.id === emailId) {
+      setSelectedEmail({ ...selectedEmail, isRead: !selectedEmail.isRead });
+    }
+  };
+
   const getUnreadCount = (folder: string) => {
     if (folder === 'inbox') {
       return emails.filter(e => !e.isRead).length;
@@ -136,18 +171,31 @@ export default function EmailApp() {
         onFolderSelect={setSelectedFolder}
         getUnreadCount={getUnreadCount}
       />
-      <EmailList
-        emails={emails}
-        selectedEmail={selectedEmail}
-        onEmailSelect={handleEmailSelect}
-        onStarToggle={handleStarToggle}
-      />
-      <EmailDetail
-        email={selectedEmail}
-        onArchive={handleArchive}
-        onDelete={handleDelete}
-        onStarToggle={handleStarToggle}
-      />
+      {selectedFolder === 'analytics' ? (
+        <div className="flex-1 overflow-y-auto">
+          <AnalyticsDashboard />
+        </div>
+      ) : (
+        <>
+          <EmailList
+            emails={emails}
+            selectedEmail={selectedEmail}
+            onEmailSelect={handleEmailSelect}
+            onStarToggle={handleStarToggle}
+            onArchive={handleArchive}
+            onDelete={handleDelete}
+            onPin={handlePin}
+            onMarkAsSpam={handleMarkAsSpam}
+            onToggleRead={handleToggleRead}
+          />
+          <EmailDetail
+            email={selectedEmail}
+            onArchive={handleArchive}
+            onDelete={handleDelete}
+            onStarToggle={handleStarToggle}
+          />
+        </>
+      )}
     </div>
   );
 }

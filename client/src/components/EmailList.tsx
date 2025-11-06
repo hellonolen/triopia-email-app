@@ -1,15 +1,31 @@
 import { useState } from 'react';
-import { Search, Filter, RefreshCw, Star, Mail } from 'lucide-react';
+import { Search, Filter, RefreshCw, Mail } from 'lucide-react';
 import type { Email } from './EmailApp';
+import EmailListItem from './EmailListItem';
 
 interface EmailListProps {
   emails: Email[];
   selectedEmail: Email | null;
   onEmailSelect: (email: Email) => void;
   onStarToggle: (emailId: number) => void;
+  onArchive?: (emailId: number) => void;
+  onDelete?: (emailId: number) => void;
+  onPin?: (emailId: number) => void;
+  onMarkAsSpam?: (emailId: number) => void;
+  onToggleRead?: (emailId: number) => void;
 }
 
-export default function EmailList({ emails, selectedEmail, onEmailSelect, onStarToggle }: EmailListProps) {
+export default function EmailList({ 
+  emails, 
+  selectedEmail, 
+  onEmailSelect, 
+  onStarToggle,
+  onArchive,
+  onDelete,
+  onPin,
+  onMarkAsSpam,
+  onToggleRead
+}: EmailListProps) {
   const [searchQuery, setSearchQuery] = useState('');
 
   const filteredEmails = emails.filter(email =>
@@ -52,66 +68,20 @@ export default function EmailList({ emails, selectedEmail, onEmailSelect, onStar
             <p className="text-muted-foreground">No emails found</p>
           </div>
         ) : (
-          <ul className="divide-y divide-border">
+          <ul>
             {filteredEmails.map((email) => (
-              <li
+              <EmailListItem
                 key={email.id}
-                onClick={() => onEmailSelect(email)}
-                className={`
-                  relative px-6 py-5 cursor-pointer transition-all duration-200
-                  hover:bg-muted/50
-                  ${selectedEmail?.id === email.id ? 'bg-muted border-l-4 border-primary' : ''}
-                  ${!email.isRead ? 'bg-card' : ''}
-                  animate-in fade-in slide-in-from-top-2 duration-300
-                `}
-              >
-                <div className="flex items-start gap-3">
-                  <input
-                    type="checkbox"
-                    className="mt-1 w-4 h-4 rounded border-2 border-muted-foreground/30 
-                             hover:border-primary transition-colors duration-200
-                             opacity-0 hover:opacity-100 focus:opacity-100"
-                    onClick={(e) => e.stopPropagation()}
-                  />
-
-                  <div className="flex-1 min-w-0">
-                    <div className="flex items-center justify-between mb-1">
-                      <span className={`text-sm ${!email.isRead ? 'font-semibold' : 'font-medium'}`}>
-                        {email.sender}
-                      </span>
-                      <div className="flex items-center gap-2">
-                        <span className="text-xs text-muted-foreground">{email.timestamp}</span>
-                        <button
-                          onClick={(e) => {
-                            e.stopPropagation();
-                            onStarToggle(email.id);
-                          }}
-                          className={`
-                            p-1 transition-all duration-200
-                            ${email.isStarred ? 'opacity-100' : 'opacity-0 group-hover:opacity-100'}
-                            hover:scale-125
-                          `}
-                        >
-                          <Star 
-                            className={`w-4 h-4 ${email.isStarred ? 'fill-yellow-400 text-yellow-400' : 'text-muted-foreground'}`}
-                          />
-                        </button>
-                      </div>
-                    </div>
-
-                    <h3 className={`text-sm mb-1 ${!email.isRead ? 'font-semibold' : 'font-medium'}`}>
-                      {email.subject}
-                    </h3>
-                    <p className="text-sm text-muted-foreground line-clamp-2">
-                      {email.preview}
-                    </p>
-                  </div>
-                </div>
-
-                {!email.isRead && (
-                  <div className="absolute left-0 top-1/2 -translate-y-1/2 w-1 h-10 bg-primary rounded-r" />
-                )}
-              </li>
+                email={email}
+                isSelected={selectedEmail?.id === email.id}
+                onSelect={onEmailSelect}
+                onStarToggle={onStarToggle}
+                onArchive={onArchive}
+                onDelete={onDelete}
+                onPin={onPin}
+                onMarkAsSpam={onMarkAsSpam}
+                onToggleRead={onToggleRead}
+              />
             ))}
           </ul>
         )}
