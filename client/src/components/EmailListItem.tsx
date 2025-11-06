@@ -48,9 +48,18 @@ export default function EmailListItem({
       `}
     >
       <div className="flex items-start gap-3">
-        {/* Avatar */}
-        <div className="w-9 h-9 bg-gradient-to-br from-primary to-primary/80 rounded-full flex items-center justify-center flex-shrink-0 text-primary-foreground font-semibold text-sm">
-          {email.sender.charAt(0).toUpperCase()}
+        {/* Avatar and Star */}
+        <div className="flex flex-col items-center gap-1 flex-shrink-0">
+          <div className="w-9 h-9 bg-gradient-to-br from-primary to-primary/80 rounded-full flex items-center justify-center text-primary-foreground font-semibold text-sm">
+            {email.sender.charAt(0).toUpperCase()}
+          </div>
+          <button
+            onClick={(e) => handleAction(e, () => onStarToggle(email.id))}
+            className="p-0.5 rounded transition-all duration-200 hover:scale-110"
+            title="Star"
+          >
+            <Star className={`w-3.5 h-3.5 ${email.isStarred ? 'fill-primary text-primary' : 'text-muted-foreground'}`} />
+          </button>
         </div>
 
         {/* Email Content */}
@@ -58,7 +67,6 @@ export default function EmailListItem({
           {/* Header: Priority, From, Time, Actions */}
           <div className="flex items-center justify-between mb-2">
             <div className="flex items-center gap-2 flex-1 min-w-0">
-              <PriorityBadge priority={email.priority} />
               <span className={`text-xs truncate ${!email.isRead ? 'font-semibold' : 'font-medium'}`}>
                 {email.sender}
               </span>
@@ -67,17 +75,11 @@ export default function EmailListItem({
               </span>
             </div>
             
-            <div className="flex items-center gap-1 flex-shrink-0 ml-2">
-              <span className="text-[11px] text-muted-foreground mr-2">{email.timestamp}</span>
-              
-              {/* Star Button */}
-              <button
-                onClick={(e) => handleAction(e, () => onStarToggle(email.id))}
-                className="p-1.5 rounded-md transition-all duration-200 hover:bg-muted hover:scale-110"
-                title="Star"
-              >
-                <Star className={`w-4 h-4 ${email.isStarred ? 'fill-primary text-primary' : 'text-muted-foreground'}`} />
-              </button>
+            <div className="flex items-center gap-2 flex-shrink-0 ml-2">
+              <span className="text-[11px] text-muted-foreground">
+                {new Date().toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}
+              </span>
+              <span className="text-[11px] text-muted-foreground">{email.timestamp}</span>
             </div>
           </div>
 

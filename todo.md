@@ -153,3 +153,69 @@
 - [ ] Smart attachment management (cloud hosting, previews, duplicate detection)
 - [ ] Brand indicators (BIMI) for sender trust
 - [ ] Feedback tools (emoji reactions, ratings, surveys)
+
+## New Visual Fixes
+
+- [x] Remove decorative icons (clock, symbols) next to email sender names
+- [x] Show both time AND date by default in email list
+- [x] Move star icon to left under avatar
+
+## Agentic Features Roadmap
+
+### Security & Trust
+- [ ] End-to-end encryption
+- [ ] Biometric login support
+- [ ] AI-powered phishing detection with auto-quarantine
+- [ ] DKIM, SPF, DMARC compliance management
+
+### Intelligent Assistance
+- [ ] AI summarization of long email threads
+- [ ] Automatic deadline extraction and highlighting
+- [ ] Tone-matching email drafting (formal/casual/executive)
+- [ ] Proactive insights (unanswered emails, follow-up suggestions)
+- [ ] Contextual memory of past conversations
+
+### Personalization & Accessibility
+- [ ] Workflow customization
+- [ ] Voice control integration
+- [ ] Text-to-speech for emails
+- [ ] High-contrast mode and enhanced readability
+- [ ] Screen reader optimization
+
+### Interactive & Dynamic Content
+- [ ] Live polls in emails
+- [ ] Embedded video players
+- [ ] Image carousels
+- [ ] Quizzes and gamified elements
+- [ ] Real-time social feed integration
+
+### Cross-Platform & Sync
+- [ ] Desktop app version
+- [ ] Mobile app (iOS/Android)
+- [ ] Real-time sync across all devices
+- [ ] Offline mode with sync on reconnect
+
+### Deep Integrations
+- [ ] One-click project management tool connections (Asana, Trello, Monday)
+- [ ] Smart device integration
+- [ ] CRM auto-updates (Salesforce, HubSpot)
+- [ ] Slack/Teams integration
+
+### Automation & Efficiency
+- [ ] Advanced rule-based email sorting
+- [ ] Smart auto-responders with context awareness
+- [ ] Team draft sharing and collaboration
+- [ ] Automated SLA compliance tracking
+- [ ] Autonomous routine task handling (unsubscribes, confirmations)
+
+### Privacy & Control
+- [ ] Granular message retention settings
+- [ ] Marketing opt-in/out management
+- [ ] Data sharing transparency dashboard
+- [ ] User-controlled data export
+
+### Real-Time Analytics
+- [ ] Dynamic engagement dashboards
+- [ ] Actionable metrics and insights
+- [ ] Interactive element feedback collection
+- [ ] Team performance analytics
