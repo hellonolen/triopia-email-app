@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Archive, Star, MoreVertical, Trash2, Mail, Loader2, Clock, Info, Reply, Sparkles } from 'lucide-react';
+import { Archive, Star, MoreVertical, Trash2, Mail, Loader2, Clock, Info, Reply } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import type { Email } from './EmailApp';
 import ContextSidebar from './ContextSidebar';
@@ -107,7 +107,7 @@ export default function EmailDetail({ email, onArchive, onDelete, onStarToggle }
             {isSummarizing ? (
               <Loader2 className="w-5 h-5 text-primary animate-spin" />
             ) : (
-              <Sparkles className="w-5 h-5 text-primary" />
+              <Mail className="w-5 h-5 text-primary" />
             )}
           </button>
         </div>

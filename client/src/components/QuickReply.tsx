@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Send, Sparkles, ThumbsUp, Calendar, X } from 'lucide-react';
+import { Send, ThumbsUp, Calendar, X } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 
 interface QuickReplyProps {
@@ -39,7 +39,6 @@ export default function QuickReply({ onSend, onClose }: QuickReplyProps) {
     <div className="border-t border-border bg-card p-6 space-y-4 animate-in slide-in-from-bottom-4 duration-300">
       <div className="flex items-center justify-between mb-4">
         <div className="flex items-center gap-2">
-          <Sparkles className="w-5 h-5 text-primary" />
           <h3 className="font-semibold">Quick Reply</h3>
         </div>
         <button
