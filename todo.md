@@ -393,3 +393,52 @@
 - [x] Add event to user's calendar on Accept
 - [x] Show confirmation toast after responding
 - [x] Update button states after response
+
+## Production Backend Implementation
+
+### 1. Real Email Integration
+- [ ] Add IMAP client library (node-imap or imap-simple)
+- [ ] Add SMTP client library (nodemailer)
+- [ ] Implement Gmail OAuth2 flow
+- [ ] Implement Outlook OAuth2 flow
+- [ ] Build email sync worker (fetch new emails)
+- [ ] Build email send functionality
+- [ ] Handle attachments (upload/download)
+- [ ] Implement email threading logic
+- [ ] Add real-time email notifications via WebSocket
+
+### 2. Backend Infrastructure
+- [x] Add database schema (emails, contacts, calendar, notes)
+- [ ] Create API endpoints for email CRUD
+- [ ] Create API endpoints for contacts CRUD
+- [ ] Create API endpoints for calendar CRUD
+- [ ] Create API endpoints for notes CRUD
+- [ ] Add WebSocket server for real-time updates
+- [ ] Implement background job queue (Bull/BullMQ)
+- [ ] Add file storage integration (S3-compatible)
+- [ ] Set up Redis for caching
+
+### 3. AI/Agentic Features Backend
+- [ ] Integrate OpenAI API for email summarization
+- [ ] Implement AI-powered quick reply generation
+- [ ] Build tone adjustment feature (formal/casual)
+- [ ] Create email prioritization classifier
+- [ ] Implement smart categorization
+- [ ] Build relationship intelligence analyzer
+- [ ] Add proactive notification agent
+
+### 4. Multi-Account Management
+- [ ] Create account credentials table (encrypted)
+- [ ] Build account connection flow
+- [ ] Implement per-account sync workers
+- [ ] Create unified inbox aggregation logic
+- [ ] Add account-specific settings
+- [ ] Implement cross-account search
+
+### 5. Calendar Integration
+- [ ] Integrate Google Calendar API
+- [ ] Integrate Microsoft Outlook Calendar API
+- [ ] Implement two-way calendar sync
+- [ ] Generate .ics files for invites
+- [ ] Handle calendar event CRUD operations
+- [ ] Sync calendar events to external providers

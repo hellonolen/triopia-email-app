@@ -1,0 +1,122 @@
+CREATE TABLE `calendarEvents` (
+	`id` int AUTO_INCREMENT NOT NULL,
+	`userId` int NOT NULL,
+	`title` varchar(500) NOT NULL,
+	`description` text,
+	`location` varchar(500),
+	`startTime` timestamp NOT NULL,
+	`endTime` timestamp NOT NULL,
+	`attendees` text,
+	`organizer` varchar(320),
+	`isAllDay` int NOT NULL DEFAULT 0,
+	`recurrence` text,
+	`reminders` text,
+	`externalId` varchar(255),
+	`externalProvider` varchar(50),
+	`status` enum('confirmed','tentative','cancelled') DEFAULT 'confirmed',
+	`sharedNoteId` int,
+	`createdAt` timestamp NOT NULL DEFAULT (now()),
+	`updatedAt` timestamp NOT NULL DEFAULT (now()) ON UPDATE CURRENT_TIMESTAMP,
+	CONSTRAINT `calendarEvents_id` PRIMARY KEY(`id`)
+);
+--> statement-breakpoint
+CREATE TABLE `contacts` (
+	`id` int AUTO_INCREMENT NOT NULL,
+	`userId` int NOT NULL,
+	`email` varchar(320) NOT NULL,
+	`name` varchar(255),
+	`company` varchar(255),
+	`jobTitle` varchar(255),
+	`phone` varchar(50),
+	`notes` text,
+	`avatar` varchar(500),
+	`tags` text,
+	`lastEmailedAt` timestamp,
+	`emailCount` int DEFAULT 0,
+	`createdAt` timestamp NOT NULL DEFAULT (now()),
+	`updatedAt` timestamp NOT NULL DEFAULT (now()) ON UPDATE CURRENT_TIMESTAMP,
+	CONSTRAINT `contacts_id` PRIMARY KEY(`id`)
+);
+--> statement-breakpoint
+CREATE TABLE `emailAccounts` (
+	`id` int AUTO_INCREMENT NOT NULL,
+	`userId` int NOT NULL,
+	`provider` enum('gmail','outlook','imap') NOT NULL,
+	`email` varchar(320) NOT NULL,
+	`displayName` varchar(255),
+	`accessToken` text,
+	`refreshToken` text,
+	`imapHost` varchar(255),
+	`imapPort` int,
+	`smtpHost` varchar(255),
+	`smtpPort` int,
+	`imapUsername` varchar(255),
+	`imapPassword` text,
+	`smtpUsername` varchar(255),
+	`smtpPassword` text,
+	`lastSyncedAt` timestamp,
+	`isActive` int NOT NULL DEFAULT 1,
+	`createdAt` timestamp NOT NULL DEFAULT (now()),
+	`updatedAt` timestamp NOT NULL DEFAULT (now()) ON UPDATE CURRENT_TIMESTAMP,
+	CONSTRAINT `emailAccounts_id` PRIMARY KEY(`id`)
+);
+--> statement-breakpoint
+CREATE TABLE `emailSyncStatus` (
+	`id` int AUTO_INCREMENT NOT NULL,
+	`accountId` int NOT NULL,
+	`lastSyncedMessageId` varchar(255),
+	`lastSyncedAt` timestamp,
+	`syncStatus` enum('idle','syncing','error') DEFAULT 'idle',
+	`errorMessage` text,
+	`createdAt` timestamp NOT NULL DEFAULT (now()),
+	`updatedAt` timestamp NOT NULL DEFAULT (now()) ON UPDATE CURRENT_TIMESTAMP,
+	CONSTRAINT `emailSyncStatus_id` PRIMARY KEY(`id`),
+	CONSTRAINT `emailSyncStatus_accountId_unique` UNIQUE(`accountId`)
+);
+--> statement-breakpoint
+CREATE TABLE `emails` (
+	`id` int AUTO_INCREMENT NOT NULL,
+	`userId` int NOT NULL,
+	`accountId` int NOT NULL,
+	`messageId` varchar(255) NOT NULL,
+	`threadId` varchar(255),
+	`subject` text,
+	`from` varchar(320) NOT NULL,
+	`fromName` varchar(255),
+	`to` text,
+	`cc` text,
+	`bcc` text,
+	`replyTo` varchar(320),
+	`body` text,
+	`bodyHtml` text,
+	`snippet` text,
+	`hasAttachments` int NOT NULL DEFAULT 0,
+	`attachments` text,
+	`folder` varchar(50) NOT NULL DEFAULT 'inbox',
+	`isRead` int NOT NULL DEFAULT 0,
+	`isStarred` int NOT NULL DEFAULT 0,
+	`isPinned` int NOT NULL DEFAULT 0,
+	`priority` enum('urgent','high','normal','low') DEFAULT 'normal',
+	`aiSummary` text,
+	`aiCategory` varchar(50),
+	`sentAt` timestamp,
+	`receivedAt` timestamp,
+	`createdAt` timestamp NOT NULL DEFAULT (now()),
+	`updatedAt` timestamp NOT NULL DEFAULT (now()) ON UPDATE CURRENT_TIMESTAMP,
+	CONSTRAINT `emails_id` PRIMARY KEY(`id`)
+);
+--> statement-breakpoint
+CREATE TABLE `notes` (
+	`id` int AUTO_INCREMENT NOT NULL,
+	`userId` int NOT NULL,
+	`title` varchar(500),
+	`content` text,
+	`drawingData` text,
+	`tags` text,
+	`isShared` int NOT NULL DEFAULT 0,
+	`sharedWith` text,
+	`linkedEventId` int,
+	`createdAt` timestamp NOT NULL DEFAULT (now()),
+	`updatedAt` timestamp NOT NULL DEFAULT (now()) ON UPDATE CURRENT_TIMESTAMP,
+	CONSTRAINT `notes_id` PRIMARY KEY(`id`)
+);
