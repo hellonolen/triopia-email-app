@@ -1,13 +1,16 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { trpc } from "@/lib/trpc";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { RefreshCw, Mail, AlertCircle, CheckCircle2 } from "lucide-react";
 import { toast } from "sonner";
+import { useWebSocket } from "@/hooks/useWebSocket";
 
 export default function UnifiedInbox() {
   const [selectedAccount, setSelectedAccount] = useState<number | null>(null);
   const [selectedFolder, setSelectedFolder] = useState<string>("inbox");
+  const { connected, on, off } = useWebSocket();
+  const [unreadCount, setUnreadCount] = useState<number>(0);
   
   const folders = [
     { id: "inbox", label: "Inbox", icon: Mail },
@@ -27,6 +30,27 @@ export default function UnifiedInbox() {
   // Filter emails by selected folder
   const emails = allEmails?.filter((email: any) => email.folder === selectedFolder);
   
+  // Listen for real-time email notifications
+  useEffect(() => {
+    const handleNewEmail = (data: any) => {
+      toast.success(`New email from ${data.from}`);
+      refetchEmails();
+      setUnreadCount(prev => prev + 1);
+    };
+
+    const handleUnreadCount = (data: { count: number }) => {
+      setUnreadCount(data.count);
+    };
+
+    on("new-email", handleNewEmail);
+    on("unread-count", handleUnreadCount);
+
+    return () => {
+      off("new-email", handleNewEmail);
+      off("unread-count", handleUnreadCount);
+    };
+  }, [on, off, refetchEmails]);
+
   const syncMutation = trpc.email.syncAccount.useMutation({
     onSuccess: () => {
       toast.success("Sync started");
@@ -58,9 +82,9 @@ export default function UnifiedInbox() {
   };
 
   return (
-    <div className="flex h-screen bg-background">
+    <div className="flex flex-col md:flex-row h-screen bg-background">
       {/* Account Sidebar */}
-      <div className="w-64 border-r border-border bg-sidebar p-4">
+      <div className="w-full md:w-64 border-b md:border-r md:border-b-0 border-border bg-sidebar p-4 overflow-auto">
         <h2 className="text-lg font-semibold mb-4">Email Accounts</h2>
         
         <div className="space-y-2">
@@ -106,7 +130,7 @@ export default function UnifiedInbox() {
       </div>
 
       {/* Folder Navigation */}
-      <div className="w-48 border-r border-border bg-sidebar p-4">
+      <div className="w-full md:w-48 border-b md:border-r md:border-b-0 border-border bg-sidebar p-4 overflow-auto">
         <h3 className="text-sm font-semibold mb-3 text-muted-foreground">FOLDERS</h3>
         <div className="space-y-1">
           {folders.map((folder) => (
@@ -130,7 +154,19 @@ export default function UnifiedInbox() {
         {selectedAccount ? (
           <>
             <div className="border-b p-4 flex items-center justify-between">
-              <h1 className="text-2xl font-bold capitalize">{selectedFolder}</h1>
+              <div className="flex items-center gap-3">
+                <h1 className="text-2xl font-bold capitalize">{selectedFolder}</h1>
+                {unreadCount > 0 && (
+                  <Badge variant="default" className="bg-primary">
+                    {unreadCount} unread
+                  </Badge>
+                )}
+                {connected && (
+                  <Badge variant="outline" className="text-xs">
+                    • Live
+                  </Badge>
+                )}
+              </div>
               <Button
                 onClick={() => handleSync(selectedAccount)}
                 disabled={syncMutation.isPending}
