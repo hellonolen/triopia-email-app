@@ -22,20 +22,6 @@
       "when": 1762457964355,
       "tag": "0002_adorable_vargas",
       "breakpoints": true
-    },
-    {
-      "idx": 3,
-      "version": "5",
-      "when": 1762459332719,
-      "tag": "0003_brief_black_tom",
-      "breakpoints": true
-    },
-    {
-      "idx": 4,
-      "version": "5",
-      "when": 1762459367679,
-      "tag": "0004_easy_scream",
-      "breakpoints": true
     }
   ]
 }

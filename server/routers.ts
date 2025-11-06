@@ -15,13 +15,6 @@ import { calendarRouter as calendarRouterNew } from "./routers/calendarRouter";
 import { templatesRouter } from "./routers/templatesRouter";
 import { preferencesRouter } from "./routers/preferencesRouter";
 import { snoozeRouter } from "./routers/snoozeRouter";
-import { rbacRouter } from "./routers/rbacRouter";
-import { billingRouter } from "./routers/billingRouter";
-import { notificationsRouter } from "./routers/notificationsRouter";
-import { supportRouter } from "./routers/supportRouter";
-import { activityRouter } from "./routers/activityRouter";
-import { systemRouter as systemCoreRouter } from "./routers/systemRouter";
-import { complianceRouter } from "./routers/complianceRouter";
 
 export const appRouter = router({
     // if you need to use socket.io, read and register route in server/_core/index.ts, all api should start with '/api/' so that the gateway can route correctly
@@ -49,15 +42,6 @@ export const appRouter = router({
   templates: templatesRouter,
   preferences: preferencesRouter,
   snooze: snoozeRouter,
-  
-  // 12-Agent SaaS Core Routers
-  rbac: rbacRouter,
-  billing: billingRouter,
-  notificationsCore: notificationsRouter,
-  support: supportRouter,
-  activity: activityRouter,
-  systemCore: systemCoreRouter,
-  compliance: complianceRouter,
 });
 
 export type AppRouter = typeof appRouter;
