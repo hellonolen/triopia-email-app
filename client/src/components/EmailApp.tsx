@@ -6,6 +6,7 @@ import AnalyticsDashboard from './AnalyticsDashboard';
 import Calendar from './Calendar';
 import Settings from './Settings';
 import Footer from './Footer';
+import EmailComposer from './EmailComposer';
 
 export interface Email {
   id: number;
@@ -27,6 +28,7 @@ export interface Email {
 export default function EmailApp() {
   const [selectedFolder, setSelectedFolder] = useState('inbox');
   const [selectedEmail, setSelectedEmail] = useState<Email | null>(null);
+  const [showComposer, setShowComposer] = useState(false);
   const [emails, setEmails] = useState<Email[]>([
     {
       id: 1,
@@ -199,6 +201,7 @@ export default function EmailApp() {
           selectedFolder={selectedFolder}
           onFolderSelect={setSelectedFolder}
           getUnreadCount={getUnreadCount}
+          onCompose={() => setShowComposer(true)}
         />
         {selectedFolder === 'analytics' ? (
           <div className="flex-1 overflow-y-auto">
@@ -236,6 +239,15 @@ export default function EmailApp() {
         )}
       </div>
       <Footer />
+      {showComposer && (
+        <EmailComposer
+          onClose={() => setShowComposer(false)}
+          onSend={(email) => {
+            console.log('Sending email:', email);
+            setShowComposer(false);
+          }}
+        />
+      )}
     </div>
   );
 }

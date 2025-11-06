@@ -48,16 +48,10 @@ export default function EmailListItem({
       `}
     >
       <div className="flex items-start gap-3">
-        {/* Checkbox */}
-        <input
-          type="checkbox"
-          className={`
-            mt-1.5 w-4 h-4 rounded border-2 border-muted-foreground/30 
-            hover:border-primary transition-all duration-200
-            ${isHovered ? 'opacity-100' : 'opacity-0'}
-          `}
-          onClick={(e) => e.stopPropagation()}
-        />
+        {/* Avatar */}
+        <div className="w-9 h-9 bg-gradient-to-br from-primary to-primary/80 rounded-full flex items-center justify-center flex-shrink-0 text-primary-foreground font-semibold text-sm">
+          {email.sender.charAt(0).toUpperCase()}
+        </div>
 
         {/* Email Content */}
         <div className="flex-1 min-w-0">
@@ -65,41 +59,35 @@ export default function EmailListItem({
           <div className="flex items-center justify-between mb-2">
             <div className="flex items-center gap-2 flex-1 min-w-0">
               <PriorityBadge priority={email.priority} />
-              <span className={`text-sm truncate ${!email.isRead ? 'font-semibold' : 'font-medium'}`}>
+              <span className={`text-xs truncate ${!email.isRead ? 'font-semibold' : 'font-medium'}`}>
                 {email.sender}
               </span>
-              <span className="text-xs text-muted-foreground flex-shrink-0">
+              <span className="text-[11px] text-muted-foreground flex-shrink-0">
                 {email.senderEmail}
               </span>
             </div>
             
             <div className="flex items-center gap-1 flex-shrink-0 ml-2">
-              <span className="text-xs text-muted-foreground mr-2">{email.timestamp}</span>
+              <span className="text-[11px] text-muted-foreground mr-2">{email.timestamp}</span>
               
               {/* Star Button */}
               <button
                 onClick={(e) => handleAction(e, () => onStarToggle(email.id))}
-                className={`
-                  p-1.5 rounded transition-all duration-200
-                  ${email.isStarred ? 'opacity-100' : isHovered ? 'opacity-100' : 'opacity-0'}
-                  hover:bg-muted hover:scale-110
-                `}
+                className="p-1.5 rounded-md transition-all duration-200 hover:bg-muted hover:scale-110"
                 title="Star"
               >
-                        <Star 
-                            className={`w-4 h-4 ${email.isStarred ? 'fill-primary text-primary' : 'text-muted-foreground'}`}
-                          />
+                <Star className={`w-4 h-4 ${email.isStarred ? 'fill-primary text-primary' : 'text-muted-foreground'}`} />
               </button>
             </div>
           </div>
 
           {/* Subject */}
-          <h3 className={`text-sm mb-1.5 truncate ${!email.isRead ? 'font-semibold' : 'font-medium'}`}>
+          <h3 className={`text-sm mb-1 truncate ${!email.isRead ? 'font-semibold' : 'font-medium'}`}>
             {email.subject}
           </h3>
 
           {/* Preview */}
-          <p className="text-sm text-muted-foreground line-clamp-2 mb-2">
+          <p className="text-xs text-muted-foreground line-clamp-2 mb-2">
             {email.preview}
           </p>
 

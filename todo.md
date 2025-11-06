@@ -129,3 +129,27 @@
 - [x] Enable IMAP email import (20+ emails support)
 - [x] Support multiple email providers (Gmail, Outlook, etc.)
 - [x] Support domain-based email import
+
+## Visual Fixes (Immediate)
+
+- [x] Remove decorative icons (arrows, zigzags) from email list
+- [x] Replace decorative icons with simple circular avatars
+- [x] Remove yellow outline from starred emails (just fill the star)
+- [x] Reduce overall text size throughout the app
+- [x] Add text size settings (XS, S, M, L, XL) in Settings
+
+## Missing Core Features (From Original 20)
+
+- [ ] Advanced search with sender/domain/conversation grouping
+- [x] Drag-and-drop email composer
+- [ ] Team collaboration tools (comments, shared inboxes, threads)
+- [ ] Full integrated chat/messaging implementation
+- [ ] Deep CRM integrations
+- [ ] Screen reader support and high-contrast mode
+- [ ] Context-aware notifications system
+- [ ] Interactive email elements (AMP, polls, surveys, forms)
+- [ ] Secure authentication and compliance (DKIM, SPF, DMARC)
+- [ ] One-click unsubscribe functionality
+- [ ] Smart attachment management (cloud hosting, previews, duplicate detection)
+- [ ] Brand indicators (BIMI) for sender trust
+- [ ] Feedback tools (emoji reactions, ratings, surveys)

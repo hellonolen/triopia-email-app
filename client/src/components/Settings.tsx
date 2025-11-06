@@ -1,5 +1,6 @@
 import { useState } from 'react';
-import { Mail, Server, Key, User, Save, Plus, Trash2 } from 'lucide-react';
+import { Mail, Server, Key, User, Save, Plus, Trash2, Type } from 'lucide-react';
+import { useTextSize } from '@/contexts/TextSizeContext';
 import { Button } from '@/components/ui/button';
 
 interface EmailAccount {
@@ -10,6 +11,7 @@ interface EmailAccount {
 }
 
 export default function Settings() {
+  const { textSize, setTextSize } = useTextSize();
   const [accounts, setAccounts] = useState<EmailAccount[]>([
     { id: 1, provider: 'Gmail', email: 'user@gmail.com', status: 'connected' },
   ]);
@@ -171,6 +173,34 @@ export default function Settings() {
         <h3 className="text-lg font-semibold">General Settings</h3>
         
         <div className="space-y-3">
+          {/* Text Size Setting */}
+          <div className="p-4 bg-card border border-border rounded-lg">
+            <div className="flex items-center justify-between mb-3">
+              <div className="flex items-center gap-2">
+                <Type className="w-5 h-5 text-primary" />
+                <div>
+                  <div className="font-medium">Text Size</div>
+                  <div className="text-sm text-muted-foreground">Adjust the size of text throughout the app</div>
+                </div>
+              </div>
+            </div>
+            <div className="flex gap-2">
+              {(['xs', 'sm', 'md', 'lg', 'xl'] as const).map((size) => (
+                <button
+                  key={size}
+                  onClick={() => setTextSize(size)}
+                  className={`px-4 py-2 rounded-lg text-xs font-medium transition-all duration-200 ${
+                    textSize === size
+                      ? 'bg-primary text-primary-foreground'
+                      : 'bg-muted hover:bg-muted/80'
+                  }`}
+                >
+                  {size.toUpperCase()}
+                </button>
+              ))}
+            </div>
+          </div>
+
           <div className="flex items-center justify-between p-4 bg-card border border-border rounded-lg">
             <div>
               <div className="font-medium">Email Notifications</div>

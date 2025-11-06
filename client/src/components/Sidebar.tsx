@@ -5,9 +5,10 @@ interface SidebarProps {
   selectedFolder: string;
   onFolderSelect: (folder: string) => void;
   getUnreadCount: (folder: string) => number;
+  onCompose?: () => void;
 }
 
-export default function Sidebar({ selectedFolder, onFolderSelect, getUnreadCount }: SidebarProps) {
+export default function Sidebar({ selectedFolder, onFolderSelect, getUnreadCount, onCompose }: SidebarProps) {
   const folders = [
     { id: 'inbox', label: 'Inbox', icon: Mail },
     { id: 'starred', label: 'Starred', icon: Star },
@@ -26,7 +27,8 @@ export default function Sidebar({ selectedFolder, onFolderSelect, getUnreadCount
   return (
     <aside className="w-[280px] bg-card border-r border-border flex flex-col h-full p-6">
       <div className="mb-8">
-        <Button 
+        <Button
+          onClick={onCompose}
           className="w-full bg-primary hover:bg-primary/90 text-primary-foreground font-medium shadow-sm hover:shadow-md transition-all duration-200 hover:-translate-y-0.5"
           size="lg"
         >
