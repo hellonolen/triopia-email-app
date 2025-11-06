@@ -10,7 +10,23 @@ import UnifiedInbox from "./pages/UnifiedInbox";
 import Calendar from "./pages/Calendar";
 import Privacy from "./pages/Privacy";
 import Terms from "./pages/Terms";
-import Contact from "@/pages/Contact";
+import Contact from "./pages/Contact";
+import ProfileCore from "./pages/ProfileCore";
+import SettingsCore from "./pages/SettingsCore";
+import LegalCore from "./pages/LegalCore";
+import AppCore from "./pages/AppCore";
+import BillingCore from "./pages/BillingCore";
+import AdminCore from "./pages/AdminCore";
+import SupportCore from "./pages/SupportCore";
+import DeveloperCore from "./pages/DeveloperCore";
+import StatusCore from "./pages/StatusCore";
+import LogsCore from "./pages/LogsCore";
+import FlagsCore from "./pages/FlagsCore";
+import NotificationsCore from "./pages/NotificationsCore";
+import SearchCore from "./pages/SearchCore";
+import ActivityCore from "./pages/ActivityCore";
+import OnboardingCore from "./pages/OnboardingCore";
+import AssistantCore from "./pages/AssistantCore";
 import Profile from "@/pages/Profile";
 import AuthCallback from "./pages/AuthCallback";
 
@@ -24,6 +40,23 @@ function Router() {
       <Route path={"/privacy"} component={Privacy} />
       <Route path={"/terms"} component={Terms} />
        <Route path="/contact" component={Contact} />
+      {/* 12-Agent SaaS Core Routes */}
+      <Route path="/app-core" component={AppCore} />
+      <Route path="/profile-core" component={ProfileCore} />
+      <Route path="/settings-core" component={SettingsCore} />
+      <Route path="/billing-core" component={BillingCore} />
+      <Route path="/admin-core" component={AdminCore} />
+      <Route path="/support-core" component={SupportCore} />
+      <Route path="/developer-core" component={DeveloperCore} />
+      <Route path="/status-core" component={StatusCore} />
+      <Route path="/logs-core" component={LogsCore} />
+      <Route path="/flags-core" component={FlagsCore} />
+      <Route path="/notifications-core" component={NotificationsCore} />
+      <Route path="/search-core" component={SearchCore} />
+      <Route path="/activity-core" component={ActivityCore} />
+      <Route path="/legal-core" component={LegalCore} />
+      <Route path="/onboarding-core" component={OnboardingCore} />
+      <Route path="/assistant-core" component={AssistantCore} />
       <Route path="/profile" component={Profile} />
       <Route path={"/auth/gmail/callback"} component={AuthCallback} />
       <Route path={"/auth/outlook/callback"} component={AuthCallback} />

@@ -1,4 +1,5 @@
-import { int, mysqlEnum, mysqlTable, text, timestamp, varchar } from "drizzle-orm/mysql-core";
+import { int, mysqlEnum, mysqlTable, text, timestamp, varchar, datetime, boolean, json } from "drizzle-orm/mysql-core";
+import { sql } from "drizzle-orm";
 
 /**
  * Core user table backing auth flow.
@@ -238,3 +239,149 @@ export const snoozedEmails = mysqlTable("snoozedEmails", {
 
 export type SnoozedEmail = typeof snoozedEmails.$inferSelect;
 export type InsertSnoozedEmail = typeof snoozedEmails.$inferInsert;
+
+// ============================================
+// 12-AGENT SAAS CORE SCHEMA (ADDITIVE)
+// ============================================
+
+// RBAC & Admin
+export const roles = mysqlTable('roles', {
+  id: int('id').primaryKey().autoincrement(),
+  name: varchar('name', { length: 50 }).notNull().unique(),
+  description: text('description'),
+  permissions: json('permissions').$type<string[]>(),
+  createdAt: datetime('created_at').default(sql`CURRENT_TIMESTAMP`),
+});
+
+export const userRoles = mysqlTable('user_roles', {
+  id: int('id').primaryKey().autoincrement(),
+  userId: varchar('user_id', { length: 255 }).notNull(),
+  roleId: int('role_id').notNull(),
+  createdAt: datetime('created_at').default(sql`CURRENT_TIMESTAMP`),
+});
+
+// Billing
+export const subscriptions = mysqlTable('subscriptions', {
+  id: int('id').primaryKey().autoincrement(),
+  userId: varchar('user_id', { length: 255 }).notNull(),
+  planId: varchar('plan_id', { length: 100 }).notNull(),
+  status: varchar('status', { length: 50 }).notNull(), // active, canceled, past_due
+  currentPeriodStart: datetime('current_period_start'),
+  currentPeriodEnd: datetime('current_period_end'),
+  cancelAtPeriodEnd: boolean('cancel_at_period_end').default(false),
+  createdAt: datetime('created_at').default(sql`CURRENT_TIMESTAMP`),
+  updatedAt: datetime('updated_at').default(sql`CURRENT_TIMESTAMP`),
+});
+
+export const invoices = mysqlTable('invoices', {
+  id: int('id').primaryKey().autoincrement(),
+  userId: varchar('user_id', { length: 255 }).notNull(),
+  subscriptionId: int('subscription_id'),
+  amount: int('amount').notNull(),
+  currency: varchar('currency', { length: 3 }).default('USD'),
+  status: varchar('status', { length: 50 }).notNull(), // paid, pending, failed
+  paidAt: datetime('paid_at'),
+  createdAt: datetime('created_at').default(sql`CURRENT_TIMESTAMP`),
+});
+
+// Notifications
+export const notifications = mysqlTable('notifications', {
+  id: int('id').primaryKey().autoincrement(),
+  userId: varchar('user_id', { length: 255 }).notNull(),
+  type: varchar('type', { length: 50 }).notNull(),
+  title: varchar('title', { length: 255 }).notNull(),
+  message: text('message').notNull(),
+  isRead: boolean('is_read').default(false),
+  actionUrl: varchar('action_url', { length: 500 }),
+  createdAt: datetime('created_at').default(sql`CURRENT_TIMESTAMP`),
+});
+
+export const notificationPreferences = mysqlTable('notification_preferences', {
+  id: int('id').primaryKey().autoincrement(),
+  userId: varchar('user_id', { length: 255 }).notNull().unique(),
+  emailEnabled: boolean('email_enabled').default(true),
+  pushEnabled: boolean('push_enabled').default(true),
+  inAppEnabled: boolean('in_app_enabled').default(true),
+  preferences: json('preferences').$type<Record<string, boolean>>(),
+  updatedAt: datetime('updated_at').default(sql`CURRENT_TIMESTAMP`),
+});
+
+// Support
+export const tickets = mysqlTable('tickets', {
+  id: int('id').primaryKey().autoincrement(),
+  userId: varchar('user_id', { length: 255 }).notNull(),
+  subject: varchar('subject', { length: 255 }).notNull(),
+  description: text('description').notNull(),
+  status: varchar('status', { length: 50 }).default('open'), // open, in_progress, resolved, closed
+  priority: varchar('priority', { length: 50 }).default('medium'),
+  createdAt: datetime('created_at').default(sql`CURRENT_TIMESTAMP`),
+  updatedAt: datetime('updated_at').default(sql`CURRENT_TIMESTAMP`),
+});
+
+export const feedback = mysqlTable('feedback', {
+  id: int('id').primaryKey().autoincrement(),
+  userId: varchar('user_id', { length: 255 }),
+  type: varchar('type', { length: 50 }).notNull(), // bug, feature, improvement
+  message: text('message').notNull(),
+  rating: int('rating'),
+  createdAt: datetime('created_at').default(sql`CURRENT_TIMESTAMP`),
+});
+
+// Activity Log
+export const activityLog = mysqlTable('activity_log', {
+  id: int('id').primaryKey().autoincrement(),
+  userId: varchar('user_id', { length: 255 }).notNull(),
+  action: varchar('action', { length: 100 }).notNull(),
+  resource: varchar('resource', { length: 100 }),
+  resourceId: varchar('resource_id', { length: 255 }),
+  metadata: json('metadata').$type<Record<string, any>>(),
+  ipAddress: varchar('ip_address', { length: 45 }),
+  userAgent: varchar('user_agent', { length: 500 }),
+  createdAt: datetime('created_at').default(sql`CURRENT_TIMESTAMP`),
+});
+
+// Feature Flags
+export const featureFlags = mysqlTable('feature_flags', {
+  id: int('id').primaryKey().autoincrement(),
+  name: varchar('name', { length: 100 }).notNull().unique(),
+  description: text('description'),
+  enabled: boolean('enabled').default(false),
+  rolloutPercentage: int('rollout_percentage').default(0),
+  conditions: json('conditions').$type<Record<string, any>>(),
+  createdAt: datetime('created_at').default(sql`CURRENT_TIMESTAMP`),
+  updatedAt: datetime('updated_at').default(sql`CURRENT_TIMESTAMP`),
+});
+
+// API Tokens
+export const apiTokens = mysqlTable('api_tokens', {
+  id: int('id').primaryKey().autoincrement(),
+  userId: varchar('user_id', { length: 255 }).notNull(),
+  name: varchar('name', { length: 100 }).notNull(),
+  token: varchar('token', { length: 255 }).notNull().unique(),
+  scopes: json('scopes').$type<string[]>(),
+  lastUsedAt: datetime('last_used_at'),
+  expiresAt: datetime('expires_at'),
+  createdAt: datetime('created_at').default(sql`CURRENT_TIMESTAMP`),
+});
+
+// Webhooks
+export const webhooks = mysqlTable('webhooks', {
+  id: int('id').primaryKey().autoincrement(),
+  userId: varchar('user_id', { length: 255 }).notNull(),
+  url: varchar('url', { length: 500 }).notNull(),
+  events: json('events').$type<string[]>(),
+  secret: varchar('secret', { length: 255 }).notNull(),
+  enabled: boolean('enabled').default(true),
+  createdAt: datetime('created_at').default(sql`CURRENT_TIMESTAMP`),
+});
+
+// Consent & Compliance
+export const userConsents = mysqlTable('user_consents', {
+  id: int('id').primaryKey().autoincrement(),
+  userId: varchar('user_id', { length: 255 }).notNull(),
+  consentType: varchar('consent_type', { length: 100 }).notNull(),
+  granted: boolean('granted').notNull(),
+  version: varchar('version', { length: 50 }),
+  createdAt: datetime('created_at').default(sql`CURRENT_TIMESTAMP`),
+});
+
