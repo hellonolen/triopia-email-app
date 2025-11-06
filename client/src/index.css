@@ -180,3 +180,14 @@
     }
   }
 }
+/* Hide Manus branding badge */
+[class*="manus-badge"],
+[class*="made-with"],
+a[href*="manus.im"],
+button[class*="manus-branding"],
+div[class*="powered-by"] {
+  display: none !important;
+  visibility: hidden !important;
+  opacity: 0 !important;
+  pointer-events: none !important;
+}

@@ -213,7 +213,7 @@
 - [ ] Verify unified inbox displays emails correctly
 
 ### Remove Branding
-- [ ] Remove "Made with Manus" footer from application
+- [x] Remove "Made with Manus" footer from application
 
 ### Email Provider Preset System (PRODUCTION READY)
 - [x] Create email provider configuration constants
