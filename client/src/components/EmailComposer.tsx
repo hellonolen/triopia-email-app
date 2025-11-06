@@ -2,6 +2,8 @@ import { useState } from 'react';
 import { X, Send, Paperclip, Image as ImageIcon, Smile, Bold, Italic, Link as LinkIcon, List, AlignLeft } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import SpeechToText from './SpeechToText';
+import { trpc } from '@/lib/trpc';
+import { toast } from 'sonner';
 
 interface EmailComposerProps {
   onClose: () => void;
@@ -16,6 +18,11 @@ export default function EmailComposer({ onClose, onSend }: EmailComposerProps) {
   const [bcc, setBCC] = useState('');
   const [showCCBCC, setShowCCBCC] = useState(false);
   const [activeField, setActiveField] = useState<'to' | 'cc' | 'bcc' | 'subject' | 'body'>('body');
+  const [isSending, setIsSending] = useState(false);
+  const [attachments, setAttachments] = useState<File[]>([]);
+
+  const { data: accounts } = trpc.email.listAccounts.useQuery();
+  const sendEmailMutation = trpc.email.sendEmail.useMutation();
 
   const handleTranscript = (transcript: string) => {
     switch (activeField) {
@@ -37,11 +44,60 @@ export default function EmailComposer({ onClose, onSend }: EmailComposerProps) {
     }
   };
 
-  const handleSend = () => {
-    if (to && subject && body) {
+  const handleSend = async () => {
+    if (!to || !subject || !body) {
+      toast.error('Please fill in all required fields');
+      return;
+    }
+
+    if (!accounts || accounts.length === 0) {
+      toast.error('No email account connected');
+      return;
+    }
+
+    setIsSending(true);
+    try {
+      // Convert attachments to base64 if any
+      const attachmentData = await Promise.all(
+        attachments.map(async (file) => {
+          const buffer = await file.arrayBuffer();
+          const base64 = btoa(String.fromCharCode(...new Uint8Array(buffer)));
+          return {
+            filename: file.name,
+            content: base64,
+            contentType: file.type
+          };
+        })
+      );
+
+      await sendEmailMutation.mutateAsync({
+        accountId: accounts[0].id,
+        to,
+        subject,
+        body,
+        cc: cc || undefined,
+        bcc: bcc || undefined,
+        attachments: attachmentData.length > 0 ? attachmentData : undefined
+      });
+
+      toast.success('Email sent successfully');
       onSend({ to, subject, body });
       onClose();
+    } catch (error) {
+      toast.error('Failed to send email');
+    } finally {
+      setIsSending(false);
     }
+  };
+
+  const handleFileSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (e.target.files) {
+      setAttachments(prev => [...prev, ...Array.from(e.target.files!)]);
+    }
+  };
+
+  const removeAttachment = (index: number) => {
+    setAttachments(prev => prev.filter((_, i) => i !== index));
   };
 
   return (
@@ -170,10 +226,46 @@ export default function EmailComposer({ onClose, onSend }: EmailComposerProps) {
           />
         </div>
 
+        {/* Attachments */}
+        {attachments.length > 0 && (
+          <div className="p-3 border-t border-border bg-muted">
+            <div className="flex flex-wrap gap-2">
+              {attachments.map((file, index) => (
+                <div key={index} className="flex items-center gap-2 px-3 py-1.5 bg-background border border-border rounded-lg text-sm">
+                  <Paperclip className="w-3 h-3" />
+                  <span>{file.name}</span>
+                  <button
+                    onClick={() => removeAttachment(index)}
+                    className="ml-2 hover:text-red-500"
+                  >
+                    <X className="w-3 h-3" />
+                  </button>
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
+
         {/* Footer Actions */}
         <div className="flex items-center justify-between p-4 border-t border-border bg-muted">
-          <div className="text-xs text-muted-foreground">
-            Press <kbd className="px-1.5 py-0.5 bg-muted rounded text-xs">Ctrl+Enter</kbd> to send
+          <div className="flex items-center gap-2">
+            <input
+              type="file"
+              multiple
+              onChange={handleFileSelect}
+              className="hidden"
+              id="file-upload"
+            />
+            <label
+              htmlFor="file-upload"
+              className="p-2 hover:bg-background rounded-lg cursor-pointer transition-all"
+              title="Attach files"
+            >
+              <Paperclip className="w-4 h-4" />
+            </label>
+            <div className="text-xs text-muted-foreground">
+              Press <kbd className="px-1.5 py-0.5 bg-muted rounded text-xs">Ctrl+Enter</kbd> to send
+            </div>
           </div>
           <div className="flex gap-2">
             <Button variant="outline" onClick={onClose}>
@@ -181,11 +273,11 @@ export default function EmailComposer({ onClose, onSend }: EmailComposerProps) {
             </Button>
             <Button
               onClick={handleSend}
-              disabled={!to || !subject || !body}
+              disabled={!to || !subject || !body || isSending}
               className="bg-primary hover:bg-primary"
             >
               <Send className="w-4 h-4 mr-2" />
-              Send
+              {isSending ? 'Sending...' : 'Send'}
             </Button>
           </div>
         </div>

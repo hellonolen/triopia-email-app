@@ -17,6 +17,7 @@ import Appearance from './Appearance';
 import { useKeyboardShortcuts } from '../hooks/useKeyboardShortcuts';
 import { trpc } from '@/lib/trpc';
 import { useEffect } from 'react';
+import { useWebSocketConnection } from '../hooks/useWebSocketConnection';
 
 export interface Email {
   id: number;
@@ -42,12 +43,20 @@ export default function EmailApp() {
   const [showComposer, setShowComposer] = useState(false);
   const [showCommandBar, setShowCommandBar] = useState(false);
   const [showKeyboardHelp, setShowKeyboardHelp] = useState(false);
+  const [searchQuery, setSearchQuery] = useState('');
+  // WebSocket connection for real-time updates
+  const { isConnected, unreadCount } = useWebSocketConnection();
+
   // Fetch emails from backend API
   const { data: emailAccounts } = trpc.email.listAccounts.useQuery();
-  const { data: backendEmails, refetch: refetchEmails } = trpc.email.getEmailsByAccount.useQuery(
+   const { data: backendEmails, refetch: refetchEmails, isLoading } = trpc.email.getEmailsByAccount.useQuery(
     { accountId: emailAccounts?.[0]?.id || '' },
     { enabled: !!emailAccounts?.[0]?.id }
   );
+
+  // Email action mutations
+  const updateEmailMutation = trpc.email.updateEmail.useMutation();
+  const deleteEmailMutation = trpc.email.deleteEmail.useMutation();
 
   // Mock data for now - will be replaced by backend
   const [emails, setEmails] = useState<Email[]>([
@@ -154,16 +163,37 @@ export default function EmailApp() {
     ));
   };
 
-  const handleStarToggle = (emailId: number) => {
-    setEmails(emails.map(email =>
-      email.id === emailId ? { ...email, isStarred: !email.isStarred } : email
+  const handleStarToggle = async (emailId: number) => {
+    const email = emails.find(e => e.id === emailId);
+    if (!email) return;
+
+    // Optimistic update
+    setEmails(emails.map(e =>
+      e.id === emailId ? { ...e, isStarred: !e.isStarred } : e
     ));
     if (selectedEmail?.id === emailId) {
       setSelectedEmail({ ...selectedEmail, isStarred: !selectedEmail.isStarred });
     }
+
+    // Persist to backend
+    try {
+      await updateEmailMutation.mutateAsync({
+        emailId,
+        isStarred: !email.isStarred
+      });
+    } catch (error) {
+      // Revert on error
+      setEmails(emails.map(e =>
+        e.id === emailId ? { ...e, isStarred: email.isStarred } : e
+      ));
+      if (selectedEmail?.id === emailId) {
+        setSelectedEmail({ ...selectedEmail, isStarred: email.isStarred });
+      }
+    }
   };
 
-  const handleArchive = (emailId: number) => {
+  const handleArchive = async (emailId: number) => {
+    // Optimistic update
     setTimeout(() => {
       setEmails(emails.map(email =>
         email.id === emailId ? { ...email, isArchived: true } : email
@@ -172,9 +202,20 @@ export default function EmailApp() {
         setSelectedEmail(null);
       }
     }, 300);
+
+    // Persist to backend
+    try {
+      await updateEmailMutation.mutateAsync({
+        emailId,
+        folder: 'archive'
+      });
+    } catch (error) {
+      console.error('Failed to archive email:', error);
+    }
   };
 
-  const handleDelete = (emailId: number) => {
+  const handleDelete = async (emailId: number) => {
+    // Optimistic update
     setTimeout(() => {
       setEmails(emails.map(email =>
         email.id === emailId ? { ...email, isDeleted: true } : email
@@ -183,6 +224,13 @@ export default function EmailApp() {
         setSelectedEmail(null);
       }
     }, 300);
+
+    // Persist to backend
+    try {
+      await deleteEmailMutation.mutateAsync({ emailId });
+    } catch (error) {
+      console.error('Failed to delete email:', error);
+    }
   };
 
   const handlePin = (emailId: number) => {
@@ -228,6 +276,20 @@ export default function EmailApp() {
   };
 
   const getFilteredEmails = () => {
+    let filtered = emails;
+
+    // Apply search filter
+    if (searchQuery.trim()) {
+      const query = searchQuery.toLowerCase();
+      filtered = filtered.filter(email =>
+        email.subject.toLowerCase().includes(query) ||
+        email.sender.toLowerCase().includes(query) ||
+        email.senderEmail.toLowerCase().includes(query) ||
+        email.body.toLowerCase().includes(query)
+      );
+    }
+
+    // Apply folder filter
     switch (selectedFolder) {
       case 'inbox':
         return emails.filter(e => !e.isArchived && !e.isDeleted && !e.isSpam);
@@ -340,6 +402,10 @@ export default function EmailApp() {
         ) : selectedFolder === 'notes' ? (
           <div className="flex-1 overflow-hidden">
             <Notes />
+          </div>
+        ) : isLoading ? (
+          <div className="flex-1 flex items-center justify-center">
+            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary"></div>
           </div>
         ) : selectedFolder === 'appearance' ? (
           <div className="flex-1 overflow-hidden">

@@ -21,6 +21,7 @@ export default function Settings() {
   // Fetch email accounts
   const { data: accounts, refetch } = trpc.email.listAccounts.useQuery();
   const deleteAccountMutation = trpc.email.deleteAccount.useMutation();
+  const syncAccountMutation = trpc.email.syncAccount.useMutation();
 
   // Get OAuth URLs
   const { data: gmailAuthUrl } = trpc.email.getGmailAuthUrl.useQuery(undefined, {
@@ -263,6 +264,20 @@ export default function Settings() {
                     <CheckCircle className="w-4 h-4 text-green-500" />
                     <span className="text-sm text-green-500">Connected</span>
                   </div>
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    onClick={async () => {
+                      try {
+                        await syncAccountMutation.mutateAsync({ accountId: account.id });
+                        toast.success('Email sync started');
+                      } catch (error) {
+                        toast.error('Failed to sync emails');
+                      }
+                    }}
+                  >
+                    Sync Now
+                  </Button>
                   <Button
                     variant="outline"
                     size="sm"

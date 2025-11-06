@@ -5,11 +5,12 @@ import { Button } from '@/components/ui/button';
 interface QuickReplyProps {
   onSend: (message: string) => void;
   onClose: () => void;
+  initialMessage?: string;
 }
 
-export default function QuickReply({ onSend, onClose }: QuickReplyProps) {
+export default function QuickReply({ onSend, onClose, initialMessage }: QuickReplyProps) {
   const [selectedTone, setSelectedTone] = useState<'professional' | 'friendly' | 'brief'>('professional');
-  const [customMessage, setCustomMessage] = useState('');
+  const [customMessage, setCustomMessage] = useState(initialMessage || '');
 
   const suggestedReplies = {
     professional: [

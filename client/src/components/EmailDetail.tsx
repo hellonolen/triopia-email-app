@@ -180,8 +180,7 @@ export default function EmailDetail({ email, onArchive, onDelete, onStarToggle }
               Summary
             </div>
             <p className="text-sm leading-relaxed">
-              This email is a meeting request for a Q4 marketing strategy review. Sarah is asking about availability 
-              for October 15th in the afternoon and requests confirmation or alternative time suggestions.
+              {summary || 'Generating summary...'}
             </p>
           </div>
         )}
@@ -205,16 +204,30 @@ export default function EmailDetail({ email, onArchive, onDelete, onStarToggle }
           />
         )}
 
-        {/* Reply Button */}
+        {/* Reply Buttons with AI Options */}
         {!showQuickReply && (
           <div className="mt-8 pt-6 border-t border-border">
-            <Button
-              onClick={() => setShowQuickReply(true)}
-              className="bg-primary hover:bg-primary"
-            >
-              <Reply className="w-4 h-4 mr-2" />
-              Reply
-            </Button>
+            <div className="flex gap-2">
+              <Button
+                onClick={() => setShowQuickReply(true)}
+                className="bg-primary hover:bg-primary"
+              >
+                <Reply className="w-4 h-4 mr-2" />
+                Reply
+              </Button>
+              <Button
+                variant="outline"
+                onClick={() => handleQuickReply('professional')}
+              >
+                AI Reply (Professional)
+              </Button>
+              <Button
+                variant="outline"
+                onClick={() => handleQuickReply('casual')}
+              >
+                AI Reply (Casual)
+              </Button>
+            </div>
           </div>
         )}
       </div>
@@ -222,11 +235,16 @@ export default function EmailDetail({ email, onArchive, onDelete, onStarToggle }
       {/* Quick Reply Section */}
       {showQuickReply && (
         <QuickReply
+          initialMessage={quickReplyText}
           onSend={(message) => {
             console.log('Sending reply:', message);
             setShowQuickReply(false);
+            setQuickReplyText('');
           }}
-          onClose={() => setShowQuickReply(false)}
+          onClose={() => {
+            setShowQuickReply(false);
+            setQuickReplyText('');
+          }}
         />
       )}
     </div>
