@@ -49,8 +49,8 @@ export default function EmailApp() {
 
   // Fetch emails from backend API
   const { data: emailAccounts } = trpc.email.listAccounts.useQuery();
-   const { data: backendEmails, refetch: refetchEmails, isLoading } = trpc.email.getEmailsByAccount.useQuery(
-    { accountId: emailAccounts?.[0]?.id || '' },
+  const { data: backendEmails, refetch: refetchEmails, isLoading } = trpc.email.getEmails.useQuery(
+    { accountId: emailAccounts?.[0]?.id || 0 },
     { enabled: !!emailAccounts?.[0]?.id }
   );
 

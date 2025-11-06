@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Mail, Trash2, Plus, AlertCircle, CheckCircle } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { trpc } from '@/lib/trpc';
@@ -7,6 +7,31 @@ import { toast } from 'sonner';
 export default function Settings() {
   const [showAddAccount, setShowAddAccount] = useState(false);
   const [selectedProvider, setSelectedProvider] = useState<'gmail' | 'outlook' | 'imap' | null>(null);
+
+  // Fetch email accounts
+  const { data: accounts, refetch } = trpc.email.listAccounts.useQuery();
+  const deleteAccountMutation = trpc.email.deleteAccount.useMutation();
+  const syncAccountMutation = trpc.email.syncAccount.useMutation();
+
+  // Handle OAuth callback success/error messages
+  useEffect(() => {
+    const params = new URLSearchParams(window.location.search);
+    const success = params.get('success');
+    const error = params.get('error');
+
+    if (success === 'gmail_connected') {
+      toast.success('Gmail account connected successfully');
+      refetch();
+      window.history.replaceState({}, '', '/settings');
+    } else if (success === 'outlook_connected') {
+      toast.success('Outlook account connected successfully');
+      refetch();
+      window.history.replaceState({}, '', '/settings');
+    } else if (error) {
+      toast.error(`Failed to connect account: ${error}`);
+      window.history.replaceState({}, '', '/settings');
+    }
+  }, [refetch]);
   
   // IMAP form state
   const [imapForm, setImapForm] = useState({
@@ -18,11 +43,6 @@ export default function Settings() {
     smtpPort: '465',
   });
 
-  // Fetch email accounts
-  const { data: accounts, refetch } = trpc.email.listAccounts.useQuery();
-  const deleteAccountMutation = trpc.email.deleteAccount.useMutation();
-  const syncAccountMutation = trpc.email.syncAccount.useMutation();
-
   // Get OAuth URLs
   const { data: gmailAuthUrl } = trpc.email.getGmailAuthUrl.useQuery(undefined, {
     enabled: selectedProvider === 'gmail'
@@ -32,22 +52,39 @@ export default function Settings() {
   });
 
   const handleConnectGmail = () => {
-    if (gmailAuthUrl) {
-      window.location.href = gmailAuthUrl;
+    if (gmailAuthUrl?.authUrl) {
+      window.location.href = gmailAuthUrl.authUrl;
     }
   };
 
   const handleConnectOutlook = () => {
-    if (outlookAuthUrl) {
-      window.location.href = outlookAuthUrl;
+    if (outlookAuthUrl?.authUrl) {
+      window.location.href = outlookAuthUrl.authUrl;
     }
   };
 
+  const connectCustomAccountMutation = trpc.email.connectCustomAccount.useMutation();
+
   const handleConnectIMAP = async () => {
     try {
-      // This would call the IMAP connection API
+      await connectCustomAccountMutation.mutateAsync({
+        email: imapForm.email,
+        password: imapForm.password,
+        imapHost: imapForm.imapHost,
+        imapPort: parseInt(imapForm.imapPort),
+        smtpHost: imapForm.smtpHost,
+        smtpPort: parseInt(imapForm.smtpPort)
+      });
       toast.success('IMAP account connected successfully');
       setShowAddAccount(false);
+      setImapForm({
+        email: '',
+        password: '',
+        imapHost: '',
+        imapPort: '993',
+        smtpHost: '',
+        smtpPort: '465',
+      });
       refetch();
     } catch (error) {
       toast.error('Failed to connect IMAP account');

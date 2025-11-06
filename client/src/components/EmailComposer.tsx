@@ -22,7 +22,7 @@ export default function EmailComposer({ onClose, onSend }: EmailComposerProps) {
   const [attachments, setAttachments] = useState<File[]>([]);
 
   const { data: accounts } = trpc.email.listAccounts.useQuery();
-  const sendEmailMutation = trpc.email.sendEmail.useMutation();
+  const sendEmailMutation = trpc.email.send.useMutation();
 
   const handleTranscript = (transcript: string) => {
     switch (activeField) {
@@ -61,7 +61,12 @@ export default function EmailComposer({ onClose, onSend }: EmailComposerProps) {
       const attachmentData = await Promise.all(
         attachments.map(async (file) => {
           const buffer = await file.arrayBuffer();
-          const base64 = btoa(String.fromCharCode(...new Uint8Array(buffer)));
+          const uint8Array = new Uint8Array(buffer);
+          let binary = '';
+          for (let i = 0; i < uint8Array.length; i++) {
+            binary += String.fromCharCode(uint8Array[i]);
+          }
+          const base64 = btoa(binary);
           return {
             filename: file.name,
             content: base64,

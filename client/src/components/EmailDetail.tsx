@@ -23,7 +23,7 @@ export default function EmailDetail({ email, onArchive, onDelete, onStarToggle }
   
   // AI mutations
   const summarizeMutation = trpc.ai.summarizeEmail.useMutation();
-  const quickReplyMutation = trpc.ai.generateQuickReply.useMutation();
+  const quickReplyMutation = trpc.ai.generateQuickReplies.useMutation();
   const categorizeMutation = trpc.ai.categorizeEmail.useMutation();
   const [isContextOpen, setIsContextOpen] = useState(false);
   const [showQuickReply, setShowQuickReply] = useState(false);
@@ -54,8 +54,9 @@ export default function EmailDetail({ email, onArchive, onDelete, onStarToggle }
     setIsSummarizing(true);
     try {
       const result = await summarizeMutation.mutateAsync({
-        emailId: email.id,
-        style: 'executive'
+        subject: email.subject,
+        from: email.senderEmail,
+        body: email.body
       });
       setSummary(result.summary);
       setShowSummary(true);
@@ -71,11 +72,12 @@ export default function EmailDetail({ email, onArchive, onDelete, onStarToggle }
     if (!email) return;
     try {
       const result = await quickReplyMutation.mutateAsync({
-        emailId: email.id,
-        tone,
-        context: ''
+        subject: email.subject,
+        from: email.senderEmail,
+        body: email.body,
+        tone
       });
-      setQuickReplyText(result.reply);
+      setQuickReplyText(result.replies[0] || '');
       setShowQuickReply(true);
       toast.success('Quick reply generated');
     } catch (error) {

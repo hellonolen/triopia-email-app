@@ -181,3 +181,25 @@
 - [ ] Add UI for email encryption key
 - [ ] Secure admin dashboard with role-based access
 - [ ] Test key updates and validation
+
+
+## PRODUCTION CONNECTION (Nov 6, 2025) - CRITICAL
+
+### Connect Settings to Backend
+- [x] Connect OAuth flows to backend API
+- [x] Connect IMAP/SMTP form to backend API
+- [x] Display connected accounts from backend
+
+### Connect Email Composer
+- [x] Connect send email to backend API
+- [x] Add attachment upload
+- [x] Show success/error feedback
+
+### Connect Email Display
+- [x] Fetch real emails from backend
+- [x] Connect all email actions to backend
+- [x] Add loading/empty states
+
+### Enable Authentication
+- [ ] Re-enable auth for production
+- [ ] Test login/registration flows
