@@ -290,3 +290,29 @@
 - [x] Add microphone button everywhere text input exists
 - [x] Implement speech-to-text functionality
 - [x] Support for users with disabilities
+
+## New User Requests - Email Management & Multi-Account
+
+### Email Management Features
+- [x] Restore emails from trash functionality
+- [x] Add Spam folder to navigation
+- [x] Mark email as spam action
+- [x] Mark email as not spam (move from spam to inbox)
+- [x] Add spam button next to trash in email actions
+- [ ] Drag-and-drop emails between folders
+
+### Multi-Account Support (Up to 20 Email Accounts)
+- [x] Collapsible "Inboxes" section in sidebar
+- [x] Expand/collapse chevron icon to show/hide all inboxes
+- [x] Show all connected accounts when expanded (up to 20)
+- [x] Show total unread count when collapsed
+- [x] Individual unread counts for each inbox when expanded
+- [x] Smooth expand/collapse animation pushing items down
+- [ ] Account badges on emails to show which account
+- [ ] Settings page to add/remove email accounts (up to 20)
+- [ ] Support Gmail, Outlook, IMAP, custom domains
+
+### Footer Refinements
+- [x] Reduce footer text size to 50% (half the current size)
+- [x] Make policy links more compact
+- [x] Maintain proper spacing while reducing text size

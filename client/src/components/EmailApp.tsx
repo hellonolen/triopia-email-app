@@ -30,6 +30,7 @@ export interface Email {
   category?: string;
   isArchived?: boolean;
   isDeleted?: boolean;
+  isSpam?: boolean;
 }
 
 export default function EmailApp() {
@@ -154,12 +155,24 @@ export default function EmailApp() {
   };
 
   const handleMarkAsSpam = (emailId: number) => {
-    setTimeout(() => {
-      setEmails(emails.filter(email => email.id !== emailId));
-      if (selectedEmail?.id === emailId) {
-        setSelectedEmail(null);
-      }
-    }, 300);
+    setEmails(emails.map(email =>
+      email.id === emailId ? { ...email, isSpam: true } : email
+    ));
+    if (selectedEmail?.id === emailId) {
+      setSelectedEmail(null);
+    }
+  };
+
+  const handleMarkAsNotSpam = (emailId: number) => {
+    setEmails(emails.map(email =>
+      email.id === emailId ? { ...email, isSpam: false } : email
+    ));
+  };
+
+  const handleRestoreFromTrash = (emailId: number) => {
+    setEmails(emails.map(email =>
+      email.id === emailId ? { ...email, isDeleted: false } : email
+    ));
   };
 
   const handleToggleRead = (emailId: number) => {
@@ -174,15 +187,17 @@ export default function EmailApp() {
   const getFilteredEmails = () => {
     switch (selectedFolder) {
       case 'inbox':
-        return emails.filter(e => !e.isArchived && !e.isDeleted);
+        return emails.filter(e => !e.isArchived && !e.isDeleted && !e.isSpam);
       case 'starred':
-        return emails.filter(e => e.isStarred && !e.isDeleted);
+        return emails.filter(e => e.isStarred && !e.isDeleted && !e.isSpam);
       case 'sent':
         return []; // Will be populated with sent emails
       case 'drafts':
         return []; // Will be populated with draft emails
       case 'archive':
-        return emails.filter(e => e.isArchived);
+        return emails.filter(e => e.isArchived && !e.isDeleted);
+      case 'spam':
+        return emails.filter(e => e.isSpam && !e.isDeleted);
       case 'trash':
         return emails.filter(e => e.isDeleted);
       default:

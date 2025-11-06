@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Star, Archive, Trash2, Pin, Mail, MailOpen, Flag } from 'lucide-react';
+import { Star, Archive, Trash2, Pin, Mail, MailOpen, AlertOctagon } from 'lucide-react';
 import type { Email } from './EmailApp';
 import PriorityBadge from './PriorityBadge';
 
@@ -129,7 +129,7 @@ export default function EmailListItem({
                 className="p-1.5 rounded-md bg-muted/50 hover:bg-destructive/10 hover:text-destructive transition-all duration-200 hover:scale-110"
                 title="Mark as spam"
               >
-                <Flag className="w-3.5 h-3.5" />
+                <AlertOctagon className="w-3.5 h-3.5" />
               </button>
 
               <button

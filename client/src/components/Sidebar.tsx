@@ -1,5 +1,6 @@
-import { Mail, Star, Send, FileText, Archive, Trash2, Calendar, Settings, Plus, BarChart3, Users, TrendingUp, HardDrive } from 'lucide-react';
+import { Mail, Star, Send, FileText, Archive, Trash2, Calendar, Settings, Plus, BarChart3, Users, TrendingUp, HardDrive, AlertOctagon } from 'lucide-react';
 import { Button } from '@/components/ui/button';
+import InboxesSection from './InboxesSection';
 
 interface SidebarProps {
   selectedFolder: string;
@@ -9,6 +10,13 @@ interface SidebarProps {
 }
 
 export default function Sidebar({ selectedFolder, onFolderSelect, getUnreadCount, onCompose }: SidebarProps) {
+  // Mock email accounts - will be populated from settings
+  const emailAccounts = [
+    { id: 'personal-gmail', name: 'Personal', email: 'you@gmail.com', unreadCount: 4, provider: 'gmail' as const },
+    { id: 'work-outlook', name: 'Work', email: 'you@company.com', unreadCount: 12, provider: 'outlook' as const },
+    { id: 'finance', name: 'Finance', email: 'finance@company.com', unreadCount: 2, provider: 'custom' as const },
+  ];
+
   const folders = [
     { id: 'priority', label: 'Priority', icon: TrendingUp },
     { id: 'inbox', label: 'Inbox', icon: Mail },
@@ -19,6 +27,7 @@ export default function Sidebar({ selectedFolder, onFolderSelect, getUnreadCount
     { id: 'starred', label: 'Starred', icon: Star },
     { id: 'drafts', label: 'Drafts', icon: FileText },
     { id: 'archive', label: 'Archive', icon: Archive },
+    { id: 'spam', label: 'Spam', icon: AlertOctagon },
     { id: 'trash', label: 'Trash', icon: Trash2 },
   ];
 
@@ -42,6 +51,13 @@ export default function Sidebar({ selectedFolder, onFolderSelect, getUnreadCount
       </div>
 
       <nav className="flex-1 space-y-1">
+        {/* Collapsible Inboxes Section */}
+        <InboxesSection
+          accounts={emailAccounts}
+          selectedInbox={selectedFolder.startsWith('inbox-') ? selectedFolder : null}
+          onSelectInbox={(accountId) => onFolderSelect(`inbox-${accountId}`)}
+        />
+
         {folders.map((folder) => {
           const Icon = folder.icon;
           const count = getUnreadCount(folder.id);
