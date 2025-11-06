@@ -4,12 +4,18 @@ import NotFound from "@/pages/NotFound";
 import { Route, Switch } from "wouter";
 import ErrorBoundary from "./components/ErrorBoundary";
 import { ThemeProvider } from "./contexts/ThemeContext";
-import Home from "./pages/Home";
+import { TextSizeProvider } from "./contexts/TextSizeContext";
+import EmailApp from "./components/EmailApp";
+import UnifiedInbox from "./pages/UnifiedInbox";
+import Calendar from "./pages/Calendar";
 
 function Router() {
+  // make sure to consider if you need authentication for certain routes
   return (
     <Switch>
-      <Route path={"/"} component={Home} />
+      <Route path={"/"} component={EmailApp} />
+      <Route path={"/inbox"} component={UnifiedInbox} />
+      <Route path={"/calendar"} component={Calendar} />
       <Route path={"/404"} component={NotFound} />
       {/* Final fallback route */}
       <Route component={NotFound} />
@@ -29,10 +35,12 @@ function App() {
         defaultTheme="light"
         // switchable
       >
-        <TooltipProvider>
-          <Toaster />
-          <Router />
-        </TooltipProvider>
+        <TextSizeProvider>
+          <TooltipProvider>
+            <Toaster />
+            <Router />
+          </TooltipProvider>
+        </TextSizeProvider>
       </ThemeProvider>
     </ErrorBoundary>
   );
