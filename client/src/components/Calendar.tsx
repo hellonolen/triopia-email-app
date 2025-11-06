@@ -39,7 +39,7 @@ export default function Calendar() {
           <h2 className="text-xl font-semibold mb-1">Calendar</h2>
           <p className="text-sm text-muted-foreground">Manage your schedule and upcoming events</p>
         </div>
-        <Button className="bg-primary hover:bg-primary/90">
+        <Button className="bg-primary hover:bg-primary">
           <CalendarIcon className="w-4 h-4 mr-2" />
           New Event
         </Button>
@@ -65,7 +65,7 @@ export default function Calendar() {
                 aspect-square p-1.5 rounded-lg text-xs transition-all duration-200
                 ${day < 1 || day > 31 ? 'text-muted-foreground/40' : ''}
                 ${isToday ? 'bg-primary text-primary-foreground font-semibold' : 'hover:bg-muted'}
-                ${hasEvent && !isToday ? 'bg-primary/10 font-medium' : ''}
+                ${hasEvent && !isToday ? 'bg-primary font-medium' : ''}
               `}
             >
               {day > 0 && day <= 31 ? day : ''}
@@ -102,7 +102,7 @@ export default function Calendar() {
                   </div>
                 </div>
                 <div className={`p-2 rounded-lg ${
-                  event.type === 'video' ? 'bg-blue-500/10' : 'bg-primary/10'
+                  event.type === 'video' ? 'bg-blue-500/10' : 'bg-primary'
                 }`}>
                   {event.type === 'video' ? (
                     <Video className="w-5 h-5 text-blue-600" />

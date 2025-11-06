@@ -41,7 +41,7 @@ export default function EmailListItem({
       onMouseLeave={() => setIsHovered(false)}
       className={`
         group relative px-6 py-4 cursor-pointer transition-all duration-200
-        hover:bg-muted/50 border-b border-border
+        hover:bg-muted border-b border-border
         ${isSelected ? 'bg-muted border-l-4 border-primary' : ''}
         ${!email.isRead ? 'bg-card' : ''}
         animate-in fade-in slide-in-from-top-2 duration-300
@@ -98,7 +98,7 @@ export default function EmailListItem({
             <div className="flex items-center gap-0.5 pt-2 border-t border-border/50 animate-in fade-in slide-in-from-bottom-1 duration-200">
               <button
                 onClick={(e) => handleAction(e, () => onToggleRead?.(email.id))}
-                className="p-1.5 rounded-md bg-muted/50 hover:bg-muted transition-all duration-200 hover:scale-110"
+                className="p-1.5 rounded-md bg-muted hover:bg-muted transition-all duration-200 hover:scale-110"
                 title={email.isRead ? 'Mark as unread' : 'Mark as read'}
               >
                 {email.isRead ? <Mail className="w-3.5 h-3.5" /> : <MailOpen className="w-3.5 h-3.5" />}
@@ -110,7 +110,7 @@ export default function EmailListItem({
                   onPin?.(email.id);
                 })}
                 className={`p-1.5 rounded-md transition-all duration-200 hover:scale-110
-                         ${isPinned ? 'bg-primary/10 text-primary' : 'bg-muted/50 hover:bg-muted'}`}
+                         ${isPinned ? 'bg-primary text-primary' : 'bg-muted hover:bg-muted'}`}
                 title="Pin"
               >
                 <Pin className={`w-3.5 h-3.5 ${isPinned ? 'fill-current' : ''}`} />
@@ -118,7 +118,7 @@ export default function EmailListItem({
 
               <button
                 onClick={(e) => handleAction(e, () => onArchive?.(email.id))}
-                className="p-1.5 rounded-md bg-muted/50 hover:bg-muted transition-all duration-200 hover:scale-110"
+                className="p-1.5 rounded-md bg-muted hover:bg-muted transition-all duration-200 hover:scale-110"
                 title="Archive"
               >
                 <Archive className="w-3.5 h-3.5" />
@@ -126,7 +126,7 @@ export default function EmailListItem({
 
               <button
                 onClick={(e) => handleAction(e, () => onMarkAsSpam?.(email.id))}
-                className="p-1.5 rounded-md bg-muted/50 hover:bg-destructive/10 hover:text-destructive transition-all duration-200 hover:scale-110"
+                className="p-1.5 rounded-md bg-muted hover:bg-muted hover:text-destructive transition-all duration-200 hover:scale-110"
                 title="Mark as spam"
               >
                 <AlertOctagon className="w-3.5 h-3.5" />
@@ -134,7 +134,7 @@ export default function EmailListItem({
 
               <button
                 onClick={(e) => handleAction(e, () => onDelete?.(email.id))}
-                className="p-1.5 rounded-md bg-muted/50 hover:bg-destructive/10 hover:text-destructive transition-all duration-200 hover:scale-110"
+                className="p-1.5 rounded-md bg-muted hover:bg-muted hover:text-destructive transition-all duration-200 hover:scale-110"
                 title="Delete"
               >
                 <Trash2 className="w-3.5 h-3.5" />

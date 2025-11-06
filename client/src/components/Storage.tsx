@@ -62,7 +62,7 @@ export default function Storage() {
               key={provider.id}
               className={`
                 p-4 rounded-lg border border-border transition-all duration-200
-                ${selectedProvider === provider.id ? 'bg-primary/5 border-primary' : 'bg-card hover:bg-muted/50'}
+                ${selectedProvider === provider.id ? 'bg-primary border-primary' : 'bg-card hover:bg-muted'}
                 ${provider.isConnected ? 'cursor-pointer' : ''}
               `}
               onClick={() => provider.isConnected && setSelectedProvider(provider.id)}
@@ -101,7 +101,7 @@ export default function Storage() {
                         e.stopPropagation();
                         handleConnect(provider.id);
                       }}
-                      className="bg-primary hover:bg-primary/90 text-xs"
+                      className="bg-primary hover:bg-primary text-xs"
                     >
                       Connect
                     </Button>
@@ -112,7 +112,7 @@ export default function Storage() {
           ))}
         </div>
 
-        <div className="p-4 border-t border-border bg-muted/30">
+        <div className="p-4 border-t border-border bg-muted">
           <p className="text-xs text-muted-foreground">
             Connected storage can be used to attach files to emails or save email attachments.
           </p>
@@ -152,7 +152,7 @@ export default function Storage() {
               ].map((item, index) => (
                 <div
                   key={index}
-                  className="flex items-center gap-3 p-3 rounded-lg hover:bg-muted/50 transition-all duration-200 cursor-pointer"
+                  className="flex items-center gap-3 p-3 rounded-lg hover:bg-muted transition-all duration-200 cursor-pointer"
                 >
                   {item.type === 'folder' ? (
                     <FolderOpen className="w-5 h-5 text-primary" />

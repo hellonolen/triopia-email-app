@@ -45,7 +45,7 @@ export default function EmailComposer({ onClose, onSend }: EmailComposerProps) {
   };
 
   return (
-    <div className="fixed inset-0 bg-background/80 backdrop-blur-sm z-50 flex items-center justify-center p-4 animate-in fade-in duration-200">
+    <div className="fixed inset-0 bg-background  z-50 flex items-center justify-center p-4 animate-in fade-in duration-200">
       <div className="bg-card border border-border rounded-lg shadow-2xl w-full max-w-3xl max-h-[90vh] flex flex-col animate-in zoom-in-95 duration-300">
         {/* Header */}
         <div className="flex items-center justify-between p-4 border-b border-border">
@@ -68,8 +68,8 @@ export default function EmailComposer({ onClose, onSend }: EmailComposerProps) {
               onChange={(e) => setTo(e.target.value)}
               onFocus={() => setActiveField('to')}
               placeholder="recipient@example.com"
-              className="flex-1 px-3 py-2 bg-muted/50 border border-border rounded-lg text-sm
-                       focus:bg-card focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/20
+              className="flex-1 px-3 py-2 bg-background border border-border rounded-lg text-sm
+                       focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/20
                        transition-all duration-200"
             />
             {!showCCBCC && (
@@ -92,7 +92,7 @@ export default function EmailComposer({ onClose, onSend }: EmailComposerProps) {
               onChange={(e) => setCC(e.target.value)}
               onFocus={() => setActiveField('cc')}
               placeholder="cc@example.com"
-                  className="flex-1 px-3 py-2 bg-muted/50 border border-border rounded-lg text-sm
+                  className="flex-1 px-3 py-2 bg-muted border border-border rounded-lg text-sm
                            focus:bg-card focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/20
                            transition-all duration-200"
                 />
@@ -105,7 +105,7 @@ export default function EmailComposer({ onClose, onSend }: EmailComposerProps) {
               onChange={(e) => setBCC(e.target.value)}
               onFocus={() => setActiveField('bcc')}
               placeholder="bcc@example.com"
-                  className="flex-1 px-3 py-2 bg-muted/50 border border-border rounded-lg text-sm
+                  className="flex-1 px-3 py-2 bg-muted border border-border rounded-lg text-sm
                            focus:bg-card focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/20
                            transition-all duration-200"
                 />
@@ -121,15 +121,15 @@ export default function EmailComposer({ onClose, onSend }: EmailComposerProps) {
               onChange={(e) => setSubject(e.target.value)}
               onFocus={() => setActiveField('subject')}
               placeholder="Email subject"
-              className="flex-1 px-3 py-2 bg-muted/50 border border-border rounded-lg text-sm
-                       focus:bg-card focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/20
+              className="flex-1 px-3 py-2 bg-background border border-border rounded-lg text-sm
+                       focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/20
                        transition-all duration-200"
             />
           </div>
         </div>
 
         {/* Formatting Toolbar */}
-        <div className="flex items-center gap-1 p-2 border-b border-border bg-muted/30">
+        <div className="flex items-center gap-1 p-2 border-b border-border bg-muted">
           <button className="p-2 hover:bg-muted rounded transition-all duration-200" title="Bold">
             <Bold className="w-4 h-4" />
           </button>
@@ -165,13 +165,13 @@ export default function EmailComposer({ onClose, onSend }: EmailComposerProps) {
             onChange={(e) => setBody(e.target.value)}
             onFocus={() => setActiveField('body')}
             placeholder="Write your message..."
-            className="w-full h-full min-h-[300px] bg-transparent border-none resize-none
+            className="w-full h-full min-h-[300px] bg-background border-none resize-none
                      focus:outline-none text-sm leading-relaxed"
           />
         </div>
 
         {/* Footer Actions */}
-        <div className="flex items-center justify-between p-4 border-t border-border bg-muted/30">
+        <div className="flex items-center justify-between p-4 border-t border-border bg-muted">
           <div className="text-xs text-muted-foreground">
             Press <kbd className="px-1.5 py-0.5 bg-muted rounded text-xs">Ctrl+Enter</kbd> to send
           </div>
@@ -182,7 +182,7 @@ export default function EmailComposer({ onClose, onSend }: EmailComposerProps) {
             <Button
               onClick={handleSend}
               disabled={!to || !subject || !body}
-              className="bg-primary hover:bg-primary/90"
+              className="bg-primary hover:bg-primary"
             >
               <Send className="w-4 h-4 mr-2" />
               Send

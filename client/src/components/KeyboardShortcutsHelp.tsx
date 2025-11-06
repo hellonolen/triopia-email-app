@@ -89,7 +89,7 @@ export default function KeyboardShortcutsHelp({ onClose }: KeyboardShortcutsHelp
         </div>
 
         {/* Footer */}
-        <div className="p-6 border-t border-border bg-muted/30">
+        <div className="p-6 border-t border-border bg-muted">
           <p className="text-sm text-muted-foreground text-center">
             Press <kbd className="px-2 py-1 bg-card border border-border rounded text-xs font-mono font-semibold">?</kbd> anytime to show this help
           </p>

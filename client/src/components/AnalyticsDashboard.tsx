@@ -60,7 +60,7 @@ export default function AnalyticsDashboard() {
           </div>
           <div className="space-y-3">
             {topSenders.map((sender) => (
-              <div key={sender.name} className="flex items-center justify-between p-3 bg-muted/50 rounded-lg">
+              <div key={sender.name} className="flex items-center justify-between p-3 bg-muted rounded-lg">
                 <div className="flex items-center gap-3">
                   <div className="w-10 h-10 bg-gradient-to-br from-primary to-primary/80 rounded-full flex items-center justify-center text-primary-foreground font-semibold">
                     {sender.name.charAt(0)}
@@ -102,7 +102,7 @@ export default function AnalyticsDashboard() {
       </div>
 
       {/* Suggested Actions */}
-      <div className="p-6 bg-primary/5 border border-primary/20 rounded-lg">
+      <div className="p-6 bg-primary border border-primary/20 rounded-lg">
         <h3 className="font-semibold mb-3 flex items-center gap-2">
           <TrendingUp className="w-5 h-5 text-primary" />
           Suggested Actions

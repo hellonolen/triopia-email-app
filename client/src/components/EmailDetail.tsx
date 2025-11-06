@@ -78,7 +78,7 @@ export default function EmailDetail({ email, onArchive, onDelete, onStarToggle }
 
           <button
             onClick={() => onDelete(email.id)}
-            className="p-2 hover:bg-destructive/10 rounded-lg transition-all duration-200 hover:scale-110"
+            className="p-2 hover:bg-muted rounded-lg transition-all duration-200 hover:scale-110"
             title="Delete"
           >
             <Trash2 className="w-5 h-5 text-destructive" />
@@ -101,7 +101,7 @@ export default function EmailDetail({ email, onArchive, onDelete, onStarToggle }
           <button
             onClick={handleSummarize}
             disabled={isSummarizing}
-            className="p-2 hover:bg-primary/10 rounded-lg transition-all duration-200 hover:scale-110"
+            className="p-2 hover:bg-primary rounded-lg transition-all duration-200 hover:scale-110"
             title="Summarize email"
           >
             {isSummarizing ? (
@@ -115,7 +115,7 @@ export default function EmailDetail({ email, onArchive, onDelete, onStarToggle }
         <div className="text-sm text-muted-foreground mb-8">{email.date}</div>
 
         {showSummary && (
-          <div className="mb-8 p-6 bg-muted/50 border-l-4 border-primary rounded-lg animate-in fade-in-down duration-500">
+          <div className="mb-8 p-6 bg-muted border-l-4 border-primary rounded-lg animate-in fade-in-down duration-500">
             <div className="flex items-center gap-2 mb-3 text-primary font-semibold text-sm uppercase tracking-wide">
               <Clock className="w-4 h-4" />
               Summary
@@ -140,7 +140,7 @@ export default function EmailDetail({ email, onArchive, onDelete, onStarToggle }
           <div className="mt-8 pt-6 border-t border-border">
             <Button
               onClick={() => setShowQuickReply(true)}
-              className="bg-primary hover:bg-primary/90"
+              className="bg-primary hover:bg-primary"
             >
               <Reply className="w-4 h-4 mr-2" />
               Reply

@@ -69,7 +69,7 @@ export default function SpeechToText({ onTranscript, className = '' }: SpeechToT
       className={`
         p-2 rounded-lg transition-all duration-200
         ${isListening 
-          ? 'bg-destructive text-destructive-foreground hover:bg-destructive/90 animate-pulse' 
+          ? 'bg-destructive text-destructive-foreground hover:bg-destructive animate-pulse' 
           : 'hover:bg-muted text-muted-foreground hover:text-foreground'
         }
         ${className}

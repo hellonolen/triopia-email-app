@@ -25,7 +25,7 @@ export default function InboxesSection({ accounts, selectedInbox, onSelectInbox 
       {/* Collapsible Header */}
       <button
         onClick={() => setIsExpanded(!isExpanded)}
-        className="w-full flex items-center justify-between px-3 py-2 rounded-lg hover:bg-muted/50 transition-all duration-200"
+        className="w-full flex items-center justify-between px-3 py-2 rounded-lg hover:bg-muted transition-all duration-200"
       >
         <div className="flex items-center gap-3">
           {isExpanded ? (
@@ -57,7 +57,7 @@ export default function InboxesSection({ accounts, selectedInbox, onSelectInbox 
                   transition-all duration-200 text-left
                   ${isActive 
                     ? 'bg-muted font-medium' 
-                    : 'hover:bg-muted/50'
+                    : 'hover:bg-muted'
                   }
                 `}
               >

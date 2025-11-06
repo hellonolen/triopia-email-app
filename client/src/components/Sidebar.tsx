@@ -42,7 +42,7 @@ export default function Sidebar({ selectedFolder, onFolderSelect, getUnreadCount
       <div className="mb-4">
         <Button
           onClick={onCompose}
-          className="w-full bg-primary hover:bg-primary/90 text-primary-foreground font-medium shadow-sm hover:shadow-md transition-all duration-200 hover:-translate-y-0.5"
+          className="w-full bg-primary hover:bg-primary text-primary-foreground font-medium shadow-sm hover:shadow-md transition-all duration-200 hover:-translate-y-0.5"
           size="lg"
         >
           <Plus className="w-5 h-5 mr-2" />
@@ -72,7 +72,7 @@ export default function Sidebar({ selectedFolder, onFolderSelect, getUnreadCount
                 transition-all duration-200
                 ${isActive 
                   ? 'bg-muted font-medium' 
-                  : 'hover:bg-muted/50'
+                  : 'hover:bg-muted'
                 }
               `}
             >
@@ -97,7 +97,7 @@ export default function Sidebar({ selectedFolder, onFolderSelect, getUnreadCount
             <button
               key={item.id}
               onClick={() => onFolderSelect(item.id)}
-              className="w-full flex items-center gap-2 px-3 py-2 rounded-lg hover:bg-muted/50 transition-all duration-200"
+              className="w-full flex items-center gap-2 px-3 py-2 rounded-lg hover:bg-muted transition-all duration-200"
             >
               <Icon className="w-4 h-4 text-muted-foreground" />
               <span className="text-xs">{item.label}</span>

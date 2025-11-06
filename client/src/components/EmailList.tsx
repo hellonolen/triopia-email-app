@@ -46,7 +46,7 @@ export default function EmailList({
             placeholder="Search emails..."
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
-            className="w-full pl-10 pr-4 py-2.5 bg-muted/50 border border-transparent rounded-lg text-sm
+            className="w-full pl-10 pr-4 py-2.5 bg-muted border border-transparent rounded-lg text-sm
                      focus:bg-card focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/20
                      transition-all duration-200"
           />

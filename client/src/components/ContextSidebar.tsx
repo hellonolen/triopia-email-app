@@ -97,7 +97,7 @@ export default function ContextSidebar({ email, isOpen, onClose }: ContextSideba
               {pastConversations.map((conv) => (
                 <button
                   key={conv.id}
-                  className="w-full p-3 bg-muted/50 hover:bg-muted rounded-lg text-left transition-all duration-200 hover:scale-[1.02]"
+                  className="w-full p-3 bg-muted hover:bg-muted rounded-lg text-left transition-all duration-200 hover:scale-[1.02]"
                 >
                   <div className="font-medium text-sm mb-1">{conv.subject}</div>
                   <div className="text-xs text-muted-foreground mb-1">{conv.date}</div>
@@ -117,7 +117,7 @@ export default function ContextSidebar({ email, isOpen, onClose }: ContextSideba
               {upcomingEvents.map((event) => (
                 <div
                   key={event.id}
-                  className="p-3 bg-primary/5 border border-primary/20 rounded-lg"
+                  className="p-3 bg-primary border border-primary/20 rounded-lg"
                 >
                   <div className="font-medium text-sm mb-1">{event.title}</div>
                   <div className="text-xs text-muted-foreground flex items-center gap-2">
@@ -143,7 +143,7 @@ export default function ContextSidebar({ email, isOpen, onClose }: ContextSideba
               {sharedFiles.map((file) => (
                 <button
                   key={file.id}
-                  className="w-full p-3 bg-muted/50 hover:bg-muted rounded-lg text-left transition-all duration-200 hover:scale-[1.02] flex items-center gap-3"
+                  className="w-full p-3 bg-muted hover:bg-muted rounded-lg text-left transition-all duration-200 hover:scale-[1.02] flex items-center gap-3"
                 >
                   <FileText className="w-8 h-8 text-primary" />
                   <div className="flex-1 min-w-0">

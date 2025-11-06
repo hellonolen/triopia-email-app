@@ -336,3 +336,17 @@
 - [ ] Free tier: Connect up to 3 accounts
 - [ ] Pro tier ($15/mo): Connect up to 20 accounts + agentic features
 - [ ] Enterprise tier ($50/mo): 20 accounts + hosted email + white-label
+
+## Urgent Fix - Remove All Transparency
+
+- [x] Add solid background color to all input fields in EmailComposer
+- [x] Fix To field background
+- [x] Fix CC/BCC field background
+- [x] Fix Subject field background
+- [x] Fix message body textarea background
+- [x] Remove all transparent backgrounds throughout entire app
+- [x] Remove all low opacity (bg-muted/50, bg-background/80, etc.)
+- [x] Remove backdrop-blur effects
+- [x] Replace all semi-transparent backgrounds with solid colors
+- [x] Ensure all modals have solid backgrounds
+- [x] Ensure all overlays have solid backgrounds

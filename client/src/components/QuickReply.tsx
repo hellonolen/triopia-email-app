@@ -59,7 +59,7 @@ export default function QuickReply({ onSend, onClose }: QuickReplyProps) {
               px-4 py-2 rounded-lg text-sm font-medium transition-all duration-200
               ${selectedTone === tone
                 ? 'bg-primary text-primary-foreground shadow-sm'
-                : 'bg-muted hover:bg-muted/80'
+                : 'bg-muted hover:bg-muted'
               }
             `}
           >
@@ -76,7 +76,7 @@ export default function QuickReply({ onSend, onClose }: QuickReplyProps) {
             <button
               key={action.label}
               onClick={() => onSend(action.message)}
-              className="flex flex-col items-center gap-2 p-3 bg-muted/50 hover:bg-muted rounded-lg transition-all duration-200 hover:scale-105"
+              className="flex flex-col items-center gap-2 p-3 bg-muted hover:bg-muted rounded-lg transition-all duration-200 hover:scale-105"
             >
               <Icon className="w-5 h-5 text-primary" />
               <span className="text-xs font-medium text-center">{action.label}</span>
@@ -92,7 +92,7 @@ export default function QuickReply({ onSend, onClose }: QuickReplyProps) {
           <button
             key={index}
             onClick={() => setCustomMessage(reply)}
-            className="w-full p-3 text-left bg-muted/30 hover:bg-muted rounded-lg text-sm transition-all duration-200 hover:scale-[1.02]"
+            className="w-full p-3 text-left bg-muted hover:bg-muted rounded-lg text-sm transition-all duration-200 hover:scale-[1.02]"
           >
             {reply}
           </button>
@@ -105,7 +105,7 @@ export default function QuickReply({ onSend, onClose }: QuickReplyProps) {
           value={customMessage}
           onChange={(e) => setCustomMessage(e.target.value)}
           placeholder="Or write your own reply..."
-          className="w-full p-3 bg-muted/50 border border-border rounded-lg text-sm resize-none
+          className="w-full p-3 bg-muted border border-border rounded-lg text-sm resize-none
                    focus:bg-card focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/20
                    transition-all duration-200"
           rows={3}
@@ -122,7 +122,7 @@ export default function QuickReply({ onSend, onClose }: QuickReplyProps) {
               }
             }}
             disabled={!customMessage.trim()}
-            className="bg-primary hover:bg-primary/90"
+            className="bg-primary hover:bg-primary"
           >
             <Send className="w-4 h-4 mr-2" />
             Send Reply

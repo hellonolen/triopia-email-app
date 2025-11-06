@@ -50,7 +50,7 @@ export default function SmartTriage({
       description: 'Requires immediate attention',
       icon: AlertCircle,
       color: 'text-destructive',
-      bgColor: 'bg-destructive/10',
+      bgColor: 'bg-muted',
       emails: urgentEmails,
     },
     {
@@ -59,7 +59,7 @@ export default function SmartTriage({
       description: 'From important contacts',
       icon: Users,
       color: 'text-primary',
-      bgColor: 'bg-primary/10',
+      bgColor: 'bg-primary',
       emails: vipEmails,
     },
     {
@@ -100,7 +100,7 @@ export default function SmartTriage({
           return (
             <div key={category.id} className="bg-card rounded-lg border border-border overflow-hidden">
               {/* Category Header */}
-              <div className="p-3 border-b border-border bg-muted/30">
+              <div className="p-3 border-b border-border bg-muted">
                 <div className="flex items-center gap-2">
                   <div className={`p-1.5 rounded-lg ${category.bgColor}`}>
                     <Icon className={`w-4 h-4 ${category.color}`} />

@@ -33,7 +33,7 @@ export default function Settings() {
           </div>
           <Button
             onClick={() => setShowAddAccount(!showAddAccount)}
-            className="bg-primary hover:bg-primary/90"
+            className="bg-primary hover:bg-primary"
           >
             <Plus className="w-4 h-4 mr-2" />
             Add Account
@@ -45,7 +45,7 @@ export default function Settings() {
           {accounts.map((account) => (
             <div key={account.id} className="p-4 bg-card border border-border rounded-lg flex items-center justify-between">
               <div className="flex items-center gap-4">
-                <div className="w-12 h-12 bg-primary/10 rounded-lg flex items-center justify-center">
+                <div className="w-12 h-12 bg-primary rounded-lg flex items-center justify-center">
                   <Mail className="w-6 h-6 text-primary" />
                 </div>
                 <div>
@@ -61,7 +61,7 @@ export default function Settings() {
                 }`}>
                   {account.status}
                 </span>
-                <button className="p-2 hover:bg-destructive/10 rounded-lg transition-all duration-200">
+                <button className="p-2 hover:bg-muted rounded-lg transition-all duration-200">
                   <Trash2 className="w-4 h-4 text-destructive" />
                 </button>
               </div>
@@ -71,7 +71,7 @@ export default function Settings() {
 
         {/* Add Account Form */}
         {showAddAccount && (
-          <div className="p-6 bg-muted/50 border border-border rounded-lg space-y-4 animate-in fade-in slide-in-from-top-2 duration-300">
+          <div className="p-6 bg-muted border border-border rounded-lg space-y-4 animate-in fade-in slide-in-from-top-2 duration-300">
             <h4 className="font-semibold">Add Email Account</h4>
             
             <div className="grid grid-cols-2 gap-4">
@@ -159,7 +159,7 @@ export default function Settings() {
               >
                 Cancel
               </Button>
-              <Button className="bg-primary hover:bg-primary/90">
+              <Button className="bg-primary hover:bg-primary">
                 <Save className="w-4 h-4 mr-2" />
                 Connect Account
               </Button>
@@ -192,7 +192,7 @@ export default function Settings() {
                   className={`px-4 py-2 rounded-lg text-xs font-medium transition-all duration-200 ${
                     textSize === size
                       ? 'bg-primary text-primary-foreground'
-                      : 'bg-muted hover:bg-muted/80'
+                      : 'bg-muted hover:bg-muted'
                   }`}
                 >
                   {size.toUpperCase()}

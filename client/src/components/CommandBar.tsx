@@ -110,7 +110,7 @@ export default function CommandBar({ onClose, onNavigate, onAction }: CommandBar
         </div>
 
         {/* Footer */}
-        <div className="p-3 border-t border-border bg-muted/30 flex items-center justify-between text-xs text-muted-foreground">
+        <div className="p-3 border-t border-border bg-muted flex items-center justify-between text-xs text-muted-foreground">
           <div className="flex gap-4">
             <span>
               <kbd className="px-1.5 py-0.5 bg-card border border-border rounded font-mono">↑↓</kbd> Navigate

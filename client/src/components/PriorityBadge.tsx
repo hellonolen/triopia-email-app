@@ -12,7 +12,7 @@ export default function PriorityBadge({ priority, showLabel = false }: PriorityB
     urgent: {
       icon: AlertCircle,
       label: 'Urgent',
-      className: 'bg-destructive/10 text-destructive border-destructive/20',
+      className: 'bg-muted text-destructive border-destructive/20',
       iconClassName: 'text-destructive',
     },
     high: {
@@ -24,7 +24,7 @@ export default function PriorityBadge({ priority, showLabel = false }: PriorityB
     normal: {
       icon: Zap,
       label: 'Normal',
-      className: 'bg-primary/10 text-primary border-primary/20',
+      className: 'bg-primary text-primary border-primary/20',
       iconClassName: 'text-primary',
     },
     low: {
