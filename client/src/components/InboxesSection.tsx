@@ -25,7 +25,7 @@ export default function InboxesSection({ accounts, selectedInbox, onSelectInbox 
       {/* Collapsible Header */}
       <button
         onClick={() => setIsExpanded(!isExpanded)}
-        className="w-full flex items-center justify-between px-4 py-3 rounded-lg hover:bg-muted/50 transition-all duration-200"
+        className="w-full flex items-center justify-between px-3 py-2 rounded-lg hover:bg-muted/50 transition-all duration-200"
       >
         <div className="flex items-center gap-3">
           {isExpanded ? (
@@ -33,8 +33,8 @@ export default function InboxesSection({ accounts, selectedInbox, onSelectInbox 
           ) : (
             <ChevronRight className="w-4 h-4 text-muted-foreground transition-transform duration-200" />
           )}
-          <Mail className="w-5 h-5 text-muted-foreground" />
-          <span className="text-sm font-medium">Inboxes</span>
+          <Mail className="w-4 h-4 text-muted-foreground" />
+          <span className="text-xs font-medium">Inboxes</span>
         </div>
         {totalUnread > 0 && (
           <span className="bg-primary text-primary-foreground text-xs font-medium px-2 py-0.5 rounded-full min-w-[24px] text-center">
@@ -53,7 +53,7 @@ export default function InboxesSection({ accounts, selectedInbox, onSelectInbox 
                 key={account.id}
                 onClick={() => onSelectInbox(account.id)}
                 className={`
-                  w-full flex items-center justify-between px-4 py-2.5 rounded-lg
+                  w-full flex items-center justify-between px-3 py-1.5 rounded-lg
                   transition-all duration-200 text-left
                   ${isActive 
                     ? 'bg-muted font-medium' 

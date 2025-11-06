@@ -34,7 +34,7 @@ export interface Email {
 }
 
 export default function EmailApp() {
-  const [selectedFolder, setSelectedFolder] = useState('priority');
+  const [selectedFolder, setSelectedFolder] = useState('inbox');
   const [selectedEmail, setSelectedEmail] = useState<Email | null>(null);
   const [showComposer, setShowComposer] = useState(false);
   const [showCommandBar, setShowCommandBar] = useState(false);
@@ -206,8 +206,12 @@ export default function EmailApp() {
   };
 
   const getUnreadCount = (folder: string) => {
+    if (folder === 'priority') {
+      // Count urgent and high priority unread emails
+      return emails.filter(e => !e.isRead && (e.priority === 'urgent' || e.priority === 'high')).length;
+    }
     if (folder === 'inbox') {
-      return emails.filter(e => !e.isRead).length;
+      return emails.filter(e => !e.isRead && !e.isSpam && !e.isArchived && !e.isDeleted).length;
     }
     if (folder === 'starred') {
       return emails.filter(e => e.isStarred).length;

@@ -316,3 +316,23 @@
 - [x] Reduce footer text size to 50% (half the current size)
 - [x] Make policy links more compact
 - [x] Maintain proper spacing while reducing text size
+
+## New User Requests - Sidebar Refinements & Default Landing
+
+### Sidebar Refinements
+- [x] Reduce sidebar padding by 50% throughout
+- [x] Reduce text size in sidebar for more compact design
+- [x] Keep Notes, Analytics, Settings in utilities section
+- [x] Ensure Settings is visible in utilities section
+- [x] More compact spacing between navigation items
+
+### Default Landing & Priority Badge
+- [x] Change default landing page from Priority to Inbox
+- [x] Show unread count badge on Priority when it has items
+- [x] Show dot indicator on Priority when it has unread emails
+
+### Email Hosting Strategy (Future Consideration)
+- [ ] Research: Hybrid approach - pure client first, optional hosted email later
+- [ ] Free tier: Connect up to 3 accounts
+- [ ] Pro tier ($15/mo): Connect up to 20 accounts + agentic features
+- [ ] Enterprise tier ($50/mo): 20 accounts + hosted email + white-label
