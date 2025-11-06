@@ -1,12 +1,13 @@
 import { useState, useEffect } from 'react';
-import { Mail, Trash2, Plus, AlertCircle, CheckCircle } from 'lucide-react';
+import { Mail, Trash2, Plus, RefreshCw, ExternalLink, HelpCircle } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { trpc } from '@/lib/trpc';
 import { toast } from 'sonner';
+import { EMAIL_PROVIDERS, getProviderById, getProviderByEmail, type EmailProvider } from '../../../shared/emailProviders';
 
 export default function Settings() {
   const [showAddAccount, setShowAddAccount] = useState(false);
-  const [selectedProvider, setSelectedProvider] = useState<'gmail' | 'outlook' | 'imap' | null>(null);
+  const [selectedProvider, setSelectedProvider] = useState<string | null>(null);
 
   // Fetch email accounts
   const { data: accounts, refetch } = trpc.email.listAccounts.useQuery();
@@ -40,8 +41,40 @@ export default function Settings() {
     imapHost: '',
     imapPort: '993',
     smtpHost: '',
-    smtpPort: '465',
+    smtpPort: '587',
   });
+
+  // Auto-detect provider from email
+  useEffect(() => {
+    if (imapForm.email && selectedProvider === 'custom') {
+      const detectedProvider = getProviderByEmail(imapForm.email);
+      if (detectedProvider) {
+        setImapForm(prev => ({
+          ...prev,
+          imapHost: detectedProvider.imapHost,
+          imapPort: detectedProvider.imapPort.toString(),
+          smtpHost: detectedProvider.smtpHost,
+          smtpPort: detectedProvider.smtpPort.toString(),
+        }));
+      }
+    }
+  }, [imapForm.email, selectedProvider]);
+
+  // Pre-fill form when provider is selected
+  useEffect(() => {
+    if (selectedProvider && selectedProvider !== 'gmail' && selectedProvider !== 'outlook') {
+      const provider = getProviderById(selectedProvider);
+      if (provider) {
+        setImapForm(prev => ({
+          ...prev,
+          imapHost: provider.imapHost,
+          imapPort: provider.imapPort.toString(),
+          smtpHost: provider.smtpHost,
+          smtpPort: provider.smtpPort.toString(),
+        }));
+      }
+    }
+  }, [selectedProvider]);
 
   // Get OAuth URLs
   const { data: gmailAuthUrl } = trpc.email.getGmailAuthUrl.useQuery(undefined, {
@@ -66,6 +99,11 @@ export default function Settings() {
   const connectCustomAccountMutation = trpc.email.connectCustomAccount.useMutation();
 
   const handleConnectIMAP = async () => {
+    if (!imapForm.email || !imapForm.password || !imapForm.imapHost || !imapForm.smtpHost) {
+      toast.error('Please fill in all required fields');
+      return;
+    }
+
     try {
       await connectCustomAccountMutation.mutateAsync({
         email: imapForm.email,
@@ -75,19 +113,20 @@ export default function Settings() {
         smtpHost: imapForm.smtpHost,
         smtpPort: parseInt(imapForm.smtpPort)
       });
-      toast.success('IMAP account connected successfully');
+      toast.success('Email account connected successfully');
       setShowAddAccount(false);
+      setSelectedProvider(null);
       setImapForm({
         email: '',
         password: '',
         imapHost: '',
         imapPort: '993',
         smtpHost: '',
-        smtpPort: '465',
+        smtpPort: '587',
       });
       refetch();
     } catch (error) {
-      toast.error('Failed to connect IMAP account');
+      toast.error('Failed to connect email account. Please check your credentials and settings.');
     }
   };
 
@@ -103,6 +142,17 @@ export default function Settings() {
     }
   };
 
+  const handleSyncAccount = async (accountId: number) => {
+    try {
+      await syncAccountMutation.mutateAsync({ accountId });
+      toast.success('Account sync started');
+    } catch (error) {
+      toast.error('Failed to sync account');
+    }
+  };
+
+  const currentProvider = selectedProvider ? getProviderById(selectedProvider) : null;
+
   return (
     <div className="p-8 space-y-8 max-w-4xl">
       <div>
@@ -115,10 +165,15 @@ export default function Settings() {
         <div className="flex items-center justify-between">
           <div>
             <h3 className="text-lg font-semibold mb-1">Email Accounts</h3>
-            <p className="text-sm text-muted-foreground">Connect Gmail, Outlook, or custom IMAP accounts</p>
+            <p className="text-sm text-muted-foreground">Connect your email accounts using IMAP/SMTP</p>
           </div>
           <Button
-            onClick={() => setShowAddAccount(!showAddAccount)}
+            onClick={() => {
+              setShowAddAccount(!showAddAccount);
+              if (showAddAccount) {
+                setSelectedProvider(null);
+              }
+            }}
             className="bg-primary hover:bg-primary/90"
           >
             <Plus className="w-4 h-4 mr-2" />
@@ -128,155 +183,241 @@ export default function Settings() {
 
         {/* Add Account Form */}
         {showAddAccount && (
-          <div className="p-6 bg-card border border-border rounded-lg space-y-4">
-            <h4 className="font-semibold mb-4">Choose Account Type</h4>
+          <div className="p-6 bg-card border border-border rounded-lg space-y-6">
+            <div>
+              <h4 className="font-semibold mb-2">Choose Your Email Provider</h4>
+              <p className="text-sm text-muted-foreground">Select your provider for quick setup with pre-configured settings</p>
+            </div>
             
-            <div className="grid grid-cols-3 gap-4">
-              <button
-                onClick={() => setSelectedProvider('gmail')}
-                className={`p-4 border-2 rounded-lg transition-all ${
-                  selectedProvider === 'gmail' 
-                    ? 'border-primary bg-primary/10' 
-                    : 'border-border hover:border-primary/50'
-                }`}
-              >
-                <div className="text-center">
-                  <Mail className="w-8 h-8 mx-auto mb-2 text-primary" />
-                  <div className="font-medium">Gmail</div>
-                  <div className="text-xs text-muted-foreground mt-1">OAuth2</div>
-                </div>
-              </button>
-
-              <button
-                onClick={() => setSelectedProvider('outlook')}
-                className={`p-4 border-2 rounded-lg transition-all ${
-                  selectedProvider === 'outlook' 
-                    ? 'border-primary bg-primary/10' 
-                    : 'border-border hover:border-primary/50'
-                }`}
-              >
-                <div className="text-center">
-                  <Mail className="w-8 h-8 mx-auto mb-2 text-primary" />
-                  <div className="font-medium">Outlook</div>
-                  <div className="text-xs text-muted-foreground mt-1">OAuth2</div>
-                </div>
-              </button>
-
-              <button
-                onClick={() => setSelectedProvider('imap')}
-                className={`p-4 border-2 rounded-lg transition-all ${
-                  selectedProvider === 'imap' 
-                    ? 'border-primary bg-primary/10' 
-                    : 'border-border hover:border-primary/50'
-                }`}
-              >
-                <div className="text-center">
-                  <Mail className="w-8 h-8 mx-auto mb-2 text-primary" />
-                  <div className="font-medium">Custom</div>
-                  <div className="text-xs text-muted-foreground mt-1">IMAP/SMTP</div>
-                </div>
-              </button>
+            {/* Provider Grid */}
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
+              {EMAIL_PROVIDERS.map((provider) => (
+                <button
+                  key={provider.id}
+                  onClick={() => setSelectedProvider(provider.id)}
+                  className={`p-4 border-2 rounded-lg transition-all hover:shadow-md ${
+                    selectedProvider === provider.id
+                      ? 'border-primary bg-primary/10 shadow-sm' 
+                      : 'border-border hover:border-primary/50'
+                  }`}
+                >
+                  <div className="text-center">
+                    <div className="font-medium">{provider.name}</div>
+                  </div>
+                </button>
+              ))}
             </div>
 
-            {/* Gmail OAuth */}
+            {/* Provider-Specific Forms */}
             {selectedProvider === 'gmail' && (
-              <div className="mt-4 p-4 bg-muted rounded-lg">
-                <p className="text-sm mb-4">
-                  Connect your Gmail account securely using Google OAuth2. You'll be redirected to Google to authorize access.
-                </p>
-                <Button onClick={handleConnectGmail} className="w-full">
-                  Connect Gmail Account
+              <div className="p-5 bg-muted/50 rounded-lg border border-border">
+                <div className="flex items-start gap-3 mb-4">
+                  <div className="flex-1">
+                    <h5 className="font-semibold mb-2">Connect Gmail</h5>
+                    <p className="text-sm text-muted-foreground mb-3">
+                      {currentProvider?.instructions}
+                    </p>
+                    {currentProvider?.helpUrl && (
+                      <a 
+                        href={currentProvider.helpUrl} 
+                        target="_blank" 
+                        rel="noopener noreferrer"
+                        className="text-sm text-primary hover:underline inline-flex items-center gap-1"
+                      >
+                        <HelpCircle className="w-3 h-3" />
+                        View Gmail setup guide
+                        <ExternalLink className="w-3 h-3" />
+                      </a>
+                    )}
+                  </div>
+                </div>
+                <Button onClick={handleConnectGmail} className="w-full" disabled={!gmailAuthUrl}>
+                  {gmailAuthUrl ? 'Connect Gmail Account (OAuth)' : 'Loading...'}
                 </Button>
+                <div className="mt-3 text-center">
+                  <button
+                    onClick={() => setSelectedProvider('custom')}
+                    className="text-sm text-muted-foreground hover:text-foreground underline"
+                  >
+                    Or connect manually with IMAP/SMTP
+                  </button>
+                </div>
               </div>
             )}
 
-            {/* Outlook OAuth */}
             {selectedProvider === 'outlook' && (
-              <div className="mt-4 p-4 bg-muted rounded-lg">
-                <p className="text-sm mb-4">
-                  Connect your Outlook account securely using Microsoft OAuth2. You'll be redirected to Microsoft to authorize access.
-                </p>
-                <Button onClick={handleConnectOutlook} className="w-full">
-                  Connect Outlook Account
+              <div className="p-5 bg-muted/50 rounded-lg border border-border">
+                <div className="flex items-start gap-3 mb-4">
+                  <div className="flex-1">
+                    <h5 className="font-semibold mb-2">Connect Outlook</h5>
+                    <p className="text-sm text-muted-foreground mb-3">
+                      {currentProvider?.instructions}
+                    </p>
+                    {currentProvider?.helpUrl && (
+                      <a 
+                        href={currentProvider.helpUrl} 
+                        target="_blank" 
+                        rel="noopener noreferrer"
+                        className="text-sm text-primary hover:underline inline-flex items-center gap-1"
+                      >
+                        <HelpCircle className="w-3 h-3" />
+                        View Outlook setup guide
+                        <ExternalLink className="w-3 h-3" />
+                      </a>
+                    )}
+                  </div>
+                </div>
+                <Button onClick={handleConnectOutlook} className="w-full" disabled={!outlookAuthUrl}>
+                  {outlookAuthUrl ? 'Connect Outlook Account (OAuth)' : 'Loading...'}
                 </Button>
+                <div className="mt-3 text-center">
+                  <button
+                    onClick={() => setSelectedProvider('custom')}
+                    className="text-sm text-muted-foreground hover:text-foreground underline"
+                  >
+                    Or connect manually with IMAP/SMTP
+                  </button>
+                </div>
               </div>
             )}
 
-            {/* IMAP Form */}
-            {selectedProvider === 'imap' && (
-              <div className="mt-4 space-y-4">
-                <div className="grid grid-cols-2 gap-4">
+            {/* IMAP/SMTP Form for all other providers */}
+            {selectedProvider && selectedProvider !== 'gmail' && selectedProvider !== 'outlook' && (
+              <div className="space-y-4">
+                {currentProvider && (
+                  <div className="p-4 bg-blue-50 dark:bg-blue-950/20 border border-blue-200 dark:border-blue-900 rounded-lg">
+                    <div className="flex items-start gap-3">
+                      <div className="flex-1">
+                        <h5 className="font-semibold mb-1 text-blue-900 dark:text-blue-100">
+                          {currentProvider.name} Setup Instructions
+                        </h5>
+                        <p className="text-sm text-blue-800 dark:text-blue-200 mb-2">
+                          {currentProvider.instructions}
+                        </p>
+                        {currentProvider.helpUrl && (
+                          <a 
+                            href={currentProvider.helpUrl} 
+                            target="_blank" 
+                            rel="noopener noreferrer"
+                            className="text-sm text-blue-600 dark:text-blue-400 hover:underline inline-flex items-center gap-1"
+                          >
+                            <ExternalLink className="w-3 h-3" />
+                            View detailed setup guide
+                          </a>
+                        )}
+                      </div>
+                    </div>
+                  </div>
+                )}
+
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <div>
-                    <label className="block text-sm font-medium mb-2">Email</label>
+                    <label className="block text-sm font-medium mb-2">
+                      Email Address <span className="text-red-500">*</span>
+                    </label>
                     <input
                       type="email"
                       value={imapForm.email}
                       onChange={(e) => setImapForm({ ...imapForm, email: e.target.value })}
-                      className="w-full px-3 py-2 border border-border rounded-lg bg-background"
+                      className="w-full px-3 py-2 border border-border rounded-lg bg-background focus:ring-2 focus:ring-primary/20 focus:border-primary"
                       placeholder="your@email.com"
                     />
                   </div>
                   <div>
-                    <label className="block text-sm font-medium mb-2">Password</label>
+                    <label className="block text-sm font-medium mb-2">
+                      Password / App Password <span className="text-red-500">*</span>
+                    </label>
                     <input
                       type="password"
                       value={imapForm.password}
                       onChange={(e) => setImapForm({ ...imapForm, password: e.target.value })}
-                      className="w-full px-3 py-2 border border-border rounded-lg bg-background"
-                      placeholder="••••••••"
+                      className="w-full px-3 py-2 border border-border rounded-lg bg-background focus:ring-2 focus:ring-primary/20 focus:border-primary"
+                      placeholder="••••••••••••••••"
                     />
                   </div>
                 </div>
 
-                <div className="grid grid-cols-2 gap-4">
-                  <div>
-                    <label className="block text-sm font-medium mb-2">IMAP Host</label>
-                    <input
-                      type="text"
-                      value={imapForm.imapHost}
-                      onChange={(e) => setImapForm({ ...imapForm, imapHost: e.target.value })}
-                      className="w-full px-3 py-2 border border-border rounded-lg bg-background"
-                      placeholder="imap.example.com"
-                    />
-                  </div>
-                  <div>
-                    <label className="block text-sm font-medium mb-2">IMAP Port</label>
-                    <input
-                      type="text"
-                      value={imapForm.imapPort}
-                      onChange={(e) => setImapForm({ ...imapForm, imapPort: e.target.value })}
-                      className="w-full px-3 py-2 border border-border rounded-lg bg-background"
-                      placeholder="993"
-                    />
-                  </div>
-                </div>
-
-                <div className="grid grid-cols-2 gap-4">
-                  <div>
-                    <label className="block text-sm font-medium mb-2">SMTP Host</label>
-                    <input
-                      type="text"
-                      value={imapForm.smtpHost}
-                      onChange={(e) => setImapForm({ ...imapForm, smtpHost: e.target.value })}
-                      className="w-full px-3 py-2 border border-border rounded-lg bg-background"
-                      placeholder="smtp.example.com"
-                    />
-                  </div>
-                  <div>
-                    <label className="block text-sm font-medium mb-2">SMTP Port</label>
-                    <input
-                      type="text"
-                      value={imapForm.smtpPort}
-                      onChange={(e) => setImapForm({ ...imapForm, smtpPort: e.target.value })}
-                      className="w-full px-3 py-2 border border-border rounded-lg bg-background"
-                      placeholder="465"
-                    />
+                <div className="border-t border-border pt-4">
+                  <h5 className="font-medium mb-3 text-sm">IMAP Settings (Incoming Mail)</h5>
+                  <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                    <div className="md:col-span-2">
+                      <label className="block text-sm font-medium mb-2">
+                        IMAP Server <span className="text-red-500">*</span>
+                      </label>
+                      <input
+                        type="text"
+                        value={imapForm.imapHost}
+                        onChange={(e) => setImapForm({ ...imapForm, imapHost: e.target.value })}
+                        className="w-full px-3 py-2 border border-border rounded-lg bg-background focus:ring-2 focus:ring-primary/20 focus:border-primary"
+                        placeholder="imap.example.com"
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-sm font-medium mb-2">Port</label>
+                      <input
+                        type="text"
+                        value={imapForm.imapPort}
+                        onChange={(e) => setImapForm({ ...imapForm, imapPort: e.target.value })}
+                        className="w-full px-3 py-2 border border-border rounded-lg bg-background focus:ring-2 focus:ring-primary/20 focus:border-primary"
+                        placeholder="993"
+                      />
+                    </div>
                   </div>
                 </div>
 
-                <Button onClick={handleConnectIMAP} className="w-full">
-                  Connect IMAP Account
-                </Button>
+                <div className="border-t border-border pt-4">
+                  <h5 className="font-medium mb-3 text-sm">SMTP Settings (Outgoing Mail)</h5>
+                  <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                    <div className="md:col-span-2">
+                      <label className="block text-sm font-medium mb-2">
+                        SMTP Server <span className="text-red-500">*</span>
+                      </label>
+                      <input
+                        type="text"
+                        value={imapForm.smtpHost}
+                        onChange={(e) => setImapForm({ ...imapForm, smtpHost: e.target.value })}
+                        className="w-full px-3 py-2 border border-border rounded-lg bg-background focus:ring-2 focus:ring-primary/20 focus:border-primary"
+                        placeholder="smtp.example.com"
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-sm font-medium mb-2">Port</label>
+                      <input
+                        type="text"
+                        value={imapForm.smtpPort}
+                        onChange={(e) => setImapForm({ ...imapForm, smtpPort: e.target.value })}
+                        className="w-full px-3 py-2 border border-border rounded-lg bg-background focus:ring-2 focus:ring-primary/20 focus:border-primary"
+                        placeholder="587"
+                      />
+                    </div>
+                  </div>
+                </div>
+
+                <div className="flex gap-3 pt-2">
+                  <Button 
+                    onClick={handleConnectIMAP} 
+                    className="flex-1"
+                    disabled={connectCustomAccountMutation.isPending}
+                  >
+                    {connectCustomAccountMutation.isPending ? 'Connecting...' : 'Connect Account'}
+                  </Button>
+                  <Button 
+                    onClick={() => {
+                      setSelectedProvider(null);
+                      setImapForm({
+                        email: '',
+                        password: '',
+                        imapHost: '',
+                        imapPort: '993',
+                        smtpHost: '',
+                        smtpPort: '587',
+                      });
+                    }}
+                    variant="outline"
+                  >
+                    Cancel
+                  </Button>
+                </div>
               </div>
             )}
           </div>
@@ -285,40 +426,37 @@ export default function Settings() {
         {/* Connected Accounts List */}
         <div className="space-y-3">
           {accounts && accounts.length > 0 ? (
-            accounts.map((account) => (
-              <div key={account.id} className="p-4 bg-card border border-border rounded-lg flex items-center justify-between">
-                <div className="flex items-center gap-4">
-                  <div className="w-12 h-12 bg-primary/10 rounded-lg flex items-center justify-center">
-                    <Mail className="w-6 h-6 text-primary" />
-                  </div>
+            accounts.map((account: any) => (
+              <div
+                key={account.id}
+                className="p-4 bg-card border border-border rounded-lg flex items-center justify-between hover:shadow-sm transition-shadow"
+              >
+                <div className="flex items-center gap-3">
+                  <Mail className="w-5 h-5 text-primary" />
                   <div>
                     <div className="font-medium">{account.email}</div>
-                    <div className="text-sm text-muted-foreground capitalize">{account.provider}</div>
+                    <div className="text-sm text-muted-foreground">
+                      {account.provider === 'gmail' && 'Gmail'}
+                      {account.provider === 'outlook' && 'Outlook'}
+                      {account.provider === 'imap' && 'IMAP/SMTP'}
+                    </div>
                   </div>
                 </div>
-                <div className="flex items-center gap-3">
-                  <div className="flex items-center gap-2">
-                    <CheckCircle className="w-4 h-4 text-green-500" />
-                    <span className="text-sm text-green-500">Connected</span>
-                  </div>
+                <div className="flex items-center gap-2">
                   <Button
+                    onClick={() => handleSyncAccount(account.id)}
                     variant="outline"
                     size="sm"
-                    onClick={async () => {
-                      try {
-                        await syncAccountMutation.mutateAsync({ accountId: account.id });
-                        toast.success('Email sync started');
-                      } catch (error) {
-                        toast.error('Failed to sync emails');
-                      }
-                    }}
+                    disabled={syncAccountMutation.isPending}
                   >
-                    Sync Now
+                    <RefreshCw className="w-4 h-4 mr-1" />
+                    Sync
                   </Button>
                   <Button
+                    onClick={() => handleDeleteAccount(account.id)}
                     variant="outline"
                     size="sm"
-                    onClick={() => handleDeleteAccount(account.id)}
+                    className="text-red-600 hover:text-red-700 hover:bg-red-50"
                   >
                     <Trash2 className="w-4 h-4" />
                   </Button>
@@ -326,10 +464,10 @@ export default function Settings() {
               </div>
             ))
           ) : (
-            <div className="p-8 text-center text-muted-foreground">
-              <AlertCircle className="w-12 h-12 mx-auto mb-4 opacity-50" />
-              <p>No email accounts connected</p>
-              <p className="text-sm mt-2">Click "Add Account" to get started</p>
+            <div className="p-8 text-center bg-muted/30 rounded-lg border border-dashed border-border">
+              <Mail className="w-12 h-12 mx-auto mb-3 text-muted-foreground/50" />
+              <p className="text-muted-foreground mb-2">No email accounts connected</p>
+              <p className="text-sm text-muted-foreground">Click "Add Account" to get started</p>
             </div>
           )}
         </div>

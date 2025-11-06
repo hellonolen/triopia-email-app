@@ -203,3 +203,24 @@
 ### Enable Authentication
 - [ ] Re-enable auth for production
 - [ ] Test login/registration flows
+
+### Test Email System Functionality
+- [ ] Test Gmail OAuth connection flow
+- [ ] Test Outlook OAuth connection flow
+- [ ] Test IMAP/SMTP custom account connection
+- [ ] Test email sending functionality
+- [ ] Test email fetching from connected accounts
+- [ ] Verify unified inbox displays emails correctly
+
+### Remove Branding
+- [ ] Remove "Made with Manus" footer from application
+
+### Email Provider Preset System (PRODUCTION READY)
+- [x] Create email provider configuration constants
+- [x] Build provider selection UI with buttons
+- [x] Implement auto-fill logic for IMAP/SMTP settings
+- [x] Add help text and instructions for each provider
+- [x] Support Gmail, Outlook, Google Workspace, Microsoft 365, Zoho, Fastmail, iCloud, ProtonMail
+- [x] Add custom/manual provider option
+- [x] Update Settings component with new provider system
+- [x] Remove all decorative emoji icons
