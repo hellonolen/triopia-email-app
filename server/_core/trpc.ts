@@ -13,6 +13,22 @@ export const publicProcedure = t.procedure;
 const requireUser = t.middleware(async opts => {
   const { ctx, next } = opts;
 
+  // Skip auth in development mode
+  if (process.env.NODE_ENV === "development" && !ctx.user) {
+    // Create mock user for development
+    return next({
+      ctx: {
+        ...ctx,
+        user: {
+          id: 1,
+          email: "dev@triopia.com",
+          name: "Dev User",
+          role: "user",
+        } as any,
+      },
+    });
+  }
+
   if (!ctx.user) {
     throw new TRPCError({ code: "UNAUTHORIZED", message: UNAUTHED_ERR_MSG });
   }

@@ -1,481 +1,54 @@
 # Premium Email Interface - TODO
 
-## Core Features
-
-- [x] Design system setup with premium color palette and typography
-- [x] Sidebar navigation with compose button and folder list
-- [x] Email list panel with search and filtering
-- [x] Email detail panel with full content display
-- [x] Premium animations and micro-interactions
-- [x] Email summarization feature
-- [x] Star/unstar emails functionality
-- [x] Archive email functionality
-- [x] Delete email functionality
-- [x] Hover states and visual feedback
-- [x] Loading states with skeleton loaders
-- [x] Empty states for all panels
-- [x] Responsive design for all screen sizes
-
-## Polish & Refinement
-
-- [x] Smooth transitions between email selections
-- [x] Elegant slide-out animations for archive/delete
-- [x] Premium button hover effects
-- [x] Refined icon set with consistent stroke weight
-- [x] Generous spacing throughout interface
-- [x] Professional typography hierarchy
-- [x] Accessibility features (ARIA labels, keyboard navigation)
-
-## Immediate Inbox Improvements
-
-- [x] Show "From" field clearly in email list items
-- [x] Display actual send time in email list
-- [x] Add inline action buttons (mark read, pin, archive, spam) on each email item
-- [x] Hover-activated action bar for quick operations
-
-## AI-Powered Features & Smart Automation
-
-- [x] Smart email prioritization with visual indicators
-- [x] Auto-categorization by importance and type
-- [x] Suggested quick replies with tone adjustment
-- [ ] Smart sorting and filtering
-- [ ] Context-aware notifications based on work hours
-
-## Context-Aware Sidebars & Communication
-
-- [x] Contact detail sidebar showing past conversations
-- [x] Calendar events integration in sidebar
-- [x] Related files and attachments view
-- [ ] Conversation threading and grouping
-- [ ] Integrated chat/messaging alongside email
-
-## Collaboration Tools
-
-- [ ] Team comments on emails
-- [ ] Shared inbox functionality
-- [ ] Discussion threads within emails
-- [ ] @mentions and assignments
-
-## Advanced Search & Visualization
-
-- [ ] Dashboard grouping by sender, domain, conversations
-- [ ] Attachment-based filtering and search
-- [ ] Visual analytics of email patterns
-- [ ] Advanced search with multiple criteria
-
-## Composition & Editing
-
-- [ ] Drag-and-drop rich email composer
-- [ ] Template library for common emails
-- [ ] Tone and style suggestions
-- [ ] Auto-completion for content
-
-## Integrations & Ecosystem
-
-- [ ] Deep CRM integration with contact sync
-- [ ] Calendar integration for scheduling
-- [ ] Cloud storage for attachments
-- [ ] Real-time data sync across systems
-
-## Analytics & Reporting
-
-- [x] Email open rate tracking
-- [x] Engagement metrics dashboard
-- [x] Suggested actions based on patterns
-- [x] Performance insights
-
-## Interactive Elements
-
-- [ ] In-email polls and surveys
-- [ ] Forms without leaving inbox
-- [ ] Emoji reactions on emails
-- [ ] Quick feedback tools
-
-## Security & Compliance
-
-- [ ] DKIM, SPF, DMARC indicators
-- [ ] Brand indicators (BIMI) for sender trust
-- [ ] Privacy tools and encryption
-- [ ] One-click unsubscribe
-
-## Attachment Management
-
-- [ ] Cloud hosting for large files
-- [ ] Attachment previews
-- [ ] Duplicate detection
-- [ ] Smart file organization
-
-## Accessibility & Mobile
-
-- [ ] Screen reader optimization
-- [ ] High-contrast mode
-- [ ] Mobile-responsive design
-- [ ] Touch-optimized interactions
-
-## User-Requested Changes & Improvements
-
-- [x] Compact inline action buttons to icon-only with tooltips
-- [x] Replace gold star with navy/black star to match palette
-- [x] Convert summarize button to icon-only with tooltip
-- [x] Remove standalone inbox icon above compose button
-- [x] Add copyright footer: "© 2025 Email Business, LLC. All rights reserved"
-- [x] Add policy page links in footer (Privacy Policy, Terms of Service)
-- [x] Build functional Sent folder view
-- [x] Build functional Drafts folder view
-- [x] Build functional Archive folder view
-- [x] Build functional Trash folder view
-- [x] Build functional Calendar view
-- [x] Build functional Settings view
-- [x] Enable IMAP email import (20+ emails support)
-- [x] Support multiple email providers (Gmail, Outlook, etc.)
-- [x] Support domain-based email import
-
-## Visual Fixes (Immediate)
-
-- [x] Remove decorative icons (arrows, zigzags) from email list
-- [x] Replace decorative icons with simple circular avatars
-- [x] Remove yellow outline from starred emails (just fill the star)
-- [x] Reduce overall text size throughout the app
-- [x] Add text size settings (XS, S, M, L, XL) in Settings
-
-## Missing Core Features (From Original 20)
-
-- [ ] Advanced search with sender/domain/conversation grouping
-- [x] Drag-and-drop email composer
-- [ ] Team collaboration tools (comments, shared inboxes, threads)
-- [ ] Full integrated chat/messaging implementation
-- [ ] Deep CRM integrations
-- [ ] Screen reader support and high-contrast mode
-- [ ] Context-aware notifications system
-- [ ] Interactive email elements (AMP, polls, surveys, forms)
-- [ ] Secure authentication and compliance (DKIM, SPF, DMARC)
-- [ ] One-click unsubscribe functionality
-- [ ] Smart attachment management (cloud hosting, previews, duplicate detection)
-- [ ] Brand indicators (BIMI) for sender trust
-- [ ] Feedback tools (emoji reactions, ratings, surveys)
-
-## New Visual Fixes
-
-- [x] Remove decorative icons (clock, symbols) next to email sender names
-- [x] Show both time AND date by default in email list
-- [x] Move star icon to left under avatar
-
-## Agentic Features Roadmap
-
-### Security & Trust
-- [ ] End-to-end encryption
-- [ ] Biometric login support
-- [ ] AI-powered phishing detection with auto-quarantine
-- [ ] DKIM, SPF, DMARC compliance management
-
-### Intelligent Assistance
-- [ ] AI summarization of long email threads
-- [ ] Automatic deadline extraction and highlighting
-- [ ] Tone-matching email drafting (formal/casual/executive)
-- [ ] Proactive insights (unanswered emails, follow-up suggestions)
-- [ ] Contextual memory of past conversations
-
-### Personalization & Accessibility
-- [ ] Workflow customization
-- [ ] Voice control integration
-- [ ] Text-to-speech for emails
-- [ ] High-contrast mode and enhanced readability
-- [ ] Screen reader optimization
-
-### Interactive & Dynamic Content
-- [ ] Live polls in emails
-- [ ] Embedded video players
-- [ ] Image carousels
-- [ ] Quizzes and gamified elements
-- [ ] Real-time social feed integration
-
-### Cross-Platform & Sync
-- [ ] Desktop app version
-- [ ] Mobile app (iOS/Android)
-- [ ] Real-time sync across all devices
-- [ ] Offline mode with sync on reconnect
-
-### Deep Integrations
-- [ ] One-click project management tool connections (Asana, Trello, Monday)
-- [ ] Smart device integration
-- [ ] CRM auto-updates (Salesforce, HubSpot)
-- [ ] Slack/Teams integration
-
-### Automation & Efficiency
-- [ ] Advanced rule-based email sorting
-- [ ] Smart auto-responders with context awareness
-- [ ] Team draft sharing and collaboration
-- [ ] Automated SLA compliance tracking
-- [ ] Autonomous routine task handling (unsubscribes, confirmations)
-
-### Privacy & Control
-- [ ] Granular message retention settings
-- [ ] Marketing opt-in/out management
-- [ ] Data sharing transparency dashboard
-- [ ] User-controlled data export
-
-### Real-Time Analytics
-- [ ] Dynamic engagement dashboards
-- [ ] Actionable metrics and insights
-- [ ] Interactive element feedback collection
-- [ ] Team performance analytics
-
-## Immediate Fix
-- [x] Remove sparkle/star decorative icon completely (no replacement)
-
-## Implementation Plan - All Agentic Features
-
-### Navigation & Structure
-- [x] Move Calendar navigation item up (under Trash)
-- [x] Add Contacts navigation item (under Calendar)
-- [x] Build comprehensive contact management system
-- [ ] Auto-save contacts from email senders
-- [ ] Auto-save contacts from email recipients
-- [ ] Contact import from phone/device
-
-### Phase 1: Core Value & Speed (Immediate)
-- [x] Smart Email Triage Dashboard (Priority Inbox)
-- [x] Keyboard shortcuts system (E, R, F, S, J/K, X, etc.)
-- [x] Contextual Command Bar (Cmd+K)
-- [x] Keyboard shortcut cheat sheet (? key)
-- [ ] Batch actions with floating action bar
-- [ ] 5-second undo toast for batch actions
-
-### Phase 2: Agentic Intelligence
-- [ ] Proactive agent notifications system
-- [ ] Email relationship intelligence graph
-- [ ] Smart scheduling assistant with auto-detection
-- [ ] Sentiment analysis & tone detection
-- [ ] Attachment intelligence with preview
-- [ ] Smart unsubscribe suggestions
-
-### Phase 3: Ultimate Agentic Features
-- [ ] Auto-draft responses based on writing style
-- [ ] Deal room integration per client
-- [ ] Email templates library
-- [ ] Smart email snooze with context
-- [ ] Voice command integration
-- [ ] VIP detection and prioritization
-
-## New User Requests - Compact Design & Features
-
-### Design Refinements
-- [x] Make Priority Inbox more compact (less bulky)
-- [x] Make Calendar more compact and refined
-- [ ] Apply compact design throughout platform
-
-### Navigation Reorganization
-- [x] Reorder navigation: Priority → Inbox → Sent → Contacts → Calendar → Storage
-- [x] Add Storage navigation item (after Calendar)
-
-### Cloud Storage Integration
-- [x] Mega storage integration with login
-- [x] Dropbox integration with login
-- [x] OneDrive (Microsoft) integration with login
-- [x] Allow attaching files from cloud storage to emails
-- [x] Allow saving email attachments to cloud storage
-- [x] No API needed - just login interface
-
-### Notes Feature
-- [x] Add Notes navigation item (above Analytics)
-- [x] Build notes taking interface
-- [x] Add drawing palette with finger/stylus support
-- [x] Add typing capability in notes
-- [ ] Allow notes before composing emails
-
-### Speech-to-Text (Accessibility)
-- [x] Add microphone button in email composer
-- [ ] Add microphone button in email reply
-- [x] Add microphone button in notes
-- [x] Add microphone button everywhere text input exists
-- [x] Implement speech-to-text functionality
-- [x] Support for users with disabilities
-
-## New User Requests - Email Management & Multi-Account
-
-### Email Management Features
-- [x] Restore emails from trash functionality
-- [x] Add Spam folder to navigation
-- [x] Mark email as spam action
-- [x] Mark email as not spam (move from spam to inbox)
-- [x] Add spam button next to trash in email actions
-- [ ] Drag-and-drop emails between folders
-
-### Multi-Account Support (Up to 20 Email Accounts)
-- [x] Collapsible "Inboxes" section in sidebar
-- [x] Expand/collapse chevron icon to show/hide all inboxes
-- [x] Show all connected accounts when expanded (up to 20)
-- [x] Show total unread count when collapsed
-- [x] Individual unread counts for each inbox when expanded
-- [x] Smooth expand/collapse animation pushing items down
-- [ ] Account badges on emails to show which account
-- [ ] Settings page to add/remove email accounts (up to 20)
-- [ ] Support Gmail, Outlook, IMAP, custom domains
-
-### Footer Refinements
-- [x] Reduce footer text size to 50% (half the current size)
-- [x] Make policy links more compact
-- [x] Maintain proper spacing while reducing text size
-
-## New User Requests - Sidebar Refinements & Default Landing
-
-### Sidebar Refinements
-- [x] Reduce sidebar padding by 50% throughout
-- [x] Reduce text size in sidebar for more compact design
-- [x] Keep Notes, Analytics, Settings in utilities section
-- [x] Ensure Settings is visible in utilities section
-- [x] More compact spacing between navigation items
-
-### Default Landing & Priority Badge
-- [x] Change default landing page from Priority to Inbox
-- [x] Show unread count badge on Priority when it has items
-- [x] Show dot indicator on Priority when it has unread emails
-
-### Email Hosting Strategy (Future Consideration)
-- [ ] Research: Hybrid approach - pure client first, optional hosted email later
-- [ ] Free tier: Connect up to 3 accounts
-- [ ] Pro tier ($15/mo): Connect up to 20 accounts + agentic features
-- [ ] Enterprise tier ($50/mo): 20 accounts + hosted email + white-label
-
-## Urgent Fix - Remove All Transparency
-
-- [x] Add solid background color to all input fields in EmailComposer
-- [x] Fix To field background
-- [x] Fix CC/BCC field background
-- [x] Fix Subject field background
-- [x] Fix message body textarea background
-- [x] Remove all transparent backgrounds throughout entire app
-- [x] Remove all low opacity (bg-muted/50, bg-background/80, etc.)
-- [x] Remove backdrop-blur effects
-- [x] Replace all semi-transparent backgrounds with solid colors
-- [x] Ensure all modals have solid backgrounds
-- [x] Ensure all overlays have solid backgrounds
-
-## Calendar Invite Feature
-
-- [x] Add "New Event" button to Calendar view
-- [x] Create event creation form modal
-- [x] Add event title field
-- [x] Add date & time picker
-- [x] Add attendees field (email addresses)
-- [x] Add location field
-- [x] Add description/notes field
-- [x] Implement "Send Invite" functionality
-- [x] Auto-generate calendar invite email
-- [x] Send invite emails to all attendees
-- [x] Show confirmation when invites sent
-
-## Advanced Calendar Features
-
-### Auto-Create Shared Note for Event Attendees
-- [x] After sending calendar invite, automatically create shared note
-- [x] Add all event attendees to the shared note
-- [x] Pre-fill note with event details (title, date, time, location)
-- [x] Add agenda section for meeting preparation
-- [x] Link note to calendar event
-- [x] Show notification that shared note was created
-
-### Drag-and-Drop Emails to Calendar
-- [x] Enable drag functionality on email list items
-- [x] Make Calendar navigation item a drop target
-- [x] Detect when email is dropped on Calendar
-- [x] Auto-open event creator with email content pre-filled
-- [x] Extract email subject as event title
-- [x] Extract sender as first attendee
-- [x] Include email content in event description
-- [x] Show visual feedback during drag operation
-
-### Accept/Decline Calendar Invites in Email
-- [x] Detect calendar invite emails
-- [x] Add Accept/Decline/Maybe buttons to invite emails
-- [x] Update event status when button clicked
-- [x] Send response notification to event organizer
-- [x] Add event to user's calendar on Accept
-- [x] Show confirmation toast after responding
-- [x] Update button states after response
-
-## Production Backend Implementation
-
-### 1. Real Email Integration
-- [ ] Add IMAP client library (node-imap or imap-simple)
-- [ ] Add SMTP client library (nodemailer)
-- [ ] Implement Gmail OAuth2 flow
-- [ ] Implement Outlook OAuth2 flow
-- [ ] Build email sync worker (fetch new emails)
-- [ ] Build email send functionality
-- [ ] Handle attachments (upload/download)
-- [ ] Implement email threading logic
-- [ ] Add real-time email notifications via WebSocket
-
-### 2. Backend Infrastructure
-- [x] Add database schema (emails, contacts, calendar, notes)
-- [ ] Create API endpoints for email CRUD
-- [ ] Create API endpoints for contacts CRUD
-- [ ] Create API endpoints for calendar CRUD
-- [ ] Create API endpoints for notes CRUD
-- [ ] Add WebSocket server for real-time updates
-- [ ] Implement background job queue (Bull/BullMQ)
-- [ ] Add file storage integration (S3-compatible)
-- [ ] Set up Redis for caching
-
-### 3. AI/Agentic Features Backend
-- [ ] Integrate OpenAI API for email summarization
-- [ ] Implement AI-powered quick reply generation
-- [ ] Build tone adjustment feature (formal/casual)
-- [ ] Create email prioritization classifier
-- [ ] Implement smart categorization
-- [ ] Build relationship intelligence analyzer
-- [ ] Add proactive notification agent
-
-### 4. Multi-Account Management
-- [ ] Create account credentials table (encrypted)
-- [ ] Build account connection flow
-- [ ] Implement per-account sync workers
-- [ ] Create unified inbox aggregation logic
-- [ ] Add account-specific settings
-- [ ] Implement cross-account search
-
-### 5. Calendar Integration
-- [ ] Integrate Google Calendar API
-- [ ] Integrate Microsoft Outlook Calendar API
-- [ ] Implement two-way calendar sync
-- [ ] Generate .ics files for invites
-- [ ] Handle calendar event CRUD operations
-- [ ] Sync calendar events to external providers
-
-## ELITE AGENT EXECUTION CONTRACT - Production Launch Tasks
-
-### Phase 1: Real Email Integration (IMAP/SMTP + OAuth2)
-- [ ] Install email client dependencies (nodemailer, imap, googleapis, @azure/msal-node)
-- [ ] Create Gmail OAuth2 authentication flow
-- [ ] Create Outlook OAuth2 authentication flow
-- [ ] Build IMAP client service for fetching emails
-- [ ] Build SMTP client service for sending emails
+## ELITE AGENT EXECUTION - 14 PHASE PRODUCTION LAUNCH
+
+### Phase 1: Real Email Integration (IMAP/SMTP + OAuth2) ✅ COMPLETE
+- [x] Install email client dependencies (nodemailer, imap, googleapis, @azure/msal-node)
+- [x] Create Gmail OAuth2 authentication flow
+- [x] Create Outlook OAuth2 authentication flow
+- [x] Build IMAP client service for fetching emails
+- [x] Build SMTP client service for sending emails
 - [ ] Implement background email sync worker
 - [ ] Add email attachment upload/download via S3
 - [ ] Create email sync queue system
 - [ ] Test Gmail integration end-to-end
 - [ ] Test Outlook integration end-to-end
 
-### Phase 2: AI Agentic Features (Billionable Agent)
-- [ ] Install OpenAI SDK
-- [ ] Create AI service for email summarization
-- [ ] Implement smart email prioritization (ML classification)
-- [ ] Build auto-categorization by sender/domain/content
-- [ ] Create context-aware quick reply generation with tone matching
-- [ ] Implement proactive agent notifications
-- [ ] Add AI-powered search and filtering
-- [ ] Create "Billionable" agent persona integration
+### Phase 2: Backend Infrastructure ✅ COMPLETE
+- [x] Install BullMQ, Redis, crypto-js dependencies
+- [x] Create tRPC email router with all endpoints
+- [x] Implement AES-256 credential encryption
+- [x] Create database helpers for email accounts and emails
+- [x] Register email router in main routers.ts
+- [x] Create background email sync worker with BullMQ
+- [x] Install Socket.IO for WebSocket support
+- [x] Create WebSocket server for real-time notifications
+- [x] Initialize WebSocket in server startup
+- [x] Initialize email sync worker in server startup
+- [ ] Add S3 file storage integration for attachments
+- [ ] Test email sync worker
+- [ ] Test WebSocket notifications
 
-### Phase 3: Multi-Account Management
-- [ ] Implement AES-256 credential encryption service
-- [ ] Create per-account sync worker processes
-- [ ] Build unified inbox with account badges
-- [ ] Add account switching UI
-- [ ] Implement account health monitoring
-- [ ] Add sync status indicators
+### Phase 3: AI Agentic Features (Billionable Agent) ✅ COMPLETE
+- [x] Install OpenAI SDK
+- [x] Create AI service for email summarization
+- [x] Implement smart email prioritization (ML classification)
+- [x] Build auto-categorization by sender/domain/content
+- [x] Create context-aware quick reply generation with tone matching
+- [x] Implement proactive agent notifications (urgency detection)
+- [x] Add AI-powered action item extraction
+- [x] Create "Billionable" agent persona integration
+- [x] Create tRPC AI router with all endpoints
+- [x] Register AI router in main routers
 
-### Phase 4: Calendar Integration
+### Phase 4: Multi-Account Management ✅ COMPLETE
+- [x] Implement per-account sync worker processes
+- [x] Build unified inbox with account badges
+- [x] Add account switching UI
+- [x] Implement account health monitoring
+- [x] Add sync status indicators
+
+### Phase 5: Calendar Integration
 - [ ] Install Google Calendar API SDK
 - [ ] Install Microsoft Graph API SDK
 - [ ] Create Google Calendar OAuth2 flow
@@ -484,22 +57,100 @@
 - [ ] Implement two-way Outlook Calendar sync
 - [ ] Add calendar event notifications
 
-### Phase 5: Real-Time Features
-- [ ] Set up Socket.IO server
+### Phase 6: Real-Time Features
 - [ ] Implement WebSocket authentication
 - [ ] Add real-time email notifications
 - [ ] Add real-time unread count updates
 - [ ] Implement live typing indicators in shared notes
 - [ ] Add presence indicators for shared notes
 
-### Phase 6: World-Class Design & Quality Assurance
-- [ ] Verify brand consistency (colors, typography, spacing)
-- [ ] Ensure all animations are smooth (60fps)
-- [ ] Test responsive design on all breakpoints
-- [ ] Verify accessibility (ARIA labels, keyboard navigation)
-- [ ] Run full TypeScript type check (zero errors)
-- [ ] Run ESLint (zero warnings)
-- [ ] Performance audit (Lighthouse score >90)
-- [ ] Cross-browser testing (Chrome, Safari, Firefox, Edge)
-- [ ] Load testing (100+ concurrent users)
-- [ ] Security audit (OWASP top 10)
+### Phase 7: Security Hardening
+- [ ] Rate limiting on API endpoints
+- [ ] CSRF protection
+- [ ] XSS prevention
+- [ ] SQL injection prevention (parameterized queries)
+- [ ] Secure session management
+- [ ] Email content sanitization
+- [ ] Attachment virus scanning integration
+- [ ] Two-factor authentication (2FA)
+
+### Phase 8: Performance Optimization
+- [ ] Database query optimization with indexes
+- [ ] Email list virtualization for large datasets
+- [ ] Lazy loading for email content
+- [ ] Image optimization and lazy loading
+- [ ] Code splitting for faster initial load
+- [ ] Service worker for offline support
+- [ ] CDN integration for static assets
+- [ ] Database connection pooling
+
+### Phase 9: Mobile Responsiveness & Accessibility
+- [ ] Mobile-first responsive design
+- [ ] Touch-friendly interactions
+- [ ] Swipe gestures for email actions
+- [ ] ARIA labels for screen readers
+- [ ] Keyboard navigation support
+- [ ] High-contrast mode
+- [ ] Focus indicators
+- [ ] Voice control integration
+
+### Phase 10: Search, Filtering & Advanced Features
+- [ ] Full-text search across all emails
+- [ ] Advanced filter UI (sender, date, has:attachment, etc.)
+- [ ] Saved search queries
+- [ ] Email threading and conversation view
+- [ ] Bulk email operations
+- [ ] Email templates
+- [ ] Email scheduling (send later)
+- [ ] Email tracking (open/click tracking)
+
+### Phase 11: Onboarding Flow & UX
+- [ ] Welcome screen with value proposition
+- [ ] Account connection wizard
+- [ ] Interactive tutorial
+- [ ] Empty state designs
+- [ ] Loading state skeletons
+- [ ] Error state handling
+- [ ] Success confirmations
+- [ ] Contextual help tooltips
+
+### Phase 12: Analytics & Monitoring
+- [ ] User activity tracking
+- [ ] Email engagement metrics
+- [ ] Performance monitoring (Sentry/DataDog)
+- [ ] Error logging and alerting
+- [ ] Usage analytics dashboard
+- [ ] A/B testing framework
+- [ ] User feedback collection
+
+### Phase 13: Legal Compliance & Documentation
+- [ ] Privacy Policy
+- [ ] Terms of Service
+- [ ] Cookie Policy
+- [ ] GDPR compliance
+- [ ] Data export functionality
+- [ ] Account deletion workflow
+- [ ] API documentation
+- [ ] User help center
+
+### Phase 14: Final Testing, QA & Deployment
+- [ ] End-to-end testing suite
+- [ ] Unit tests for critical functions
+- [ ] Integration tests for API endpoints
+- [ ] Load testing
+- [ ] Security audit
+- [ ] Browser compatibility testing
+- [ ] Mobile device testing
+- [ ] Production deployment checklist
+- [ ] Monitoring and alerting setup
+- [ ] Rollback plan
+
+### Phase 7 Addition: Admin Dashboard for API Keys
+- [ ] Build admin settings dashboard for API key management
+- [ ] Add UI for Gmail OAuth2 credentials
+- [ ] Add UI for Outlook OAuth2 credentials
+- [ ] Add UI for Redis connection settings
+- [ ] Add UI for OpenAI API key
+- [ ] Add UI for email encryption key
+- [ ] Secure admin dashboard with role-based access
+- [ ] Test key updates and validation

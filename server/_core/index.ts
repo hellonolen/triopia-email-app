@@ -7,6 +7,8 @@ import { registerOAuthRoutes } from "./oauth";
 import { appRouter } from "../routers";
 import { createContext } from "./context";
 import { serveStatic, setupVite } from "./vite";
+import { initializeWebSocket } from "../websocket/emailNotifications";
+import "../workers/emailSyncWorker"; // Initialize worker on import
 
 function isPortAvailable(port: number): Promise<boolean> {
   return new Promise(resolve => {
@@ -57,8 +59,14 @@ async function startServer() {
     console.log(`Port ${preferredPort} is busy, using port ${port} instead`);
   }
 
+  // Initialize WebSocket server
+  initializeWebSocket(server);
+  console.log("[Server] WebSocket server initialized");
+
   server.listen(port, () => {
     console.log(`Server running on http://localhost:${port}/`);
+    console.log(`[Server] tRPC API available at http://localhost:${port}/api/trpc`);
+    console.log(`[Server] WebSocket available at http://localhost:${port}/api/socket.io`);
   });
 }
 

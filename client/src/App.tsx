@@ -6,12 +6,14 @@ import ErrorBoundary from "./components/ErrorBoundary";
 import { ThemeProvider } from "./contexts/ThemeContext";
 import { TextSizeProvider } from "./contexts/TextSizeContext";
 import EmailApp from "./components/EmailApp";
+import UnifiedInbox from "./pages/UnifiedInbox";
 
 function Router() {
   // make sure to consider if you need authentication for certain routes
   return (
     <Switch>
       <Route path={"/"} component={EmailApp} />
+      <Route path={"/inbox"} component={UnifiedInbox} />
       <Route path={"/404"} component={NotFound} />
       {/* Final fallback route */}
       <Route component={NotFound} />
