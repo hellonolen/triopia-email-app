@@ -1477,31 +1477,29 @@ export default function ClaudeRefinedDemo() {
                 />
                 
                 {/* Action buttons */}
-                <div style={{ display: "flex", gap: "12px", marginTop: "20px", paddingTop: "20px", borderTop: "1px solid #F0EBE6" }}>
+                <div style={{ display: "flex", gap: "16px", marginTop: "20px", paddingTop: "20px", borderTop: "1px solid #F0EBE6" }}>
                   <button
                     style={{
-                      padding: "10px 24px",
-                      background: "#D89880",
+                      padding: 0,
+                      background: "none",
                       border: "none",
-                      borderRadius: "4px",
-                      color: "white",
+                      color: "#D89880",
                       fontSize: "13px",
                       fontWeight: 300,
                       cursor: "pointer",
-                      transition: "background 0.2s ease"
+                      transition: "color 0.2s ease"
                     }}
-                    onMouseEnter={(e) => e.currentTarget.style.background = "#C88770"}
-                    onMouseLeave={(e) => e.currentTarget.style.background = "#D89880"}
+                    onMouseEnter={(e) => e.currentTarget.style.color = "#C88770"}
+                    onMouseLeave={(e) => e.currentTarget.style.color = "#D89880"}
                   >
                     Send
                   </button>
                   <button
                     onClick={() => setRightPanelMode('email')}
                     style={{
-                      padding: "10px 24px",
-                      background: "transparent",
+                      padding: 0,
+                      background: "none",
                       border: "none",
-                      borderRadius: "4px",
                       color: "#999",
                       fontSize: "13px",
                       fontWeight: 300,
