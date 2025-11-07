@@ -327,26 +327,52 @@ export default function ClaudeRefinedDemo() {
             borderBottom: "1px solid #F0EBE6"
           }}>
             <div className="flex items-center justify-between">
-              <div>
-                <h2 style={{ 
-                  fontSize: "22px", 
-                  fontWeight: 200,
-                  color: "#2A2A2A",
-                  letterSpacing: "-0.02em",
-                  marginBottom: "6px"
-                }}>
-                  Inbox
-                </h2>
-                <p style={{ 
-                  fontSize: "10px", 
-                  fontWeight: 300,
-                  color: "#999",
-                  letterSpacing: "0.05em",
-                  textTransform: "uppercase"
-                }}>
-                  12 Unread
-                </p>
+              <div className="flex items-center gap-4">
+                <div>
+                  <h2 style={{ 
+                    fontSize: "22px", 
+                    fontWeight: 200,
+                    color: "#2A2A2A",
+                    letterSpacing: "-0.02em",
+                    marginBottom: "6px"
+                  }}>
+                    Inbox
+                  </h2>
+                  <p style={{ 
+                    fontSize: "10px", 
+                    fontWeight: 300,
+                    color: "#999",
+                    letterSpacing: "0.05em",
+                    textTransform: "uppercase"
+                  }}>
+                    12 Unread
+                  </p>
+                </div>
+                {/* Compose and Search next to Inbox */}
+                <div className="flex items-center gap-2" style={{ marginTop: "-6px" }}>
+                  <button
+                    style={{
+                      background: "none",
+                      border: "none",
+                      cursor: "pointer",
+                      padding: 0
+                    }}
+                  >
+                    <Pencil style={{ width: "16px", height: "16px", color: "#666", strokeWidth: 1.5 }} />
+                  </button>
+                  <button
+                    style={{
+                      background: "none",
+                      border: "none",
+                      cursor: "pointer",
+                      padding: 0
+                    }}
+                  >
+                    <Search style={{ width: "16px", height: "16px", color: "#666", strokeWidth: 1.5 }} />
+                  </button>
+                </div>
               </div>
+              {/* Toggle and Zap on right */}
               <div className="flex items-center gap-3">
                 <button
                   style={{
@@ -391,26 +417,6 @@ export default function ClaudeRefinedDemo() {
                   }}
                 >
                   <Zap style={{ width: "14px", height: "14px", color: "#666", strokeWidth: 1.5 }} />
-                </button>
-                <button
-                  style={{
-                    background: "none",
-                    border: "none",
-                    cursor: "pointer",
-                    padding: 0
-                  }}
-                >
-                  <Search style={{ width: "14px", height: "14px", color: "#666", strokeWidth: 1.5 }} />
-                </button>
-                <button
-                  style={{
-                    background: "none",
-                    border: "none",
-                    cursor: "pointer",
-                    padding: 0
-                  }}
-                >
-                  <Pencil style={{ width: "14px", height: "14px", color: "#666", strokeWidth: 1.5 }} />
                 </button>
               </div>
             </div>
@@ -497,6 +503,7 @@ export default function ClaudeRefinedDemo() {
                     { icon: AlertCircle, label: "Spam" },
                     { icon: Trash2, label: "Delete" },
                     { icon: Pin, label: "Pin" },
+                    { icon: Star, label: "Star" },
                   ].map((action) => (
                     <button
                       key={action.label}
@@ -548,6 +555,7 @@ export default function ClaudeRefinedDemo() {
                 { icon: AlertCircle, label: "Spam" },
                 { icon: Trash2, label: "Delete" },
                 { icon: Pin, label: "Pin" },
+                { icon: Star, label: "Star" },
               ].map((action) => (
                 <button
                   key={action.label}
@@ -714,6 +722,7 @@ export default function ClaudeRefinedDemo() {
                 { icon: AlertCircle, label: "Spam" },
                 { icon: Trash2, label: "Delete" },
                 { icon: Pin, label: "Pin" },
+                { icon: Star, label: "Star" },
               ].map((action) => (
                 <button
                   key={action.label}
@@ -795,13 +804,11 @@ export default function ClaudeRefinedDemo() {
 
       {/* Custom Tooltip */}
       {hoveredTooltip && (
-        <div style={{
+        <div className="bg-tooltip-bg text-tooltip-foreground" style={{
           position: "fixed",
           left: `${hoveredTooltip.x}px`,
           top: `${hoveredTooltip.y}px`,
           transform: "translateX(-50%)",
-          background: "#2A2A2A",
-          color: "white",
           padding: "4px 8px",
           borderRadius: "4px",
           fontSize: "11px",
