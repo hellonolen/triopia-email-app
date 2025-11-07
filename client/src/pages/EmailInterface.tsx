@@ -35,6 +35,7 @@ export default function ClaudeRefinedDemo() {
   const [hoveredTooltip, setHoveredTooltip] = useState<{label: string, x: number, y: number} | null>(null);
   const [emailDetailWidth, setEmailDetailWidth] = useState(1000);
   const [activeView, setActiveView] = useState('Inbox');
+  const [rightPanelMode, setRightPanelMode] = useState<'email' | 'compose' | 'ai'>('email');
 
   // Backend data hooks
   const { data: notesData = [], refetch: refetchNotes } = trpc.notes.list.useQuery(undefined, { enabled: activeView === 'Notes' });
@@ -44,8 +45,7 @@ export default function ClaudeRefinedDemo() {
   const deleteNoteMutation = trpc.notes.delete.useMutation({ onSuccess: () => refetchNotes() });
   const createContactMutation = trpc.contacts.create.useMutation({ onSuccess: () => refetchContacts() });
   const createEventMutation = trpc.calendar.create.useMutation({ onSuccess: () => refetchCalendar() });
-  const [showComposeModal, setShowComposeModal] = useState(false);
-  const [showAIPanel, setShowAIPanel] = useState(false);
+
   const [activeAITab, setActiveAITab] = useState<'chat' | 'triage' | 'quick-reply' | 'voice'>('chat');
   const [showKeyboardHelp, setShowKeyboardHelp] = useState(false);
   const [showCreateNoteModal, setShowCreateNoteModal] = useState(false);
@@ -57,14 +57,14 @@ export default function ClaudeRefinedDemo() {
   // Email action handlers
   const handleReply = (emailId: number) => {
     console.log('Reply to email:', emailId);
-    setShowComposeModal(true);
-    // TODO: Pre-fill compose modal with reply data
+    setRightPanelMode('compose');
+    // TODO: Pre-fill compose panel with reply data
   };
 
   const handleForward = (emailId: number) => {
     console.log('Forward email:', emailId);
-    setShowComposeModal(true);
-    // TODO: Pre-fill compose modal with forward data
+    setRightPanelMode('compose');
+    // TODO: Pre-fill compose panel with forward data
   };
 
   const handleArchive = (emailId: number) => {
@@ -150,8 +150,7 @@ export default function ClaudeRefinedDemo() {
 
       // Esc - Close modals/panels
       if (e.key === 'Escape') {
-        setShowComposeModal(false);
-        setShowAIPanel(false);
+        setRightPanelMode('email');
         setShowKeyboardHelp(false);
         return;
       }
@@ -159,14 +158,14 @@ export default function ClaudeRefinedDemo() {
       // c - Compose new email
       if (e.key === 'c') {
         e.preventDefault();
-        setShowComposeModal(true);
+        setRightPanelMode('compose');
         return;
       }
 
       // Cmd/Ctrl+K - Open AI assistant
       if ((e.metaKey || e.ctrlKey) && e.key === 'k') {
         e.preventDefault();
-        setShowAIPanel(true);
+        setRightPanelMode('ai');
         setActiveAITab('chat');
         return;
       }
@@ -174,7 +173,7 @@ export default function ClaudeRefinedDemo() {
       // Cmd/Ctrl+J - Quick reply AI
       if ((e.metaKey || e.ctrlKey) && e.key === 'j') {
         e.preventDefault();
-        setShowAIPanel(true);
+        setRightPanelMode('ai');
         setActiveAITab('quick-reply');
         return;
       }
@@ -552,7 +551,7 @@ export default function ClaudeRefinedDemo() {
                 {/* Compose and Search next to Inbox */}
                 <div className="flex items-center gap-2" style={{ marginTop: "-6px" }}>
                   <button
-                    onClick={() => setShowComposeModal(true)}
+                    onClick={() => setRightPanelMode('compose')}
                     style={{
                       background: "none",
                       border: "none",
@@ -573,7 +572,7 @@ export default function ClaudeRefinedDemo() {
                     <Search style={{ width: "16px", height: "16px", color: "#666", strokeWidth: 1.5 }} />
                   </button>
                   <button
-                    onClick={() => setShowAIPanel(true)}
+                    onClick={() => setRightPanelMode('ai')}
                     style={{
                       background: "none",
                       border: "none",
@@ -1008,7 +1007,7 @@ export default function ClaudeRefinedDemo() {
           </div>
         </div>
 
-        {/* Email Detail - DRAMATICALLY COMPACT */}
+        {/* Right Panel - Multi-purpose (Email/Compose/AI) */}
         <div ref={emailDetailRef} style={{ 
           flex: 1,
           background: "#FFFBF7",
@@ -1016,8 +1015,10 @@ export default function ClaudeRefinedDemo() {
           padding: "28px 36px"
         }}>
           <div style={{ maxWidth: "680px", margin: "0 auto" }}>
+            {/* Email View Mode */}
+            {rightPanelMode === 'email' && (
+            <>
             <div className="flex items-center gap-6 mb-10">
-              <>
               <div className="flex items-center gap-3">
               {[
                 { icon: Reply, label: "Reply", alwaysShow: true },
@@ -1126,7 +1127,6 @@ export default function ClaudeRefinedDemo() {
                 </button>
               </div>
               )}
-              </>
             </div>
 
             <h1 style={{ 
@@ -1245,6 +1245,109 @@ export default function ClaudeRefinedDemo() {
                 </button>
               ))}
             </div>
+            </>
+            )}
+
+            {/* Compose Mode */}
+            {rightPanelMode === 'compose' && (
+              <div>
+                <h2 style={{ fontSize: "18px", fontWeight: 300, color: "#2A2A2A", marginBottom: "20px" }}>New Message</h2>
+                <div style={{ display: "flex", flexDirection: "column", gap: "16px" }}>
+                  <input
+                    type="text"
+                    placeholder="To"
+                    style={{
+                      padding: "12px",
+                      fontSize: "13px",
+                      border: "1px solid #F0EBE6",
+                      borderRadius: "4px",
+                      background: "white"
+                    }}
+                  />
+                  <input
+                    type="text"
+                    placeholder="Subject"
+                    style={{
+                      padding: "12px",
+                      fontSize: "13px",
+                      border: "1px solid #F0EBE6",
+                      borderRadius: "4px",
+                      background: "white"
+                    }}
+                  />
+                  <textarea
+                    placeholder="Compose your message..."
+                    style={{
+                      padding: "12px",
+                      fontSize: "13px",
+                      border: "1px solid #F0EBE6",
+                      borderRadius: "4px",
+                      minHeight: "300px",
+                      background: "white",
+                      resize: "vertical"
+                    }}
+                  />
+                  <div style={{ display: "flex", gap: "8px", justifyContent: "flex-end" }}>
+                    <button
+                      onClick={() => setRightPanelMode('email')}
+                      style={{
+                        padding: "10px 20px",
+                        background: "transparent",
+                        border: "1px solid #F0EBE6",
+                        borderRadius: "4px",
+                        fontSize: "12px",
+                        cursor: "pointer"
+                      }}
+                    >
+                      Cancel
+                    </button>
+                    <button
+                      style={{
+                        padding: "10px 20px",
+                        background: "#D89880",
+                        border: "none",
+                        borderRadius: "4px",
+                        color: "white",
+                        fontSize: "12px",
+                        cursor: "pointer"
+                      }}
+                    >
+                      Send
+                    </button>
+                  </div>
+                </div>
+              </div>
+            )}
+
+            {/* AI Mode */}
+            {rightPanelMode === 'ai' && (
+              <div>
+                <h2 style={{ fontSize: "18px", fontWeight: 300, color: "#2A2A2A", marginBottom: "20px" }}>AI Assistant</h2>
+                <div style={{ display: "flex", gap: "8px", marginBottom: "20px" }}>
+                  {['chat', 'triage', 'quick-reply', 'voice'].map((tab) => (
+                    <button
+                      key={tab}
+                      onClick={() => setActiveAITab(tab as any)}
+                      style={{
+                        padding: "8px 16px",
+                        background: activeAITab === tab ? "#FFFBF7" : "transparent",
+                        border: activeAITab === tab ? "1px solid #D89880" : "1px solid #F0EBE6",
+                        borderRadius: "4px",
+                        fontSize: "11px",
+                        cursor: "pointer",
+                        color: activeAITab === tab ? "#D89880" : "#666",
+                        textTransform: "capitalize"
+                      }}
+                    >
+                      {tab.replace('-', ' ')}
+                    </button>
+                  ))}
+                </div>
+                <div style={{ padding: "20px", background: "white", border: "1px solid #F0EBE6", borderRadius: "8px", minHeight: "400px" }}>
+                  <p style={{ fontSize: "12px", color: "#666" }}>AI {activeAITab} interface</p>
+                </div>
+              </div>
+            )}
           </div>
         </div>
       </div>
@@ -1316,291 +1419,7 @@ export default function ClaudeRefinedDemo() {
         </div>
       )}
 
-      {/* Compose Email Slide-in Panel */}
-      {showComposeModal && (
-        <>
-        {/* Overlay */}
-        <div style={{
-          position: "fixed",
-          top: 0,
-          left: 0,
-          right: 0,
-          bottom: 0,
-          background: "rgba(0,0,0,0.2)",
-          zIndex: 10000
-        }} onClick={() => setShowComposeModal(false)} />
-        {/* Slide-in Panel */}
-        <div style={{
-          position: "fixed",
-          top: 0,
-          right: 0,
-          bottom: 0,
-          width: "500px",
-          maxWidth: "90%",
-          background: "white",
-          boxShadow: "-4px 0 20px rgba(0,0,0,0.1)",
-          zIndex: 10001,
-          display: "flex",
-          flexDirection: "column",
-          animation: "slideInRight 0.3s ease-out"
-        }}>
-            <div style={{
-              padding: "20px",
-              borderBottom: "1px solid #F0EBE6",
-              display: "flex",
-              justifyContent: "space-between",
-              alignItems: "center"
-            }}>
-              <h3 style={{ fontSize: "16px", fontWeight: 300, color: "#2A2A2A" }}>New Message</h3>
-              <button onClick={() => setShowComposeModal(false)} style={{
-                background: "none",
-                border: "none",
-                cursor: "pointer",
-                fontSize: "20px",
-                color: "#999"
-              }}>×</button>
-            </div>
-            <div style={{ padding: "20px" }}>
-              <div style={{ marginBottom: "16px" }}>
-                <input type="text" placeholder="To" style={{
-                  width: "100%",
-                  padding: "10px 14px",
-                  border: "2px solid #D89880",
-                  borderRadius: "6px",
-                  fontSize: "13px",
-                  outline: "none"
-                }} />
-              </div>
-              <div style={{ marginBottom: "16px" }}>
-                <input type="text" placeholder="Subject" style={{
-                  width: "100%",
-                  padding: "10px 14px",
-                  border: "2px solid #D89880",
-                  borderRadius: "6px",
-                  fontSize: "13px",
-                  outline: "none"
-                }} />
-              </div>
-              <div style={{ marginBottom: "16px" }}>
-                <textarea placeholder="Compose email..." style={{
-                  width: "100%",
-                  padding: "14px",
-                  border: "2px solid #D89880",
-                  borderRadius: "6px",
-                  fontSize: "13px",
-                  minHeight: "250px",
-                  fontFamily: "inherit",
-                  resize: "vertical",
-                  outline: "none"
-                }} />
-              </div>
-              <div style={{ display: "flex", gap: "8px", justifyContent: "flex-end" }}>
-                <button onClick={() => setShowComposeModal(false)} style={{
-                  padding: "8px 16px",
-                  background: "transparent",
-                  border: "1px solid #F0EBE6",
-                  borderRadius: "4px",
-                  cursor: "pointer",
-                  fontSize: "13px",
-                  color: "#666"
-                }}>Cancel</button>
-                <button style={{
-                  padding: "8px 16px",
-                  background: "#D89880",
-                  border: "none",
-                  borderRadius: "4px",
-                  cursor: "pointer",
-                  fontSize: "13px",
-                  color: "white"
-                }}>Send</button>
-              </div>
-            </div>
-        </div>
-        </>
-      )}
 
-      {/* AI Assistant Slide-in Panel */}
-      {showAIPanel && (
-        <>
-        {/* Overlay */}
-        <div style={{
-          position: "fixed",
-          top: 0,
-          left: 0,
-          right: 0,
-          bottom: 0,
-          background: "rgba(0,0,0,0.2)",
-          zIndex: 10000
-        }} onClick={() => setShowAIPanel(false)} />
-        {/* Slide-in Panel */}
-        <div style={{
-          position: "fixed",
-          top: 0,
-          right: 0,
-          bottom: 0,
-          width: "600px",
-          maxWidth: "90%",
-          background: "white",
-          boxShadow: "-4px 0 20px rgba(0,0,0,0.1)",
-          zIndex: 10001,
-          display: "flex",
-          flexDirection: "column"
-        }}>
-          {/* Header */}
-          <div style={{
-            padding: "20px",
-            borderBottom: "1px solid #F0EBE6",
-            display: "flex",
-            justifyContent: "space-between",
-            alignItems: "center"
-          }}>
-            <h3 style={{ fontSize: "16px", fontWeight: 300, color: "#2A2A2A" }}>AI Assistant</h3>
-            <button onClick={() => setShowAIPanel(false)} style={{
-              background: "none",
-              border: "none",
-              cursor: "pointer",
-              fontSize: "20px",
-              color: "#999"
-            }}>×</button>
-          </div>
-          
-          {/* Tabs */}
-          <div style={{
-            display: "flex",
-            borderBottom: "1px solid #F0EBE6",
-            padding: "0 20px"
-          }}>
-            {[
-              { id: 'chat', label: 'Chat' },
-              { id: 'triage', label: 'Smart Triage' },
-              { id: 'quick-reply', label: 'Quick Reply' },
-              { id: 'voice', label: 'Voice' }
-            ].map((tab) => (
-              <button
-                key={tab.id}
-                onClick={() => setActiveAITab(tab.id as any)}
-                style={{
-                  padding: "12px 16px",
-                  background: "none",
-                  border: "none",
-                  borderBottom: activeAITab === tab.id ? "2px solid #D89880" : "2px solid transparent",
-                  cursor: "pointer",
-                  fontSize: "13px",
-                  fontWeight: activeAITab === tab.id ? 400 : 300,
-                  color: activeAITab === tab.id ? "#2A2A2A" : "#666",
-                  transition: "all 0.2s ease"
-                }}
-              >
-                {tab.label}
-              </button>
-            ))}
-          </div>
-
-          {/* Tab Content */}
-          <div style={{ flex: 1, overflow: "auto", padding: "20px" }}>
-            {activeAITab === 'chat' && (
-              <div style={{ display: "flex", flexDirection: "column", height: "100%" }}>
-                <div style={{ flex: 1, overflowY: "auto", marginBottom: "16px" }}>
-                  <div style={{ padding: "12px", background: "#FFFBF7", borderRadius: "6px", marginBottom: "12px" }}>
-                    <p style={{ fontSize: "12px", color: "#666", marginBottom: "8px" }}>AI Assistant</p>
-                    <p style={{ fontSize: "13px", color: "#2A2A2A" }}>How can I help you with your emails today?</p>
-                  </div>
-                </div>
-                <div style={{ borderTop: "1px solid #F0EBE6", paddingTop: "12px" }}>
-                  <textarea
-                    placeholder="Ask AI anything about your emails..."
-                    style={{
-                      width: "100%",
-                      padding: "12px",
-                      border: "1px solid #F0EBE6",
-                      borderRadius: "6px",
-                      fontSize: "13px",
-                      minHeight: "80px",
-                      resize: "vertical",
-                      fontFamily: "inherit"
-                    }}
-                  />
-                  <button style={{
-                    marginTop: "8px",
-                    padding: "8px 16px",
-                    background: "#D89880",
-                    color: "white",
-                    border: "none",
-                    borderRadius: "4px",
-                    cursor: "pointer",
-                    fontSize: "13px",
-                    width: "100%"
-                  }}>Send</button>
-                </div>
-              </div>
-            )}
-            {activeAITab === 'triage' && (
-              <div>
-                <h4 style={{ fontSize: "14px", fontWeight: 400, color: "#2A2A2A", marginBottom: "16px" }}>Smart Email Triage</h4>
-                <div style={{ display: "grid", gap: "12px" }}>
-                  {['Urgent', 'VIP', 'Action Required', 'Opportunities'].map(category => (
-                    <div key={category} style={{
-                      padding: "12px",
-                      background: "#FFFBF7",
-                      border: "1px solid #F0EBE6",
-                      borderRadius: "6px"
-                    }}>
-                      <div style={{ fontSize: "13px", fontWeight: 400, color: "#2A2A2A", marginBottom: "4px" }}>{category}</div>
-                      <div style={{ fontSize: "11px", color: "#999" }}>0 emails</div>
-                    </div>
-                  ))}
-                </div>
-              </div>
-            )}
-            {activeAITab === 'quick-reply' && (
-              <div>
-                <h4 style={{ fontSize: "14px", fontWeight: 400, color: "#2A2A2A", marginBottom: "16px" }}>Quick Reply Suggestions</h4>
-                <div style={{ display: "grid", gap: "8px" }}>
-                  {['Thank you for reaching out', 'I\'ll get back to you soon', 'Let\'s schedule a call'].map(reply => (
-                    <button key={reply} style={{
-                      padding: "12px",
-                      background: "#FFFBF7",
-                      border: "1px solid #F0EBE6",
-                      borderRadius: "6px",
-                      cursor: "pointer",
-                      fontSize: "12px",
-                      color: "#2A2A2A",
-                      textAlign: "left",
-                      transition: "all 0.2s"
-                    }}
-                    onMouseEnter={(e) => e.currentTarget.style.borderColor = "#D89880"}
-                    onMouseLeave={(e) => e.currentTarget.style.borderColor = "#F0EBE6"}
-                    >{reply}</button>
-                  ))}
-                </div>
-              </div>
-            )}
-            {activeAITab === 'voice' && (
-              <div>
-                <h4 style={{ fontSize: "14px", fontWeight: 400, color: "#2A2A2A", marginBottom: "16px" }}>Voice to Text</h4>
-                <div style={{ textAlign: "center", padding: "40px 20px" }}>
-                  <div style={{
-                    width: "80px",
-                    height: "80px",
-                    borderRadius: "50%",
-                    background: "#FFFBF7",
-                    border: "2px solid #D89880",
-                    display: "flex",
-                    alignItems: "center",
-                    justifyContent: "center",
-                    margin: "0 auto 16px",
-                    cursor: "pointer"
-                  }}>
-                    <div style={{ fontSize: "32px" }}>🎤</div>
-                  </div>
-                  <p style={{ fontSize: "13px", color: "#666" }}>Click to start recording</p>
-                </div>
-              </div>
-            )}
-          </div>
-        </div>
-        </>
-      )}
     </div>
   );
 }
