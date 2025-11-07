@@ -267,3 +267,8 @@
 - [x] Change time format to actual date/time (Nov 6, 2:30 PM format)
 - [x] Add all sidebar items from original design
 - [x] Add copyright footer
+
+### Claude Demo Layout Fixes
+- [ ] Move copyright to fixed footer at bottom of page (not in sidebar)
+- [ ] Fix email detail area proportions (too large)
+- [ ] Balance layout between sidebar, email list, and detail

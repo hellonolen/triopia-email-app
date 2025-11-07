@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Mail, Send, Archive, Trash2, Star, Clock, CheckCircle2, Pause, Home, Inbox, Calendar, Users, Settings, Plus, UserPlus } from "lucide-react";
+import { Mail, Send, Archive, Trash2, Star, Clock, CheckCircle2, Pause, Home, Inbox, Calendar, Users, Settings, Plus, UserPlus, Search, Zap, Check, Pencil } from "lucide-react";
 
 /**
  * Claude AI - DRAMATICALLY Refined
@@ -24,7 +24,9 @@ export default function ClaudeRefinedDemo() {
     <div style={{ 
       minHeight: "100vh",
       background: "#FFFBF7",
-      fontFamily: "'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif"
+      fontFamily: "'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
+      display: "flex",
+      flexDirection: "column"
     }}>
       {/* Header - DRAMATICALLY COMPACT */}
       <div style={{ 
@@ -53,7 +55,7 @@ export default function ClaudeRefinedDemo() {
         </div>
       </div>
 
-      <div className="flex" style={{ height: "calc(100vh - 49px)" }}>
+      <div className="flex" style={{ flex: 1, overflow: "hidden" }}>
         {/* Sidebar - DRAMATICALLY NARROW */}
         <div style={{ 
           width: "220px",
@@ -163,24 +165,12 @@ export default function ClaudeRefinedDemo() {
                 </span>
               </div>
             ))}
-            
-            <div style={{ 
-              marginTop: "24px", 
-              paddingTop: "16px", 
-              borderTop: "1px solid #F0EBE6",
-              fontSize: "9px",
-              fontWeight: 300,
-              color: "#999",
-              letterSpacing: "0.02em"
-            }}>
-              © 2025 Triopia. All rights reserved.
-            </div>
           </div>
         </div>
 
         {/* Email List - DRAMATICALLY COMPACT */}
         <div style={{ 
-          width: "380px",
+          width: "420px",
           background: "white",
           borderRight: "1px solid #F0EBE6"
         }}>
@@ -188,24 +178,94 @@ export default function ClaudeRefinedDemo() {
             padding: "20px 16px 14px",
             borderBottom: "1px solid #F0EBE6"
           }}>
-            <h2 style={{ 
-              fontSize: "22px", 
-              fontWeight: 200,
-              color: "#2A2A2A",
-              letterSpacing: "-0.02em",
-              marginBottom: "6px"
-            }}>
-              Inbox
-            </h2>
-            <p style={{ 
-              fontSize: "10px", 
-              fontWeight: 300,
-              color: "#999",
-              letterSpacing: "0.05em",
-              textTransform: "uppercase"
-            }}>
-              12 Unread
-            </p>
+            <div className="flex items-center justify-between">
+              <div>
+                <h2 style={{ 
+                  fontSize: "22px", 
+                  fontWeight: 200,
+                  color: "#2A2A2A",
+                  letterSpacing: "-0.02em",
+                  marginBottom: "6px"
+                }}>
+                  Inbox
+                </h2>
+                <p style={{ 
+                  fontSize: "10px", 
+                  fontWeight: 300,
+                  color: "#999",
+                  letterSpacing: "0.05em",
+                  textTransform: "uppercase"
+                }}>
+                  12 Unread
+                </p>
+              </div>
+              <div className="flex items-center gap-3">
+                <button
+                  style={{
+                    background: "none",
+                    border: "none",
+                    cursor: "pointer",
+                    padding: 0,
+                    display: "flex",
+                    alignItems: "center",
+                    gap: "2px"
+                  }}
+                >
+                  <Check style={{ width: "14px", height: "14px", color: "#666", strokeWidth: 1.5 }} />
+                  <div style={{
+                    width: "24px",
+                    height: "12px",
+                    borderRadius: "12px",
+                    border: "1px solid #ccc",
+                    background: "white",
+                    position: "relative"
+                  }}>
+                    <div style={{
+                      width: "8px",
+                      height: "8px",
+                      borderRadius: "50%",
+                      background: "#666",
+                      position: "absolute",
+                      top: "1px",
+                      left: "2px"
+                    }} />
+                  </div>
+                </button>
+                <button
+                  style={{
+                    background: "none",
+                    border: "none",
+                    cursor: "pointer",
+                    padding: 0,
+                    display: "flex",
+                    alignItems: "center",
+                    gap: "2px"
+                  }}
+                >
+                  <Zap style={{ width: "14px", height: "14px", color: "#666", strokeWidth: 1.5 }} />
+                </button>
+                <button
+                  style={{
+                    background: "none",
+                    border: "none",
+                    cursor: "pointer",
+                    padding: 0
+                  }}
+                >
+                  <Search style={{ width: "14px", height: "14px", color: "#666", strokeWidth: 1.5 }} />
+                </button>
+                <button
+                  style={{
+                    background: "none",
+                    border: "none",
+                    cursor: "pointer",
+                    padding: 0
+                  }}
+                >
+                  <Pencil style={{ width: "14px", height: "14px", color: "#666", strokeWidth: 1.5 }} />
+                </button>
+              </div>
+            </div>
           </div>
 
           <div>
@@ -272,9 +332,46 @@ export default function ClaudeRefinedDemo() {
                   fontWeight: 300,
                   color: "#666",
                   lineHeight: "1.5",
-                  letterSpacing: "0.005em"
+                  letterSpacing: "0.005em",
+                  marginBottom: "8px"
                 }}>
                   {email.preview}
+                </div>
+                {/* Email action icons */}
+                <div className="flex items-center gap-3">
+                  <button
+                    onClick={(e) => { e.stopPropagation(); }}
+                    style={{
+                      background: "none",
+                      border: "none",
+                      cursor: "pointer",
+                      padding: 0
+                    }}
+                  >
+                    <Star style={{ width: "12px", height: "12px", color: "#ccc", strokeWidth: 1.5 }} />
+                  </button>
+                  <button
+                    onClick={(e) => { e.stopPropagation(); }}
+                    style={{
+                      background: "none",
+                      border: "none",
+                      cursor: "pointer",
+                      padding: 0
+                    }}
+                  >
+                    <Pause style={{ width: "12px", height: "12px", color: "#ccc", strokeWidth: 1.5 }} />
+                  </button>
+                  <button
+                    onClick={(e) => { e.stopPropagation(); }}
+                    style={{
+                      background: "none",
+                      border: "none",
+                      cursor: "pointer",
+                      padding: 0
+                    }}
+                  >
+                    <CheckCircle2 style={{ width: "12px", height: "12px", color: "#ccc", strokeWidth: 1.5 }} />
+                  </button>
                 </div>
               </div>
             ))}
@@ -284,6 +381,7 @@ export default function ClaudeRefinedDemo() {
         {/* Email Detail - DRAMATICALLY COMPACT */}
         <div style={{ 
           flex: 1,
+          maxWidth: "650px",
           background: "#FFFBF7",
           overflowY: "auto",
           padding: "28px 36px"
@@ -408,6 +506,54 @@ export default function ClaudeRefinedDemo() {
               </p>
             </div>
           </div>
+        </div>
+      </div>
+
+      {/* Fixed Footer */}
+      <div style={{
+        background: "white",
+        borderTop: "1px solid #F0EBE6",
+        padding: "16px 24px",
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "space-between"
+      }}>
+        <div style={{
+          fontSize: "9px",
+          fontWeight: 300,
+          color: "#000000",
+          letterSpacing: "0.02em"
+        }}>
+          © 2025 Triopia. All rights reserved.
+        </div>
+        <div className="flex items-center gap-4">
+          <a href="#" style={{
+            fontSize: "9px",
+            fontWeight: 300,
+            color: "#000000",
+            textDecoration: "none",
+            letterSpacing: "0.02em"
+          }}>
+            Privacy Policy
+          </a>
+          <a href="#" style={{
+            fontSize: "9px",
+            fontWeight: 300,
+            color: "#000000",
+            textDecoration: "none",
+            letterSpacing: "0.02em"
+          }}>
+            Terms of Service
+          </a>
+          <a href="#" style={{
+            fontSize: "9px",
+            fontWeight: 300,
+            color: "#000000",
+            textDecoration: "none",
+            letterSpacing: "0.02em"
+          }}>
+            Contact
+          </a>
         </div>
       </div>
     </div>
