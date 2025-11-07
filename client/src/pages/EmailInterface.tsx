@@ -34,6 +34,7 @@ export default function ClaudeRefinedDemo() {
   const [hoveredTooltip, setHoveredTooltip] = useState<{label: string, x: number, y: number} | null>(null);
   const [emailDetailWidth, setEmailDetailWidth] = useState(1000);
   const [activeView, setActiveView] = useState('Inbox');
+  const [showComposeModal, setShowComposeModal] = useState(false);
 
   useEffect(() => {
     const handleMouseMove = (e: MouseEvent) => {
@@ -175,7 +176,8 @@ export default function ClaudeRefinedDemo() {
                   position: "absolute",
                   bottom: 0,
                   left: "16px",
-                  right: "16px",
+                  width: "auto",
+                  right: item.count ? "50px" : "16px",
                   height: "1px",
                   background: "#D89880",
                   transform: item.label === activeView ? "scaleX(1)" : "scaleX(0)",
@@ -386,6 +388,7 @@ export default function ClaudeRefinedDemo() {
                 {/* Compose and Search next to Inbox */}
                 <div className="flex items-center gap-2" style={{ marginTop: "-6px" }}>
                   <button
+                    onClick={() => setShowComposeModal(true)}
                     style={{
                       background: "none",
                       border: "none",
@@ -859,6 +862,101 @@ export default function ClaudeRefinedDemo() {
           whiteSpace: "nowrap"
         }}>
           {hoveredTooltip.label}
+        </div>
+      )}
+
+      {/* Compose Email Modal */}
+      {showComposeModal && (
+        <div style={{
+          position: "fixed",
+          top: 0,
+          left: 0,
+          right: 0,
+          bottom: 0,
+          background: "rgba(0,0,0,0.3)",
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+          zIndex: 10000
+        }} onClick={() => setShowComposeModal(false)}>
+          <div style={{
+            background: "white",
+            borderRadius: "8px",
+            width: "600px",
+            maxWidth: "90%",
+            maxHeight: "80vh",
+            overflow: "auto",
+            boxShadow: "0 4px 20px rgba(0,0,0,0.15)"
+          }} onClick={(e) => e.stopPropagation()}>
+            <div style={{
+              padding: "20px",
+              borderBottom: "1px solid #F0EBE6",
+              display: "flex",
+              justifyContent: "space-between",
+              alignItems: "center"
+            }}>
+              <h3 style={{ fontSize: "16px", fontWeight: 300, color: "#2A2A2A" }}>New Message</h3>
+              <button onClick={() => setShowComposeModal(false)} style={{
+                background: "none",
+                border: "none",
+                cursor: "pointer",
+                fontSize: "20px",
+                color: "#999"
+              }}>×</button>
+            </div>
+            <div style={{ padding: "20px" }}>
+              <div style={{ marginBottom: "16px" }}>
+                <input type="text" placeholder="To" style={{
+                  width: "100%",
+                  padding: "8px 12px",
+                  border: "1px solid #F0EBE6",
+                  borderRadius: "4px",
+                  fontSize: "13px"
+                }} />
+              </div>
+              <div style={{ marginBottom: "16px" }}>
+                <input type="text" placeholder="Subject" style={{
+                  width: "100%",
+                  padding: "8px 12px",
+                  border: "1px solid #F0EBE6",
+                  borderRadius: "4px",
+                  fontSize: "13px"
+                }} />
+              </div>
+              <div style={{ marginBottom: "16px" }}>
+                <textarea placeholder="Compose email..." style={{
+                  width: "100%",
+                  padding: "12px",
+                  border: "1px solid #F0EBE6",
+                  borderRadius: "4px",
+                  fontSize: "13px",
+                  minHeight: "200px",
+                  fontFamily: "inherit",
+                  resize: "vertical"
+                }} />
+              </div>
+              <div style={{ display: "flex", gap: "8px", justifyContent: "flex-end" }}>
+                <button onClick={() => setShowComposeModal(false)} style={{
+                  padding: "8px 16px",
+                  background: "transparent",
+                  border: "1px solid #F0EBE6",
+                  borderRadius: "4px",
+                  cursor: "pointer",
+                  fontSize: "13px",
+                  color: "#666"
+                }}>Cancel</button>
+                <button style={{
+                  padding: "8px 16px",
+                  background: "#D89880",
+                  border: "none",
+                  borderRadius: "4px",
+                  cursor: "pointer",
+                  fontSize: "13px",
+                  color: "white"
+                }}>Send</button>
+              </div>
+            </div>
+          </div>
         </div>
       )}
     </div>
