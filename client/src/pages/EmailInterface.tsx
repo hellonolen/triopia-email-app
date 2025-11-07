@@ -118,6 +118,7 @@ export default function ClaudeRefinedDemo() {
   // Email action handlers
   const [isReplying, setIsReplying] = useState(false);
   const [isReplyingAll, setIsReplyingAll] = useState(false);
+  const [isForwarding, setIsForwarding] = useState(false);
   const replyBoxRef = useRef<HTMLDivElement>(null);
   
   // Quick reply suggestions - dynamic and configurable
@@ -130,6 +131,7 @@ export default function ClaudeRefinedDemo() {
   // Reset reply state when email changes
   useEffect(() => {
     setIsReplying(false);
+    setIsForwarding(false);
   }, [selectedEmail.id]);
     const handleReply = (emailId: number) => {
     console.log('Reply to email:', emailId, 'Current isReplying:', isReplying);
@@ -147,8 +149,9 @@ export default function ClaudeRefinedDemo() {
 
   const handleForward = (emailId: number) => {
     console.log('Forward email:', emailId);
-    setRightPanelMode('compose');
-    // TODO: Pre-fill compose panel with forward data
+    setIsForwarding(true);
+    setIsReplying(false);
+    setRightPanelMode('email'); // Stay in email mode to show thread
   };
 
   const handleArchive = (emailId: number) => {
@@ -1473,6 +1476,191 @@ export default function ClaudeRefinedDemo() {
                 </div>
               </div>
             </div>
+
+            {/* Inline Reply/Forward Compose Area - Appears at TOP */}
+            {(isReplying || isForwarding) && (
+              <div ref={replyBoxRef} style={{
+                marginBottom: "32px",
+                paddingBottom: "24px",
+                borderBottom: "2px solid #F0EBE6"
+              }}>
+                <div style={{ display: "flex", alignItems: "center", gap: "12px", marginBottom: "16px" }}>
+                  <div style={{
+                    width: "32px",
+                    height: "32px",
+                    background: "#D89880",
+                    borderRadius: "50%",
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    fontSize: "13px",
+                    fontWeight: 300,
+                    color: "white"
+                  }}>
+                    You
+                  </div>
+                  <div>
+                    <div style={{ fontSize: "13px", fontWeight: 300, color: "#2A2A2A" }}>
+                      {isForwarding ? 'Forward' : isReplyingAll ? 'Reply All to' : 'Reply to'} {isForwarding ? '' : selectedEmail.from}
+                    </div>
+                  </div>
+                </div>
+                
+                {/* To field for Forward */}
+                {isForwarding && (
+                  <div style={{ marginBottom: "12px" }}>
+                    <input
+                      type="text"
+                      placeholder="To"
+                      value={composeTo}
+                      onChange={(e) => setComposeTo(e.target.value)}
+                      style={{
+                        width: "100%",
+                        padding: "8px 0",
+                        fontSize: "13px",
+                        fontWeight: 300,
+                        border: "none",
+                        borderBottom: "1px solid #F0EBE6",
+                        background: "transparent",
+                        outline: "none",
+                        color: "#2A2A2A"
+                      }}
+                    />
+                  </div>
+                )}
+                
+                <div style={{ marginBottom: "16px" }}>
+                  <SimpleRichTextEditor
+                    value={replyBody}
+                    onChange={setReplyBody}
+                    placeholder={isForwarding ? "Add a message..." : "Type your reply..."}
+                    minHeight="200px"
+                  />
+                </div>
+                
+                {/* Signature Preview */}
+                <div style={{
+                  padding: "12px 0",
+                  borderTop: "1px solid #F0EBE6",
+                  marginBottom: "16px"
+                }}>
+                  <div style={{ fontSize: "11px", fontWeight: 300, color: "#999", marginBottom: "8px" }}>Signature:</div>
+                  <div style={{ fontSize: "12px", fontWeight: 300, color: "#666", whiteSpace: "pre-line" }}>
+                    {emailSignature}
+                  </div>
+                  <button
+                    onClick={() => setShowSignatureSelector(!showSignatureSelector)}
+                    style={{
+                      marginTop: "8px",
+                      padding: 0,
+                      background: "none",
+                      border: "none",
+                      color: "#D89880",
+                      fontSize: "11px",
+                      fontWeight: 300,
+                      cursor: "pointer",
+                      transition: "color 0.2s ease"
+                    }}
+                    onMouseEnter={(e) => e.currentTarget.style.color = "#C88770"}
+                    onMouseLeave={(e) => e.currentTarget.style.color = "#D89880"}
+                  >
+                    Change Signature
+                  </button>
+                  
+                  {/* Signature Selector Dropdown */}
+                  {showSignatureSelector && (
+                    <div style={{
+                      marginTop: "8px",
+                      padding: "8px",
+                      background: "white",
+                      border: "1px solid #F0EBE6",
+                      borderRadius: "4px"
+                    }}>
+                      {signatures.map(sig => (
+                        <button
+                          key={sig.id}
+                          onClick={() => {
+                            setEmailSignature(sig.content);
+                            setShowSignatureSelector(false);
+                          }}
+                          style={{
+                            display: "block",
+                            width: "100%",
+                            padding: "8px",
+                            background: "none",
+                            border: "none",
+                            textAlign: "left",
+                            fontSize: "11px",
+                            fontWeight: 300,
+                            color: "#2A2A2A",
+                            cursor: "pointer",
+                            borderRadius: "4px",
+                            transition: "background 0.2s ease"
+                          }}
+                          onMouseEnter={(e) => e.currentTarget.style.background = "#FFFBF7"}
+                          onMouseLeave={(e) => e.currentTarget.style.background = "none"}
+                        >
+                          {sig.name}
+                        </button>
+                      ))}
+                    </div>
+                  )}
+                </div>
+                
+                <div style={{ display: "flex", gap: "16px", alignItems: "center" }}>
+                  <button
+                    style={{
+                      padding: 0,
+                      background: "none",
+                      border: "none",
+                      color: "#D89880",
+                      fontSize: "13px",
+                      fontWeight: 300,
+                      cursor: "pointer",
+                      transition: "color 0.2s ease"
+                    }}
+                    onMouseEnter={(e) => e.currentTarget.style.color = "#C88770"}
+                    onMouseLeave={(e) => e.currentTarget.style.color = "#D89880"}
+                  >
+                    Send
+                  </button>
+                  <button
+                    onClick={() => {
+                      setIsReplying(false);
+                      setIsForwarding(false);
+                    }}
+                    style={{
+                      padding: 0,
+                      background: "none",
+                      border: "none",
+                      color: "#999",
+                      fontSize: "13px",
+                      fontWeight: 300,
+                      cursor: "pointer",
+                      transition: "color 0.2s ease"
+                    }}
+                    onMouseEnter={(e) => e.currentTarget.style.color = "#666"}
+                    onMouseLeave={(e) => e.currentTarget.style.color = "#999"}
+                  >
+                    Discard
+                  </button>
+                </div>
+              </div>
+            )}
+
+            {/* Email History Label (when replying/forwarding) */}
+            {(isReplying || isForwarding) && (
+              <div style={{
+                fontSize: "11px",
+                fontWeight: 400,
+                color: "#999",
+                marginBottom: "16px",
+                textTransform: "uppercase",
+                letterSpacing: "0.05em"
+              }}>
+                Email History
+              </div>
+            )}
             
             <div className="flex items-center gap-3 mb-8 pb-6" style={{ borderBottom: "1px solid #F0EBE6" }}>
               <div style={{
@@ -1721,150 +1909,7 @@ export default function ClaudeRefinedDemo() {
               ))}
             </div>
             
-            {/* Inline Reply Compose Area */}
-            {isReplying && (
-              <div ref={replyBoxRef} style={{
-                marginTop: "32px",
-                paddingTop: "24px",
-                borderTop: "2px solid #F0EBE6"
-              }}>
-                <div style={{ display: "flex", alignItems: "center", gap: "12px", marginBottom: "16px" }}>
-                  <div style={{
-                    width: "32px",
-                    height: "32px",
-                    background: "#D89880",
-                    borderRadius: "50%",
-                    display: "flex",
-                    alignItems: "center",
-                    justifyContent: "center",
-                    fontSize: "13px",
-                    fontWeight: 300,
-                    color: "white"
-                  }}>
-                    You
-                  </div>
-                  <div>
-                    <div style={{ fontSize: "13px", fontWeight: 300, color: "#2A2A2A" }}>
-                      Reply to {selectedEmail.from}
-                    </div>
-                  </div>
-                </div>
-                
-                <div style={{ marginBottom: "16px" }}>
-                  <SimpleRichTextEditor
-                    value={replyBody}
-                    onChange={setReplyBody}
-                    placeholder="Type your reply..."
-                    minHeight="200px"
-                  />
-                </div>
-                
-                {/* Signature Preview */}
-                <div style={{
-                  padding: "12px 0",
-                  borderTop: "1px solid #F0EBE6",
-                  marginBottom: "16px"
-                }}>
-                  <div style={{ fontSize: "11px", fontWeight: 300, color: "#999", marginBottom: "8px" }}>Signature:</div>
-                  <div style={{ fontSize: "12px", fontWeight: 300, color: "#666", whiteSpace: "pre-line" }}>
-                    {emailSignature}
-                  </div>
-                  <button
-                    onClick={() => setShowSignatureSelector(!showSignatureSelector)}
-                    style={{
-                      marginTop: "8px",
-                      padding: 0,
-                      background: "none",
-                      border: "none",
-                      color: "#D89880",
-                      fontSize: "11px",
-                      fontWeight: 300,
-                      cursor: "pointer",
-                      transition: "color 0.2s ease"
-                    }}
-                    onMouseEnter={(e) => e.currentTarget.style.color = "#C88770"}
-                    onMouseLeave={(e) => e.currentTarget.style.color = "#D89880"}
-                  >
-                    Change Signature
-                  </button>
-                  
-                  {/* Signature Selector Dropdown */}
-                  {showSignatureSelector && (
-                    <div style={{
-                      marginTop: "8px",
-                      padding: "8px",
-                      background: "white",
-                      border: "1px solid #F0EBE6",
-                      borderRadius: "4px"
-                    }}>
-                      {signatures.map(sig => (
-                        <button
-                          key={sig.id}
-                          onClick={() => {
-                            setEmailSignature(sig.content);
-                            setShowSignatureSelector(false);
-                          }}
-                          style={{
-                            display: "block",
-                            width: "100%",
-                            padding: "8px",
-                            background: "none",
-                            border: "none",
-                            textAlign: "left",
-                            fontSize: "11px",
-                            fontWeight: 300,
-                            color: "#2A2A2A",
-                            cursor: "pointer",
-                            borderRadius: "4px",
-                            transition: "background 0.2s ease"
-                          }}
-                          onMouseEnter={(e) => e.currentTarget.style.background = "#FFFBF7"}
-                          onMouseLeave={(e) => e.currentTarget.style.background = "none"}
-                        >
-                          {sig.name}
-                        </button>
-                      ))}
-                    </div>
-                  )}
-                </div>
-                
-                <div style={{ display: "flex", gap: "16px", alignItems: "center" }}>
-                  <button
-                    style={{
-                      padding: 0,
-                      background: "none",
-                      border: "none",
-                      color: "#D89880",
-                      fontSize: "13px",
-                      fontWeight: 300,
-                      cursor: "pointer",
-                      transition: "color 0.2s ease"
-                    }}
-                    onMouseEnter={(e) => e.currentTarget.style.color = "#C88770"}
-                    onMouseLeave={(e) => e.currentTarget.style.color = "#D89880"}
-                  >
-                    Send
-                  </button>
-                  <button
-                    onClick={() => setIsReplying(false)}
-                    style={{
-                      padding: 0,
-                      background: "none",
-                      border: "none",
-                      color: "#999",
-                      fontSize: "13px",
-                      fontWeight: 300,
-                      cursor: "pointer",
-                      transition: "color 0.2s ease"
-                    }}
-                    onMouseEnter={(e) => e.currentTarget.style.color = "#D89880"}
-                    onMouseLeave={(e) => e.currentTarget.style.color = "#999"}
-                  >
-                    Discard
-                  </button>
-                </div>
-              </div>
-            )}
+
             </>
             )}
 
