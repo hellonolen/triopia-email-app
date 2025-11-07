@@ -13,9 +13,9 @@ import SimpleRichTextEditor from "@/components/SimpleRichTextEditor";
  */
 
 const mockEmails = [
-  { id: 1, from: "Sarah Johnson", email: "sarah@startup.com", subject: "Welcome to your new chapter", preview: "Excited to have you on board! Let's schedule a kickoff call...", time: "Nov 6, 2:30 PM", unread: true, starred: false, tags: [2] }, // Meeting
-  { id: 2, from: "David Chen", email: "david@company.com", subject: "Q4 Marketing Strategy Review", preview: "I wanted to share the preliminary results from our Q4 marketing campaign...", time: "Nov 6, 1:15 PM", unread: true, starred: true, tags: [1, 7] }, // Urgent, Work
-  { id: 3, from: "Emily Rodriguez", email: "emily@agency.co", subject: "Project Update", preview: "Let me know if this works for you. Looking forward to our meeting...", time: "Nov 6, 12:48 PM", unread: false, starred: false, tags: [7] }, // Work
+  { id: 1, from: "Sarah Johnson", email: "sarah@startup.com", subject: "Welcome to your new chapter", preview: "Excited to have you on board! Let's schedule a kickoff call...", time: "Nov 6, 2:30 PM", unread: true, starred: false, tags: [2], folder: "inbox" }, // Meeting
+  { id: 2, from: "David Chen", email: "david@company.com", subject: "Q4 Marketing Strategy Review", preview: "I wanted to share the preliminary results from our Q4 marketing campaign...", time: "Nov 6, 1:15 PM", unread: true, starred: true, tags: [1, 7], folder: "inbox" }, // Urgent, Work
+  { id: 3, from: "Emily Rodriguez", email: "emily@agency.co", subject: "Project Update", preview: "Let me know if this works for you. Looking forward to our meeting...", time: "Nov 6, 12:48 PM", unread: false, starred: false, tags: [7], folder: "inbox" }, // Work
 ];
 
 const mockAccounts = [
@@ -157,12 +157,44 @@ export default function ClaudeRefinedDemo() {
 
   const handleArchive = (emailId: number) => {
     console.log('Archive email:', emailId);
-    // TODO: Move email to archive
+    setEmails(prev => prev.map(email => 
+      email.id === emailId ? { ...email, folder: 'archive' } : email
+    ));
+    // If we're viewing the archived email, go back to inbox
+    if (selectedEmail.id === emailId) {
+      const remainingEmails = emails.filter(e => e.id !== emailId && e.folder === 'inbox');
+      if (remainingEmails.length > 0) {
+        setSelectedEmail(remainingEmails[0]);
+      }
+    }
   };
 
   const handleSpam = (emailId: number) => {
     console.log('Mark as spam:', emailId);
-    // TODO: Move email to spam
+    setEmails(prev => prev.map(email => 
+      email.id === emailId ? { ...email, folder: 'spam' } : email
+    ));
+    // If we're viewing the spam email, go back to inbox
+    if (selectedEmail.id === emailId) {
+      const remainingEmails = emails.filter(e => e.id !== emailId && e.folder === 'inbox');
+      if (remainingEmails.length > 0) {
+        setSelectedEmail(remainingEmails[0]);
+      }
+    }
+  };
+
+  const handleUnarchive = (emailId: number) => {
+    console.log('Unarchive email:', emailId);
+    setEmails(prev => prev.map(email => 
+      email.id === emailId ? { ...email, folder: 'inbox' } : email
+    ));
+  };
+
+  const handleNotSpam = (emailId: number) => {
+    console.log('Mark as not spam:', emailId);
+    setEmails(prev => prev.map(email => 
+      email.id === emailId ? { ...email, folder: 'inbox' } : email
+    ));
   };
 
   const handleDelete = (emailId: number) => {
@@ -804,7 +836,7 @@ export default function ClaudeRefinedDemo() {
 
           <div>
             {/* Inbox View */}
-            {activeView === 'Inbox' && emails.map((email) => (
+            {activeView === 'Inbox' && emails.filter(e => e.folder === 'inbox').map((email) => (
               <div
                 key={email.id}
                 onClick={() => {
@@ -1326,15 +1358,157 @@ export default function ClaudeRefinedDemo() {
 
             {/* Archive View */}
             {activeView === 'Archive' && (
-              <div style={{ padding: "20px" }}>
-                <p style={{ fontSize: "13px", color: "#666" }}>Archived emails - Coming soon</p>
+              <div>
+                {emails.filter(e => e.folder === 'archive').length === 0 ? (
+                  <div style={{ padding: "40px", textAlign: "center" }}>
+                    <p style={{ fontSize: "13px", color: "#999", fontWeight: 300 }}>No archived emails</p>
+                  </div>
+                ) : (
+                  emails.filter(e => e.folder === 'archive').map((email) => (
+                    <div
+                      key={email.id}
+                      onClick={() => {
+                        setSelectedEmail(email);
+                        setRightPanelMode('email');
+                      }}
+                      style={{
+                        padding: "12px 16px",
+                        borderBottom: "1px solid #F8F6F4",
+                        borderLeft: selectedEmail.id === email.id ? "3px solid #D89880" : "3px solid transparent",
+                        background: selectedEmail.id === email.id ? "#FFFBF7" : "white",
+                        cursor: "pointer",
+                        transition: "all 0.3s ease"
+                      }}
+                    >
+                      <div className="flex items-start justify-between mb-2">
+                        <div>
+                          <div style={{ fontSize: "12px", fontWeight: 300, color: "#2A2A2A" }}>
+                            {email.from}
+                          </div>
+                          <div style={{ fontSize: "11px", color: "#999", marginTop: "2px" }}>
+                            {email.email}
+                          </div>
+                        </div>
+                        <div style={{ fontSize: "10px", color: "#999", fontWeight: 300 }}>
+                          {email.time}
+                        </div>
+                      </div>
+                      <div style={{ fontSize: "12px", fontWeight: 400, color: "#2A2A2A", marginBottom: "4px" }}>
+                        {email.subject}
+                      </div>
+                      <div style={{ fontSize: "11px", color: "#666", fontWeight: 300, lineHeight: "1.4" }}>
+                        {email.preview}
+                      </div>
+                      <div style={{ marginTop: "8px" }}>
+                        <button
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            handleUnarchive(email.id);
+                          }}
+                          style={{
+                            padding: "4px 8px",
+                            background: "none",
+                            border: "1px solid #D89880",
+                            borderRadius: "3px",
+                            color: "#D89880",
+                            fontSize: "10px",
+                            fontWeight: 300,
+                            cursor: "pointer",
+                            transition: "all 0.2s ease"
+                          }}
+                          onMouseEnter={(e) => {
+                            e.currentTarget.style.background = "#D89880";
+                            e.currentTarget.style.color = "white";
+                          }}
+                          onMouseLeave={(e) => {
+                            e.currentTarget.style.background = "none";
+                            e.currentTarget.style.color = "#D89880";
+                          }}
+                        >
+                          Move to Inbox
+                        </button>
+                      </div>
+                    </div>
+                  ))
+                )}
               </div>
             )}
 
             {/* Spam View */}
             {activeView === 'Spam' && (
-              <div style={{ padding: "20px" }}>
-                <p style={{ fontSize: "13px", color: "#666" }}>Spam emails - Coming soon</p>
+              <div>
+                {emails.filter(e => e.folder === 'spam').length === 0 ? (
+                  <div style={{ padding: "40px", textAlign: "center" }}>
+                    <p style={{ fontSize: "13px", color: "#999", fontWeight: 300 }}>No spam emails</p>
+                  </div>
+                ) : (
+                  emails.filter(e => e.folder === 'spam').map((email) => (
+                    <div
+                      key={email.id}
+                      onClick={() => {
+                        setSelectedEmail(email);
+                        setRightPanelMode('email');
+                      }}
+                      style={{
+                        padding: "12px 16px",
+                        borderBottom: "1px solid #F8F6F4",
+                        borderLeft: selectedEmail.id === email.id ? "3px solid #D89880" : "3px solid transparent",
+                        background: selectedEmail.id === email.id ? "#FFFBF7" : "white",
+                        cursor: "pointer",
+                        transition: "all 0.3s ease"
+                      }}
+                    >
+                      <div className="flex items-start justify-between mb-2">
+                        <div>
+                          <div style={{ fontSize: "12px", fontWeight: 300, color: "#2A2A2A" }}>
+                            {email.from}
+                          </div>
+                          <div style={{ fontSize: "11px", color: "#999", marginTop: "2px" }}>
+                            {email.email}
+                          </div>
+                        </div>
+                        <div style={{ fontSize: "10px", color: "#999", fontWeight: 300 }}>
+                          {email.time}
+                        </div>
+                      </div>
+                      <div style={{ fontSize: "12px", fontWeight: 400, color: "#2A2A2A", marginBottom: "4px" }}>
+                        {email.subject}
+                      </div>
+                      <div style={{ fontSize: "11px", color: "#666", fontWeight: 300, lineHeight: "1.4" }}>
+                        {email.preview}
+                      </div>
+                      <div style={{ marginTop: "8px" }}>
+                        <button
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            handleNotSpam(email.id);
+                          }}
+                          style={{
+                            padding: "4px 8px",
+                            background: "none",
+                            border: "1px solid #D89880",
+                            borderRadius: "3px",
+                            color: "#D89880",
+                            fontSize: "10px",
+                            fontWeight: 300,
+                            cursor: "pointer",
+                            transition: "all 0.2s ease"
+                          }}
+                          onMouseEnter={(e) => {
+                            e.currentTarget.style.background = "#D89880";
+                            e.currentTarget.style.color = "white";
+                          }}
+                          onMouseLeave={(e) => {
+                            e.currentTarget.style.background = "none";
+                            e.currentTarget.style.color = "#D89880";
+                          }}
+                        >
+                          Not Spam
+                        </button>
+                      </div>
+                    </div>
+                  ))
+                )}
               </div>
             )}
 

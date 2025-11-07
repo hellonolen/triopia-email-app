@@ -289,3 +289,8 @@
 - [x] Add signature on/off toggle in Settings
 - [x] Create signature editor in Settings (create/edit/delete signatures)
 - [ ] Auto-append signature when sending (not visible during composition)
+
+- [x] Make Archive button functional - move email to Archive folder and remove from current view
+- [x] Make Spam button functional - move email to Spam folder and remove from current view
+- [x] Add Unarchive button in Archive view to restore emails to Inbox
+- [x] Add Not Spam button in Spam view to restore emails to Inbox
