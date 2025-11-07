@@ -2,7 +2,7 @@ import { useState, useEffect, useRef } from "react";
 import { trpc } from "@/lib/trpc";
 import { EmailListSkeleton, EmailDetailSkeleton } from "@/components/Skeleton";
 import { Mail, Send, Archive, Trash2, Star, Clock, CheckCircle2, Pause, Home, Inbox, Calendar, Users, Settings, Plus, UserPlus, Search, Zap, Check, Pencil, ChevronDown, ChevronRight, Pin, Info, FileText, HardDrive, BarChart3, Palette, AlertCircle, FilePen, Reply, Forward, Bot, User, Shield, Printer, MessageSquare, ListFilter, Mic, Paperclip } from "lucide-react";
-import { LegacySidebarSection } from "@/components/legacy/LegacySidebarSection";
+import { SidebarNav, SidebarModel, InboxSource } from "@/components/legacy/SidebarNav";
 import { LegacyEmailListItem } from "@/components/legacy/LegacyEmailListItem";
 import { LegacyDetailHeader } from "@/components/legacy/LegacyDetailHeader";
 import { LegacyDetailActions } from "@/components/legacy/LegacyDetailActions";
@@ -23,13 +23,26 @@ const mockEmails = [
   { id: 3, from: "Emily Rodriguez", email: "emily@agency.co", subject: "Project Update", preview: "Let me know if this works for you. Looking forward to our meeting...", time: "Nov 6, 12:48 PM", unread: false, starred: false, tags: [7], folder: "inbox", attachments: [] }, // Work
 ];
 
-const mockAccounts = [
-  { id: 1, email: "work@company.com", unread: 5, color: "#D89880" },
-  { id: 2, email: "personal@gmail.com", unread: 3, color: "#8B9DC3" },
-  { id: 3, email: "startup@venture.io", unread: 2, color: "#C9ADA7" },
-  { id: 4, email: "consulting@freelance.com", unread: 1, color: "#9A8C98" },
-  { id: 5, email: "side@project.dev", unread: 1, color: "#B5838D" },
-];
+// Generate 100 mock accounts for virtualization testing
+const mockAccounts = Array.from({ length: 100 }, (_, i) => ({
+  id: i + 1,
+  email: `account${i + 1}@${['company.com', 'gmail.com', 'venture.io', 'startup.dev', 'agency.co'][i % 5]}`,
+  unread: Math.floor(Math.random() * 10),
+  color: ['#D89880', '#8B9DC3', '#C9ADA7', '#9A8C98', '#B5838D'][i % 5]
+}));
+
+// Sidebar model data
+const sidebarModel: SidebarModel = {
+  core: ['Fresh Start', 'Inbox', 'Starred', 'New Connections', 'Paused', 'Complete', 'Sent', 'Drafts', 'Archive', 'Spam', 'Trash', 'Storage'],
+  inboxes: mockAccounts.map(acc => ({
+    id: acc.id.toString(),
+    label: acc.email,
+    type: 'email' as const,
+    unread: acc.unread
+  })),
+  tools: ['Notes', 'Calendar', 'Contacts'],
+  settings: ['Analytics', 'Appearance', 'Settings', 'Profile', 'Admin']
+};
 
 export default function ClaudeRefinedDemo() {
   const [isLoading, setIsLoading] = useState(true);
@@ -487,7 +500,10 @@ export default function ClaudeRefinedDemo() {
 
 
           <div style={{ padding: "0 var(--space-3)" }}>
-            <LegacySidebarSection />
+            <SidebarNav
+              model={sidebarModel}
+              onAddSource={() => setActiveView('Settings')}
+            />
           </div>
         </div>
 
@@ -1025,7 +1041,30 @@ export default function ClaudeRefinedDemo() {
             {/* Calendar View */}
             {activeView === 'Calendar' && (
               <div style={{ padding: "20px" }}>
-                <p style={{ fontSize: "13px", color: "#666" }}>Calendar integration - Coming soon</p>
+                <div style={{ marginBottom: "20px" }}>
+                  <h3 style={{ fontSize: "18px", fontWeight: 300, color: "#2A2A2A", marginBottom: "12px" }}>Calendar</h3>
+                  <div style={{ display: "flex", gap: "8px" }}>
+                    {['Month', 'Week', 'Day'].map((view) => (
+                      <button
+                        key={view}
+                        style={{
+                          padding: "6px 16px",
+                          fontSize: "12px",
+                          fontWeight: 300,
+                          color: view === 'Month' ? "#D89880" : "#666",
+                          background: view === 'Month' ? "#FFFBF7" : "transparent",
+                          border: "1px solid #E8E3DE",
+                          borderRadius: "4px",
+                          cursor: "pointer",
+                          transition: "all 0.2s"
+                        }}
+                      >
+                        {view}
+                      </button>
+                    ))}
+                  </div>
+                </div>
+                <p style={{ fontSize: "13px", color: "#666" }}>Calendar events will appear here</p>
               </div>
             )}
 
