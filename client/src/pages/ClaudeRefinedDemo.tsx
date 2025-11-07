@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Mail, Send, Archive, Trash2, Star, Clock, CheckCircle2, Pause, Home, Inbox, Calendar, Users, Settings, Plus, UserPlus, Search, Zap, Check, Pencil, ChevronDown, ChevronRight, Pin, Info, FileText, HardDrive, BarChart3, Palette, AlertCircle, FilePen } from "lucide-react";
 
 /**
@@ -29,6 +29,33 @@ export default function ClaudeRefinedDemo() {
   const [hoveredItem, setHoveredItem] = useState<string | null>(null);
   const [inboxesExpanded, setInboxesExpanded] = useState(false);
   const [emailFontSize, setEmailFontSize] = useState<'small' | 'medium' | 'large'>('medium');
+  const [emailListWidth, setEmailListWidth] = useState(420);
+  const [isResizing, setIsResizing] = useState(false);
+
+  useEffect(() => {
+    const handleMouseMove = (e: MouseEvent) => {
+      if (isResizing) {
+        const newWidth = e.clientX - 198; // Subtract sidebar width
+        if (newWidth >= 300 && newWidth <= 600) {
+          setEmailListWidth(newWidth);
+        }
+      }
+    };
+
+    const handleMouseUp = () => {
+      setIsResizing(false);
+    };
+
+    if (isResizing) {
+      document.addEventListener('mousemove', handleMouseMove);
+      document.addEventListener('mouseup', handleMouseUp);
+    }
+
+    return () => {
+      document.removeEventListener('mousemove', handleMouseMove);
+      document.removeEventListener('mouseup', handleMouseUp);
+    };
+  }, [isResizing]);
 
   return (
     <div style={{ 
@@ -68,7 +95,7 @@ export default function ClaudeRefinedDemo() {
       <div className="flex" style={{ flex: 1, overflow: "hidden" }}>
         {/* Sidebar - DRAMATICALLY NARROW */}
         <div style={{ 
-          width: "220px",
+          width: "198px",
           background: "white",
           borderRight: "1px solid #F0EBE6",
           padding: "16px 0"
@@ -271,10 +298,37 @@ export default function ClaudeRefinedDemo() {
 
         {/* Email List - DRAMATICALLY COMPACT */}
         <div style={{ 
-          width: "420px",
+          width: `${emailListWidth}px`,
           background: "white",
-          borderRight: "1px solid #F0EBE6"
+          borderRight: "1px solid #F0EBE6",
+          position: "relative",
+          minWidth: "300px",
+          maxWidth: "600px"
         }}>
+          {/* Resize Handle */}
+          <div
+            onMouseDown={(e) => {
+              setIsResizing(true);
+              e.preventDefault();
+            }}
+            style={{
+              position: "absolute",
+              right: 0,
+              top: 0,
+              bottom: 0,
+              width: "4px",
+              cursor: "col-resize",
+              background: isResizing ? "#D89880" : "transparent",
+              transition: "background 0.2s",
+              zIndex: 10
+            }}
+            onMouseEnter={(e) => {
+              if (!isResizing) e.currentTarget.style.background = "#F0EBE6";
+            }}
+            onMouseLeave={(e) => {
+              if (!isResizing) e.currentTarget.style.background = "transparent";
+            }}
+          />
           <div style={{ 
             padding: "20px 16px 14px",
             borderBottom: "1px solid #F0EBE6"
@@ -493,7 +547,7 @@ export default function ClaudeRefinedDemo() {
                     background: "transparent",
                     border: "none",
                     color: "#999",
-                    fontSize: "10px",
+                    fontSize: "7px",
                     fontWeight: 300,
                     letterSpacing: "0.05em",
                     textTransform: "uppercase",
@@ -501,7 +555,7 @@ export default function ClaudeRefinedDemo() {
                     transition: "all 0.3s ease",
                     display: "flex",
                     alignItems: "center",
-                    gap: "6px",
+                    gap: "4px",
                     position: "relative"
                   }}
                   onMouseEnter={(e) => {
@@ -515,7 +569,7 @@ export default function ClaudeRefinedDemo() {
                     if (underline) underline.style.transform = "scaleX(0)";
                   }}
                 >
-                  <action.icon style={{ width: "14px", height: "14px", strokeWidth: 1.5 }} />
+                  <action.icon style={{ width: "10px", height: "10px", strokeWidth: 1.5 }} />
                   <span>{action.label}</span>
                   <div 
                     className="underline"
