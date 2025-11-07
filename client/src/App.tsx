@@ -12,12 +12,22 @@ import Privacy from "./pages/Privacy";
 import Terms from "./pages/Terms";
 import Contact from "./pages/Contact";
 import AuthCallback from "./pages/AuthCallback";
+import PremiumDemo from "./pages/PremiumDemo";
+import ClaudeRefinedDemo from "./pages/ClaudeRefinedDemo";
+import DiorRefinedDemo from "./pages/DiorRefinedDemo";
+import SuperhumanDemo from "./pages/SuperhumanDemo";
+import EditorialDemo from "./pages/EditorialDemo";
 
 function Router() {
   // make sure to consider if you need authentication for certain routes
   return (
     <Switch>
       <Route path={"/"} component={EmailApp} />
+      <Route path={"/premium-demo"} component={PremiumDemo} />
+      <Route path={"/claude-demo"} component={ClaudeRefinedDemo} />
+      <Route path={"/dior-demo"} component={DiorRefinedDemo} />
+      <Route path={"/superhuman-demo"} component={SuperhumanDemo} />
+      <Route path={"/editorial-demo"} component={EditorialDemo} />
       <Route path={"/inbox"} component={UnifiedInbox} />
       <Route path={"/calendar"} component={Calendar} />
       <Route path={"/privacy"} component={Privacy} />
