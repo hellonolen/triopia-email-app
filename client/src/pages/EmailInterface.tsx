@@ -35,19 +35,11 @@ export default function ClaudeRefinedDemo() {
   const [hoveredTooltip, setHoveredTooltip] = useState<{label: string, x: number, y: number} | null>(null);
   const [emailDetailWidth, setEmailDetailWidth] = useState(1000);
   const [activeView, setActiveView] = useState('Inbox');
-  const [emailFilter, setEmailFilter] = useState<'all' | 'unread' | 'starred'>('all');
-  const [searchQuery, setSearchQuery] = useState('');
-  const [selectedEmails, setSelectedEmails] = useState<number[]>([]);
 
   // Backend data hooks
-  const { data: emailsData = [], refetch: refetchEmails } = trpc.emails.list.useQuery(
-    { folder: activeView.toLowerCase(), limit: 100 },
-    { enabled: ['Inbox', 'Starred', 'Sent', 'Drafts', 'Archive', 'Spam', 'Trash'].includes(activeView) }
-  );
   const { data: notesData = [], refetch: refetchNotes } = trpc.notes.list.useQuery(undefined, { enabled: activeView === 'Notes' });
   const { data: contactsData = [], refetch: refetchContacts } = trpc.contacts.list.useQuery(undefined, { enabled: activeView === 'Contacts' });
   const { data: calendarData = [], refetch: refetchCalendar } = trpc.calendar.list.useQuery({}, { enabled: activeView === 'Calendar' });
-  const updateEmailMutation = trpc.emails.update.useMutation({ onSuccess: () => refetchEmails() });
   const createNoteMutation = trpc.notes.create.useMutation({ onSuccess: () => refetchNotes() });
   const deleteNoteMutation = trpc.notes.delete.useMutation({ onSuccess: () => refetchNotes() });
   const createContactMutation = trpc.contacts.create.useMutation({ onSuccess: () => refetchContacts() });
@@ -76,58 +68,29 @@ export default function ClaudeRefinedDemo() {
   };
 
   const handleArchive = (emailId: number) => {
-    updateEmailMutation.mutate({ id: emailId, folder: 'archive' });
+    console.log('Archive email:', emailId);
+    // TODO: Move email to archive
   };
 
   const handleSpam = (emailId: number) => {
-    updateEmailMutation.mutate({ id: emailId, folder: 'spam' });
+    console.log('Mark as spam:', emailId);
+    // TODO: Move email to spam
   };
 
   const handleDelete = (emailId: number) => {
-    updateEmailMutation.mutate({ id: emailId, folder: 'trash' });
+    console.log('Delete email:', emailId);
+    // TODO: Move email to trash
   };
 
   const handlePin = (emailId: number) => {
-    const email = emailsData.find(e => e.id === emailId);
-    if (email) {
-      updateEmailMutation.mutate({ id: emailId, pinned: !email.pinned });
-    }
+    console.log('Pin email:', emailId);
+    // TODO: Toggle pin status
   };
 
   const handleStar = (emailId: number) => {
-    const email = emailsData.find(e => e.id === emailId);
-    if (email) {
-      updateEmailMutation.mutate({ id: emailId, starred: !email.starred });
-    }
+    console.log('Star email:', emailId);
+    // TODO: Toggle star status
   };
-
-  // Bulk actions
-  const handleBulkArchive = () => {
-    selectedEmails.forEach(id => updateEmailMutation.mutate({ id, folder: 'archive' }));
-    setSelectedEmails([]);
-  };
-
-  const handleBulkDelete = () => {
-    selectedEmails.forEach(id => updateEmailMutation.mutate({ id, folder: 'trash' }));
-    setSelectedEmails([]);
-  };
-
-  const toggleSelectAll = () => {
-    if (selectedEmails.length === filteredEmails.length) {
-      setSelectedEmails([]);
-    } else {
-      setSelectedEmails(filteredEmails.map(e => e.id));
-    }
-  };
-
-  // Filter and search emails
-  const filteredEmails = emailsData.filter(email => {
-    if (emailFilter === 'unread' && email.read) return false;
-    if (emailFilter === 'starred' && !email.starred) return false;
-    if (searchQuery && !email.subject.toLowerCase().includes(searchQuery.toLowerCase()) && 
-        !email.from.toLowerCase().includes(searchQuery.toLowerCase())) return false;
-    return true;
-  });
 
   useEffect(() => {
     const handleMouseMove = (e: MouseEvent) => {
@@ -624,107 +587,6 @@ export default function ClaudeRefinedDemo() {
                   </button>
                 </div>
               </div>
-              
-              {/* Filter and Search Bar */}
-              <div className="flex items-center gap-3" style={{ padding: "8px 16px", borderBottom: "1px solid #F0EBE6" }}>
-                <div className="flex items-center gap-2">
-                  <button
-                    onClick={() => setEmailFilter('all')}
-                    style={{
-                      padding: "4px 10px",
-                      fontSize: "10px",
-                      fontWeight: 300,
-                      background: emailFilter === 'all' ? '#FFFBF7' : 'transparent',
-                      border: emailFilter === 'all' ? '1px solid #D89880' : '1px solid #E5E5E5',
-                      borderRadius: "4px",
-                      color: emailFilter === 'all' ? '#D89880' : '#666',
-                      cursor: "pointer"
-                    }}
-                  >
-                    All
-                  </button>
-                  <button
-                    onClick={() => setEmailFilter('unread')}
-                    style={{
-                      padding: "4px 10px",
-                      fontSize: "10px",
-                      fontWeight: 300,
-                      background: emailFilter === 'unread' ? '#FFFBF7' : 'transparent',
-                      border: emailFilter === 'unread' ? '1px solid #D89880' : '1px solid #E5E5E5',
-                      borderRadius: "4px",
-                      color: emailFilter === 'unread' ? '#D89880' : '#666',
-                      cursor: "pointer"
-                    }}
-                  >
-                    Unread
-                  </button>
-                  <button
-                    onClick={() => setEmailFilter('starred')}
-                    style={{
-                      padding: "4px 10px",
-                      fontSize: "10px",
-                      fontWeight: 300,
-                      background: emailFilter === 'starred' ? '#FFFBF7' : 'transparent',
-                      border: emailFilter === 'starred' ? '1px solid #D89880' : '1px solid #E5E5E5',
-                      borderRadius: "4px",
-                      color: emailFilter === 'starred' ? '#D89880' : '#666',
-                      cursor: "pointer"
-                    }}
-                  >
-                    Starred
-                  </button>
-                </div>
-                <input
-                  type="text"
-                  placeholder="Search emails..."
-                  value={searchQuery}
-                  onChange={(e) => setSearchQuery(e.target.value)}
-                  style={{
-                    flex: 1,
-                    padding: "4px 8px",
-                    fontSize: "11px",
-                    fontWeight: 300,
-                    border: "1px solid #E5E5E5",
-                    borderRadius: "4px",
-                    outline: "none"
-                  }}
-                />
-                {selectedEmails.length > 0 && (
-                  <div className="flex items-center gap-2">
-                    <button
-                      onClick={handleBulkArchive}
-                      style={{
-                        padding: "4px 10px",
-                        fontSize: "10px",
-                        fontWeight: 300,
-                        background: "#FFFBF7",
-                        border: "1px solid #D89880",
-                        borderRadius: "4px",
-                        color: "#D89880",
-                        cursor: "pointer"
-                      }}
-                    >
-                      Archive ({selectedEmails.length})
-                    </button>
-                    <button
-                      onClick={handleBulkDelete}
-                      style={{
-                        padding: "4px 10px",
-                        fontSize: "10px",
-                        fontWeight: 300,
-                        background: "#FFFBF7",
-                        border: "1px solid #D89880",
-                        borderRadius: "4px",
-                        color: "#D89880",
-                        cursor: "pointer"
-                      }}
-                    >
-                      Delete ({selectedEmails.length})
-                    </button>
-                  </div>
-                )}
-              </div>
-              
               {/* Toggle and Zap on right */}
               <div className="flex items-center gap-3">
                 <button
@@ -777,7 +639,7 @@ export default function ClaudeRefinedDemo() {
 
           <div>
             {/* Inbox View */}
-            {activeView === 'Inbox' && filteredEmails.map((email) => (
+            {activeView === 'Inbox' && mockEmails.map((email) => (
               <div
                 key={email.id}
                 onClick={() => setSelectedEmail(email)}
@@ -1154,7 +1016,8 @@ export default function ClaudeRefinedDemo() {
           padding: "28px 36px"
         }}>
           <div style={{ maxWidth: "680px", margin: "0 auto" }}>
-            <div className="flex items-center justify-between mb-10" style={{ flexWrap: "wrap", gap: "12px" }}>
+            <div className="flex items-center gap-6 mb-10">
+              <>
               <div className="flex items-center gap-3">
               {[
                 { icon: Reply, label: "Reply", alwaysShow: true },
@@ -1203,7 +1066,7 @@ export default function ClaudeRefinedDemo() {
               
               {/* Font Size Controls */}
               {emailDetailWidth >= 700 && (
-              <div className="flex items-center gap-2" style={{ marginLeft: "auto" }}>
+              <div className="flex items-center gap-2">
                 <button
                   onClick={() => setEmailFontSize('small')}
                   style={{
@@ -1263,6 +1126,7 @@ export default function ClaudeRefinedDemo() {
                 </button>
               </div>
               )}
+              </>
             </div>
 
             <h1 style={{ 
