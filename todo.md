@@ -224,3 +224,10 @@
 - [x] Add custom/manual provider option
 - [x] Update Settings component with new provider system
 - [x] Remove all decorative emoji icons
+
+### Focus Features (Spark-Inspired)
+- [ ] Fresh Start Dashboard - Daily greeting home screen
+- [ ] New Connections - Gatekeeper for new sender screening (Accept/Block)
+- [ ] Pause For Later - Set aside emails temporarily
+- [ ] Mark Complete - Done marker for emails
+- [ ] Group by Sender - Bundle emails from same person

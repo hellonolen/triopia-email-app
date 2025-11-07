@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Star, Archive, Trash2, Pin, Mail, MailOpen, AlertOctagon } from 'lucide-react';
+import { Star, Archive, Trash2, Pin, Mail, MailOpen, AlertOctagon, Clock, CheckCircle2 } from 'lucide-react';
 import type { Email } from './EmailApp';
 import PriorityBadge from './PriorityBadge';
 
@@ -13,6 +13,8 @@ interface EmailListItemProps {
   onPin?: (emailId: number) => void;
   onMarkAsSpam?: (emailId: number) => void;
   onToggleRead?: (emailId: number) => void;
+  onPause?: (emailId: number) => void;
+  onMarkComplete?: (emailId: number) => void;
 }
 
 export default function EmailListItem({ 
@@ -24,7 +26,9 @@ export default function EmailListItem({
   onDelete,
   onPin,
   onMarkAsSpam,
-  onToggleRead
+  onToggleRead,
+  onPause,
+  onMarkComplete
 }: EmailListItemProps) {
   const [isHovered, setIsHovered] = useState(false);
   const [isPinned, setIsPinned] = useState(false);
@@ -121,6 +125,22 @@ export default function EmailListItem({
                 title="Pin"
               >
                 <Pin className={`w-3.5 h-3.5 ${isPinned ? 'fill-current' : ''}`} />
+              </button>
+
+              <button
+                onClick={(e) => handleAction(e, () => onPause?.(email.id))}
+                className="p-1.5 rounded-md bg-muted hover:bg-muted hover:text-orange-600 transition-all duration-200 hover:scale-110"
+                title="Pause for later"
+              >
+                <Clock className="w-3.5 h-3.5" />
+              </button>
+
+              <button
+                onClick={(e) => handleAction(e, () => onMarkComplete?.(email.id))}
+                className="p-1.5 rounded-md bg-muted hover:bg-muted hover:text-green-600 transition-all duration-200 hover:scale-110"
+                title="Mark complete"
+              >
+                <CheckCircle2 className="w-3.5 h-3.5" />
               </button>
 
               <button

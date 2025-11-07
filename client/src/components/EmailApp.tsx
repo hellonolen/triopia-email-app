@@ -14,6 +14,8 @@ import KeyboardShortcutsHelp from './KeyboardShortcutsHelp';
 import Storage from './Storage';
 import Notes from './Notes';
 import Appearance from './Appearance';
+import FreshStart from './FreshStart';
+import NewConnections from './NewConnections';
 import { useKeyboardShortcuts } from '../hooks/useKeyboardShortcuts';
 import { trpc } from '@/lib/trpc';
 import { useEffect } from 'react';
@@ -35,10 +37,12 @@ export interface Email {
   isArchived?: boolean;
   isDeleted?: boolean;
   isSpam?: boolean;
+  isPaused?: boolean;
+  isComplete?: boolean;
 }
 
 export default function EmailApp() {
-  const [selectedFolder, setSelectedFolder] = useState('inbox');
+  const [selectedFolder, setSelectedFolder] = useState('home');
   const [selectedEmail, setSelectedEmail] = useState<Email | null>(null);
   const [showComposer, setShowComposer] = useState(false);
   const [showCommandBar, setShowCommandBar] = useState(false);
@@ -266,6 +270,23 @@ export default function EmailApp() {
     );
   };
 
+  const handlePause = (emailId: number) => {
+    // Move email to paused folder
+    setEmails(emails.map(email =>
+      email.id === emailId ? { ...email, isPaused: true } : email
+    ));
+    if (selectedEmail?.id === emailId) {
+      setSelectedEmail(null);
+    }
+  };
+
+  const handleMarkComplete = (emailId: number) => {
+    // Mark email as complete
+    setEmails(emails.map(email =>
+      email.id === emailId ? { ...email, isComplete: true, isRead: true } : email
+    ));
+  };
+
   const handleEmailDropOnCalendar = (email: Email) => {
     // Switch to calendar view and open event creator with email data pre-filled
     setSelectedFolder('calendar');
@@ -367,7 +388,18 @@ export default function EmailApp() {
           onCompose={() => setShowComposer(true)}
           onEmailDrop={handleEmailDropOnCalendar}
         />
-        {selectedFolder === 'priority' ? (
+        {selectedFolder === 'home' ? (
+          <div className="flex-1 overflow-y-auto">
+            <FreshStart onNavigate={setSelectedFolder} />
+          </div>
+        ) : selectedFolder === 'new-connections' ? (
+          <NewConnections />
+        ) : selectedFolder === 'paused' ? (
+          <div className="flex-1 overflow-y-auto p-8">
+            <h2 className="text-2xl font-bold mb-4">Paused Emails</h2>
+            <p className="text-muted-foreground">Emails you've set aside for later will appear here.</p>
+          </div>
+        ) : selectedFolder === 'priority' ? (
           <SmartTriage
             emails={emails.filter(e => !e.isArchived && !e.isDeleted)}
             selectedEmail={selectedEmail}
@@ -424,6 +456,8 @@ export default function EmailApp() {
               onPin={handlePin}
               onMarkAsSpam={handleMarkAsSpam}
               onToggleRead={handleToggleRead}
+              onPause={handlePause}
+              onMarkComplete={handleMarkComplete}
             />
             <EmailDetail
               email={selectedEmail}

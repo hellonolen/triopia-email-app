@@ -1,4 +1,4 @@
-import { Mail, Star, Send, FileText, Archive, Trash2, Calendar, Settings, Plus, BarChart3, Users, TrendingUp, HardDrive, AlertOctagon, Palette } from 'lucide-react';
+import { Mail, Star, Send, FileText, Archive, Trash2, Calendar, Settings, Plus, BarChart3, Users, TrendingUp, HardDrive, AlertOctagon, Palette, Home, UserPlus, Clock } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import InboxesSection from './InboxesSection';
 import { useState } from 'react';
@@ -46,6 +46,9 @@ export default function Sidebar({ selectedFolder, onFolderSelect, getUnreadCount
   ];
 
   const folders = [
+    { id: 'home', label: 'Home', icon: Home },
+    { id: 'new-connections', label: 'New Connections', icon: UserPlus },
+    { id: 'paused', label: 'Paused', icon: Clock },
     { id: 'priority', label: 'Priority', icon: TrendingUp },
     { id: 'inbox', label: 'Inbox', icon: Mail },
     { id: 'sent', label: 'Sent', icon: Send },
