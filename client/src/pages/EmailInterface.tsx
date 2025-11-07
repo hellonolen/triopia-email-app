@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { Mail, Send, Archive, Trash2, Star, Clock, CheckCircle2, Pause, Home, Inbox, Calendar, Users, Settings, Plus, UserPlus, Search, Zap, Check, Pencil, ChevronDown, ChevronRight, Pin, Info, FileText, HardDrive, BarChart3, Palette, AlertCircle, FilePen, Reply, Forward } from "lucide-react";
 
 /**
@@ -32,6 +32,7 @@ export default function ClaudeRefinedDemo() {
   const [emailListWidth, setEmailListWidth] = useState(420);
   const [isResizing, setIsResizing] = useState(false);
   const [hoveredTooltip, setHoveredTooltip] = useState<{label: string, x: number, y: number} | null>(null);
+  const [emailDetailWidth, setEmailDetailWidth] = useState(0);
 
   useEffect(() => {
     const handleMouseMove = (e: MouseEvent) => {
@@ -57,6 +58,24 @@ export default function ClaudeRefinedDemo() {
       document.removeEventListener('mouseup', handleMouseUp);
     };
   }, [isResizing]);
+
+  const emailDetailRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    if (!emailDetailRef.current) return;
+
+    const resizeObserver = new ResizeObserver((entries) => {
+      for (const entry of entries) {
+        setEmailDetailWidth(entry.contentRect.width);
+      }
+    });
+
+    resizeObserver.observe(emailDetailRef.current);
+
+    return () => {
+      resizeObserver.disconnect();
+    };
+  }, []);
 
   return (
     <div style={{ 
@@ -538,7 +557,7 @@ export default function ClaudeRefinedDemo() {
         </div>
 
         {/* Email Detail - DRAMATICALLY COMPACT */}
-        <div style={{ 
+        <div ref={emailDetailRef} style={{ 
           flex: 1,
           background: "#FFFBF7",
           overflowY: "auto",
@@ -546,16 +565,17 @@ export default function ClaudeRefinedDemo() {
         }}>
           <div style={{ maxWidth: "680px", margin: "0 auto" }}>
             <div className="flex items-center gap-6 mb-10">
+              <>
               <div className="flex items-center gap-3">
               {[
-                { icon: Reply, label: "Reply" },
-                { icon: Forward, label: "Forward" },
-                { icon: Archive, label: "Archive" },
-                { icon: AlertCircle, label: "Spam" },
-                { icon: Trash2, label: "Delete" },
-                { icon: Pin, label: "Pin" },
-                { icon: Star, label: "Star" },
-              ].map((action) => (
+                { icon: Reply, label: "Reply", alwaysShow: true },
+                { icon: Forward, label: "Forward", alwaysShow: true },
+                { icon: Archive, label: "Archive", alwaysShow: false },
+                { icon: AlertCircle, label: "Spam", alwaysShow: false },
+                { icon: Trash2, label: "Delete", alwaysShow: false },
+                { icon: Pin, label: "Pin", alwaysShow: false },
+                { icon: Star, label: "Star", alwaysShow: false },
+              ].filter(action => action.alwaysShow || emailDetailWidth >= 500).map((action) => (
                 <button
                   key={action.label}
                   style={{
@@ -584,6 +604,7 @@ export default function ClaudeRefinedDemo() {
               </div>
               
               {/* Font Size Controls */}
+              {emailDetailWidth >= 500 && (
               <div className="flex items-center gap-2">
                 <button
                   onClick={() => setEmailFontSize('small')}
@@ -643,6 +664,8 @@ export default function ClaudeRefinedDemo() {
                   A+
                 </button>
               </div>
+              )}
+              </>
             </div>
 
             <h1 style={{ 
