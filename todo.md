@@ -498,6 +498,14 @@
 - [x] Make Admin dashboard take full width (no email panels visible)
 - [x] Apply same logic to Notes, Calendar, Contacts, Settings views
 
+## CLEAN URLs - REMOVE LANDING PAGE (CRITICAL)
+
+- [x] Move email app back to root / route
+- [x] Update sidebar links to remove /app prefix
+- [x] Remove ALL pagination query params from code
+- [ ] Test triopia.com/ goes directly to email app
+- [ ] Test triopia.com/ shows NO query params
+
 ## ADMIN PANEL NOT DISPLAYING (URGENT)
 
 - [ ] Check browser console for JavaScript errors
@@ -521,3 +529,11 @@
 - [x] Increase default mobile font size
 - [x] Make font size controls more prominent on mobile
 - [ ] Test mobile experience with larger fonts
+
+## CLEAN URLs - REMOVE LANDING PAGE (CRITICAL)
+
+- [ ] Move email app back to root / route
+- [ ] Update sidebar links to remove /app prefix
+- [ ] Remove ALL pagination query params from code
+- [ ] Test triopia.com/ goes directly to email app
+- [ ] Test triopia.com/ shows NO query params

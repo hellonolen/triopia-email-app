@@ -223,7 +223,7 @@ export function SidebarNav({ model, onAddSource }: SidebarNavProps) {
         {isExpanded && (
           <div style={{ marginLeft: '18px', marginTop: '2px' }}>
             {childRoutes.map((child) => {
-              const childPath = `/app/${child}/${sourceId}`;
+              const childPath = `/${child}/${sourceId}`;
               const isActive = location === childPath || location.includes(`sourceId=${sourceId}`);
               const Icon = coreIcons[child.charAt(0).toUpperCase() + child.slice(1)] || Inbox;
 
@@ -280,7 +280,7 @@ export function SidebarNav({ model, onAddSource }: SidebarNavProps) {
         <div style={{ display: 'flex', flexDirection: 'column', gap: '1px' }}>
           {model.core.map((label) => {
             const icon = coreIcons[label] || Inbox;
-            const path = `/app/${label.toLowerCase().replace(/\s+/g, '-')}`;
+            const path = `/${label.toLowerCase().replace(/\s+/g, '-')}`;
             return renderNavItem(label, icon, path, `sidebar-link-${label.toLowerCase().replace(/\s+/g, '-')}`);
           })}
         </div>
@@ -434,7 +434,7 @@ export function SidebarNav({ model, onAddSource }: SidebarNavProps) {
           <div style={{ display: 'flex', flexDirection: 'column', gap: '1px' }}>
             {model.tools.map((label) => {
               const icon = toolIcons[label] || FileText;
-              const path = `/app/${label.toLowerCase()}`;
+              const path = `/${label.toLowerCase()}`;
               return renderNavItem(label, icon, path, `sidebar-link-${label.toLowerCase()}`);
             })}
           </div>
@@ -471,7 +471,7 @@ export function SidebarNav({ model, onAddSource }: SidebarNavProps) {
           <div style={{ display: 'flex', flexDirection: 'column', gap: '1px' }}>
             {model.settings.map((label) => {
               const icon = settingsIcons[label] || Settings;
-              const path = `/app/${label.toLowerCase()}`;
+              const path = `/${label.toLowerCase()}`;
               return renderNavItem(label, icon, path, `sidebar-link-${label.toLowerCase()}`);
             })}
           </div>

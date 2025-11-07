@@ -101,21 +101,7 @@ export default function ClaudeRefinedDemo({ view = 'inbox' }: EmailInterfaceProp
     };
   }, []);
   
-  // URL sync for pagination
-  useEffect(() => {
-    const params = new URLSearchParams(window.location.search);
-    const page = params.get('page');
-    const size = params.get('size');
-    
-    if (page) setCurrentPage(parseInt(page, 10));
-    if (size) {
-      const newSize = parseInt(size, 10);
-      setPageSize(newSize);
-      localStorage.setItem('triopia:pager:size', newSize.toString());
-    }
-  }, []);
-  
-  // URL params removed - clean URLs by default
+  // Pagination state persists via localStorage only - no URL params
   const [selectedEmail, setSelectedEmail] = useState(mockEmails[0]);
   const [hoveredItem, setHoveredItem] = useState<string | null>(null);
   const [inboxesExpanded, setInboxesExpanded] = useState(false);

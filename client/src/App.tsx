@@ -23,37 +23,34 @@ function Router() {
   // make sure to consider if you need authentication for certain routes
   return (
     <Switch>
-      {/* Landing page */}
-      <Route path="/" component={Landing} />
-      
-      {/* Main app route */}
-      <Route path="/app" component={() => <EmailInterface view="inbox" />} />
+      {/* Main app at root */}
+      <Route path="/" component={() => <EmailInterface view="inbox" />} />
       
       {/* CORE routes */}
-      <Route path="/app/fresh-start" component={() => <EmailInterface view="fresh-start" />} />
-      <Route path="/app/inbox" component={() => <EmailInterface view="inbox" />} />
-      <Route path="/app/starred" component={() => <EmailInterface view="starred" />} />
-      <Route path="/app/new-connections" component={() => <EmailInterface view="new-connections" />} />
-      <Route path="/app/paused" component={() => <EmailInterface view="paused" />} />
-      <Route path="/app/complete" component={() => <EmailInterface view="complete" />} />
-      <Route path="/app/sent" component={() => <EmailInterface view="sent" />} />
-      <Route path="/app/drafts" component={() => <EmailInterface view="drafts" />} />
-      <Route path="/app/archive" component={() => <EmailInterface view="archive" />} />
-      <Route path="/app/spam" component={() => <EmailInterface view="spam" />} />
-      <Route path="/app/trash" component={() => <EmailInterface view="trash" />} />
-      <Route path="/app/storage" component={() => <EmailInterface view="storage" />} />
+      <Route path="/fresh-start" component={() => <EmailInterface view="fresh-start" />} />
+      <Route path="/inbox" component={() => <EmailInterface view="inbox" />} />
+      <Route path="/starred" component={() => <EmailInterface view="starred" />} />
+      <Route path="/new-connections" component={() => <EmailInterface view="new-connections" />} />
+      <Route path="/paused" component={() => <EmailInterface view="paused" />} />
+      <Route path="/complete" component={() => <EmailInterface view="complete" />} />
+      <Route path="/sent" component={() => <EmailInterface view="sent" />} />
+      <Route path="/drafts" component={() => <EmailInterface view="drafts" />} />
+      <Route path="/archive" component={() => <EmailInterface view="archive" />} />
+      <Route path="/spam" component={() => <EmailInterface view="spam" />} />
+      <Route path="/trash" component={() => <EmailInterface view="trash" />} />
+      <Route path="/storage" component={() => <EmailInterface view="storage" />} />
       
       {/* TOOLS routes */}
-      <Route path="/app/notes" component={() => <EmailInterface view="notes" />} />
-      <Route path="/app/calendar" component={() => <EmailInterface view="calendar" />} />
-      <Route path="/app/contacts" component={() => <EmailInterface view="contacts" />} />
+      <Route path="/notes" component={() => <EmailInterface view="notes" />} />
+      <Route path="/calendar" component={() => <EmailInterface view="calendar" />} />
+      <Route path="/contacts" component={() => <EmailInterface view="contacts" />} />
       
       {/* SETTINGS routes */}
-      <Route path="/app/analytics" component={() => <EmailInterface view="analytics" />} />
-      <Route path="/app/appearance" component={() => <EmailInterface view="appearance" />} />
-      <Route path="/app/settings" component={() => <EmailInterface view="settings" />} />
-      <Route path="/app/profile" component={() => <EmailInterface view="profile" />} />
-      <Route path="/app/admin" component={() => <EmailInterface view="admin" />} />
+      <Route path="/analytics" component={() => <EmailInterface view="analytics" />} />
+      <Route path="/appearance" component={() => <EmailInterface view="appearance" />} />
+      <Route path="/settings" component={() => <EmailInterface view="settings" />} />
+      <Route path="/profile" component={() => <EmailInterface view="profile" />} />
+      <Route path="/admin" component={() => <EmailInterface view="admin" />} />
       
       {/* Legacy demo routes */}
       <Route path={"/premium-demo"} component={PremiumDemo} />
