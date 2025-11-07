@@ -261,3 +261,9 @@
 - [x] Remove circle logo next to Triopia in header
 - [x] Redesign Archive/Delete/Reply button layout with animated underlines
 - [x] All features already present in Claude demo
+
+### Claude Demo Fixes
+- [x] Move/redesign Compose button (removed from sidebar)
+- [x] Change time format to actual date/time (Nov 6, 2:30 PM format)
+- [x] Add all sidebar items from original design
+- [x] Add copyright footer

@@ -11,9 +11,9 @@ import { Mail, Send, Archive, Trash2, Star, Clock, CheckCircle2, Pause, Home, In
  */
 
 const mockEmails = [
-  { id: 1, from: "Sarah Johnson", email: "sarah@startup.com", subject: "Welcome to your new chapter", preview: "Excited to have you on board! Let's schedule a kickoff call...", time: "2:30 PM", unread: true, starred: false },
-  { id: 2, from: "David Chen", email: "david@company.com", subject: "Q4 Marketing Strategy Review", preview: "I wanted to share the preliminary results from our Q4 marketing campaign...", time: "1h", unread: true, starred: true },
-  { id: 3, from: "Emily Rodriguez", email: "emily@agency.co", subject: "Project Update", preview: "Let me know if this works for you. Looking forward to our meeting...", time: "27m", unread: false, starred: false },
+  { id: 1, from: "Sarah Johnson", email: "sarah@startup.com", subject: "Welcome to your new chapter", preview: "Excited to have you on board! Let's schedule a kickoff call...", time: "Nov 6, 2:30 PM", unread: true, starred: false },
+  { id: 2, from: "David Chen", email: "david@company.com", subject: "Q4 Marketing Strategy Review", preview: "I wanted to share the preliminary results from our Q4 marketing campaign...", time: "Nov 6, 1:15 PM", unread: true, starred: true },
+  { id: 3, from: "Emily Rodriguez", email: "emily@agency.co", subject: "Project Update", preview: "Let me know if this works for you. Looking forward to our meeting...", time: "Nov 6, 12:48 PM", unread: false, starred: false },
 ];
 
 export default function ClaudeRefinedDemo() {
@@ -61,33 +61,7 @@ export default function ClaudeRefinedDemo() {
           borderRight: "1px solid #F0EBE6",
           padding: "16px 0"
         }}>
-          <div style={{ padding: "0 16px", marginBottom: "16px" }}>
-            <button style={{
-              width: "100%",
-              background: "transparent",
-              border: "1px solid #D89880",
-              color: "#D89880",
-              padding: "10px",
-              borderRadius: "4px",
-              fontSize: "10px",
-              fontWeight: 300,
-              letterSpacing: "0.08em",
-              textTransform: "uppercase",
-              cursor: "pointer",
-              transition: "all 0.3s ease"
-            }}
-            onMouseEnter={(e) => {
-              e.currentTarget.style.background = "#D89880";
-              e.currentTarget.style.color = "white";
-            }}
-            onMouseLeave={(e) => {
-              e.currentTarget.style.background = "transparent";
-              e.currentTarget.style.color = "#D89880";
-            }}>
-              <Plus className="inline" style={{ width: "12px", height: "12px", marginRight: "6px" }} />
-              Compose
-            </button>
-          </div>
+
 
           <div>
             {[
@@ -155,7 +129,7 @@ export default function ClaudeRefinedDemo() {
             ))}
           </div>
 
-          <div style={{ marginTop: "16px", padding: "16px", borderTop: "1px solid #F0EBE6" }}>
+          <div style={{ marginTop: "auto", padding: "16px", borderTop: "1px solid #F0EBE6" }}>
             {[
               { icon: Calendar, label: "Calendar" },
               { icon: Users, label: "Contacts" },
@@ -189,6 +163,18 @@ export default function ClaudeRefinedDemo() {
                 </span>
               </div>
             ))}
+            
+            <div style={{ 
+              marginTop: "24px", 
+              paddingTop: "16px", 
+              borderTop: "1px solid #F0EBE6",
+              fontSize: "9px",
+              fontWeight: 300,
+              color: "#999",
+              letterSpacing: "0.02em"
+            }}>
+              © 2025 Triopia. All rights reserved.
+            </div>
           </div>
         </div>
 
