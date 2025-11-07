@@ -1,6 +1,7 @@
 import { useState, useEffect, useRef } from "react";
 import { trpc } from "@/lib/trpc";
 import { Mail, Send, Archive, Trash2, Star, Clock, CheckCircle2, Pause, Home, Inbox, Calendar, Users, Settings, Plus, UserPlus, Search, Zap, Check, Pencil, ChevronDown, ChevronRight, Pin, Info, FileText, HardDrive, BarChart3, Palette, AlertCircle, FilePen, Reply, Forward, Bot, User, Shield, Printer, MessageSquare, ListFilter, Mic, Paperclip } from "lucide-react";
+import SimpleRichTextEditor from "@/components/SimpleRichTextEditor";
 
 /**
  * Claude AI - DRAMATICALLY Refined
@@ -84,6 +85,7 @@ export default function ClaudeRefinedDemo() {
   const [composeBcc, setComposeBcc] = useState('');
   const [composeSubject, setComposeSubject] = useState('');
   const [composeBody, setComposeBody] = useState('');
+  const [replyBody, setReplyBody] = useState('');
   const [attachments, setAttachments] = useState<File[]>([]);
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [emailSignature, setEmailSignature] = useState('Best regards,\nYour Name\nYour Title\nYour Company');
@@ -1669,25 +1671,14 @@ export default function ClaudeRefinedDemo() {
                   </div>
                 </div>
                 
-                <textarea
-                  placeholder="Type your reply..."
-                  style={{
-                    width: "100%",
-                    minHeight: "240px",
-                    padding: "16px 0",
-                    fontSize: "14px",
-                    fontWeight: 300,
-                    border: "none",
-                    borderBottom: "1px solid #F0EBE6",
-                    outline: "none",
-                    background: "transparent",
-                    color: "#2A2A2A",
-                    resize: "vertical",
-                    fontFamily: "inherit",
-                    marginBottom: "16px",
-                    lineHeight: "1.6"
-                  }}
-                />
+                <div style={{ marginBottom: "16px" }}>
+                  <SimpleRichTextEditor
+                    value={replyBody}
+                    onChange={setReplyBody}
+                    placeholder="Type your reply..."
+                    minHeight="200px"
+                  />
+                </div>
                 
                 {/* Signature Preview */}
                 <div style={{
@@ -1976,24 +1967,14 @@ export default function ClaudeRefinedDemo() {
                 </div>
                 
                 {/* Message body */}
-                <textarea
-                  placeholder="Type your message..."
-                  value={composeBody}
-                  onChange={(e) => setComposeBody(e.target.value)}
-                  style={{
-                    flex: 1,
-                    padding: "0",
-                    fontSize: "13px",
-                    fontWeight: 300,
-                    border: "none",
-                    outline: "none",
-                    background: "transparent",
-                    color: "#2A2A2A",
-                    resize: "none",
-                    fontFamily: "inherit",
-                    minHeight: "300px"
-                  }}
-                />
+                <div style={{ flex: 1, marginBottom: "12px" }}>
+                  <SimpleRichTextEditor
+                    value={composeBody}
+                    onChange={setComposeBody}
+                    placeholder="Type your message..."
+                    minHeight="300px"
+                  />
+                </div>
                 
                 {/* Formatting toolbar */}
                 <div style={{ display: "flex", gap: "12px", marginTop: "12px", paddingTop: "12px", borderTop: "1px solid #F0EBE6" }}>
