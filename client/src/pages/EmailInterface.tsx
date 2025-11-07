@@ -33,6 +33,7 @@ export default function ClaudeRefinedDemo() {
   const [isResizing, setIsResizing] = useState(false);
   const [hoveredTooltip, setHoveredTooltip] = useState<{label: string, x: number, y: number} | null>(null);
   const [emailDetailWidth, setEmailDetailWidth] = useState(1000);
+  const [activeView, setActiveView] = useState('Inbox');
 
   useEffect(() => {
     const handleMouseMove = (e: MouseEvent) => {
@@ -131,6 +132,7 @@ export default function ClaudeRefinedDemo() {
             ].map((item) => (
               <div
                 key={item.label}
+                onClick={() => setActiveView(item.label)}
                 onMouseEnter={() => setHoveredItem(item.label)}
                 onMouseLeave={() => setHoveredItem(null)}
                 style={{
@@ -138,7 +140,7 @@ export default function ClaudeRefinedDemo() {
                   cursor: "pointer",
                   position: "relative",
                   transition: "all 0.3s ease",
-                  background: item.label === "Inbox" ? "#FFFBF7" : "transparent"
+                  background: item.label === activeView ? "#FFFBF7" : "transparent"
                 }}
               >
                 <div className="flex items-center justify-between">
@@ -146,7 +148,7 @@ export default function ClaudeRefinedDemo() {
                     <item.icon style={{ 
                       width: "14px", 
                       height: "14px",
-                      color: item.label === "Inbox" ? "#D89880" : "#999",
+                      color: item.label === activeView ? "#D89880" : "#999",
                       strokeWidth: 1.5
                     }} />
                     <span style={{
@@ -279,6 +281,7 @@ export default function ClaudeRefinedDemo() {
             ].map((item) => (
               <div
                 key={item.label}
+                onClick={() => setActiveView(item.label)}
                 className="flex items-center gap-3"
                 style={{
                   padding: "8px 0",
@@ -290,14 +293,14 @@ export default function ClaudeRefinedDemo() {
                 }}
                 onMouseLeave={(e) => {
                   const span = e.currentTarget.querySelector("span");
-                  if (span) span.style.color = "#666";
+                  if (span && item.label !== activeView) span.style.color = "#666";
                 }}
               >
-                <item.icon style={{ width: "14px", height: "14px", color: "#999", strokeWidth: 1.5 }} />
+                <item.icon style={{ width: "14px", height: "14px", color: item.label === activeView ? "#D89880" : "#999", strokeWidth: 1.5 }} />
                 <span style={{
                   fontSize: "11px",
                   fontWeight: 300,
-                  color: "#666",
+                  color: item.label === activeView ? "#D89880" : "#666",
                   letterSpacing: "0.02em",
                   transition: "color 0.3s ease"
                 }}>
@@ -355,7 +358,7 @@ export default function ClaudeRefinedDemo() {
                     letterSpacing: "-0.02em",
                     marginBottom: "6px"
                   }}>
-                    Inbox
+                    {activeView}
                   </h2>
                   <p style={{ 
                     fontSize: "10px", 
