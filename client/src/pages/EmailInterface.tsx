@@ -34,6 +34,7 @@ export default function ClaudeRefinedDemo() {
   const [isResizing, setIsResizing] = useState(false);
   const [hoveredTooltip, setHoveredTooltip] = useState<{label: string, x: number, y: number} | null>(null);
   const [emailDetailWidth, setEmailDetailWidth] = useState(1000);
+  const [activeView, setActiveView] = useState('Inbox');
 
   // Backend data hooks
   const { data: notesData = [], refetch: refetchNotes } = trpc.notes.list.useQuery(undefined, { enabled: activeView === 'Notes' });
@@ -42,7 +43,6 @@ export default function ClaudeRefinedDemo() {
   const createNoteMutation = trpc.notes.create.useMutation({ onSuccess: () => refetchNotes() });
   const createContactMutation = trpc.contacts.create.useMutation({ onSuccess: () => refetchContacts() });
   const createEventMutation = trpc.calendar.create.useMutation({ onSuccess: () => refetchCalendar() });
-  const [activeView, setActiveView] = useState('Inbox');
   const [showComposeModal, setShowComposeModal] = useState(false);
   const [showAIPanel, setShowAIPanel] = useState(false);
   const [activeAITab, setActiveAITab] = useState<'chat' | 'triage' | 'quick-reply' | 'voice'>('chat');
