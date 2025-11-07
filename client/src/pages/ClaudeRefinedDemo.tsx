@@ -487,29 +487,39 @@ export default function ClaudeRefinedDemo() {
                 }}>
                   {email.preview}
                 </div>
-                {/* Email action icons - 7 icons from screenshot */}
+                {/* Email action icons - consistent with top/bottom */}
                 <div className="flex items-center gap-2">
-                  <button onClick={(e) => { e.stopPropagation(); }} style={{ background: "none", border: "none", cursor: "pointer", padding: 0 }}>
-                    <Mail style={{ width: "14px", height: "14px", color: "#ccc", strokeWidth: 1.5 }} />
-                  </button>
-                  <button onClick={(e) => { e.stopPropagation(); }} style={{ background: "none", border: "none", cursor: "pointer", padding: 0 }}>
-                    <Pin style={{ width: "14px", height: "14px", color: "#ccc", strokeWidth: 1.5 }} />
-                  </button>
-                  <button onClick={(e) => { e.stopPropagation(); }} style={{ background: "none", border: "none", cursor: "pointer", padding: 0 }}>
-                    <Clock style={{ width: "14px", height: "14px", color: "#ccc", strokeWidth: 1.5 }} />
-                  </button>
-                  <button onClick={(e) => { e.stopPropagation(); }} style={{ background: "none", border: "none", cursor: "pointer", padding: 0 }}>
-                    <CheckCircle2 style={{ width: "14px", height: "14px", color: "#ccc", strokeWidth: 1.5 }} />
-                  </button>
-                  <button onClick={(e) => { e.stopPropagation(); }} style={{ background: "none", border: "none", cursor: "pointer", padding: 0 }}>
-                    <Archive style={{ width: "14px", height: "14px", color: "#ccc", strokeWidth: 1.5 }} />
-                  </button>
-                  <button onClick={(e) => { e.stopPropagation(); }} style={{ background: "none", border: "none", cursor: "pointer", padding: 0 }}>
-                    <Info style={{ width: "14px", height: "14px", color: "#ccc", strokeWidth: 1.5 }} />
-                  </button>
-                  <button onClick={(e) => { e.stopPropagation(); }} style={{ background: "none", border: "none", cursor: "pointer", padding: 0 }}>
-                    <Trash2 style={{ width: "14px", height: "14px", color: "#ccc", strokeWidth: 1.5 }} />
-                  </button>
+                  {[
+                    { icon: Send, label: "Reply" },
+                    { icon: Mail, label: "Forward" },
+                    { icon: Archive, label: "Archive" },
+                    { icon: AlertCircle, label: "Spam" },
+                    { icon: Trash2, label: "Delete" },
+                    { icon: Pin, label: "Pin" },
+                  ].map((action) => (
+                    <button
+                      key={action.label}
+                      title={action.label}
+                      onClick={(e) => { e.stopPropagation(); }}
+                      style={{
+                        background: "none",
+                        border: "none",
+                        cursor: "pointer",
+                        padding: 0,
+                        transition: "all 0.2s ease"
+                      }}
+                      onMouseEnter={(e) => {
+                        const icon = e.currentTarget.querySelector('svg') as any;
+                        if (icon) icon.style.color = "#D89880";
+                      }}
+                      onMouseLeave={(e) => {
+                        const icon = e.currentTarget.querySelector('svg') as any;
+                        if (icon) icon.style.color = "#999";
+                      }}
+                    >
+                      <action.icon style={{ width: "14px", height: "14px", color: "#999", strokeWidth: 1.5, transition: "color 0.2s ease" }} />
+                    </button>
+                  ))}
                 </div>
               </div>
             ))}
@@ -528,55 +538,33 @@ export default function ClaudeRefinedDemo() {
             <div className="flex items-center justify-between mb-10">
               <div className="flex items-center gap-3">
               {[
-                { icon: Archive, label: "Archive" },
-                { icon: Trash2, label: "Delete" },
                 { icon: Send, label: "Reply" },
+                { icon: Mail, label: "Forward" },
+                { icon: Archive, label: "Archive" },
+                { icon: AlertCircle, label: "Spam" },
+                { icon: Trash2, label: "Delete" },
+                { icon: Pin, label: "Pin" },
               ].map((action) => (
                 <button
                   key={action.label}
+                  title={action.label}
                   style={{
-                    padding: "0",
-                    background: "transparent",
+                    padding: 0,
+                    background: "none",
                     border: "none",
-                    color: "#999",
-                    fontSize: "7px",
-                    fontWeight: 300,
-                    letterSpacing: "0.05em",
-                    textTransform: "uppercase",
                     cursor: "pointer",
-                    transition: "all 0.3s ease",
-                    display: "flex",
-                    alignItems: "center",
-                    gap: "4px",
-                    position: "relative"
+                    transition: "all 0.2s ease"
                   }}
                   onMouseEnter={(e) => {
-                    e.currentTarget.style.color = "#D89880";
-                    const underline = e.currentTarget.querySelector(".underline") as HTMLElement;
-                    if (underline) underline.style.transform = "scaleX(1)";
+                    const icon = e.currentTarget.querySelector('svg') as any;
+                    if (icon) icon.style.color = "#D89880";
                   }}
                   onMouseLeave={(e) => {
-                    e.currentTarget.style.color = "#999";
-                    const underline = e.currentTarget.querySelector(".underline") as HTMLElement;
-                    if (underline) underline.style.transform = "scaleX(0)";
+                    const icon = e.currentTarget.querySelector('svg') as any;
+                    if (icon) icon.style.color = "#999";
                   }}
                 >
-                  <action.icon style={{ width: "10px", height: "10px", strokeWidth: 1.5 }} />
-                  <span>{action.label}</span>
-                  <div 
-                    className="underline"
-                    style={{
-                      position: "absolute",
-                      bottom: "-4px",
-                      left: 0,
-                      right: 0,
-                      height: "1px",
-                      background: "#D89880",
-                      transform: "scaleX(0)",
-                      transformOrigin: "left",
-                      transition: "transform 0.4s cubic-bezier(0.4, 0, 0.2, 1)"
-                    }}
-                  />
+                  <action.icon style={{ width: "16px", height: "16px", color: "#999", strokeWidth: 1.5, transition: "color 0.2s ease" }} />
                 </button>
               ))}
               </div>
@@ -718,6 +706,7 @@ export default function ClaudeRefinedDemo() {
                 { icon: Archive, label: "Archive" },
                 { icon: AlertCircle, label: "Spam" },
                 { icon: Trash2, label: "Delete" },
+                { icon: Pin, label: "Pin" },
               ].map((action) => (
                 <button
                   key={action.label}
