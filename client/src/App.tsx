@@ -22,7 +22,7 @@ function Router() {
   // make sure to consider if you need authentication for certain routes
   return (
     <Switch>
-      <Route path={"/"} component={EmailApp} />
+      <Route path={"/"} component={ClaudeRefinedDemo} />
       <Route path={"/premium-demo"} component={PremiumDemo} />
       <Route path={"/claude-demo"} component={ClaudeRefinedDemo} />
       <Route path={"/dior-demo"} component={DiorRefinedDemo} />
