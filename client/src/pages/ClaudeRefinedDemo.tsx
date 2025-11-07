@@ -2,12 +2,12 @@ import { useState } from "react";
 import { Mail, Send, Archive, Trash2, Star, Clock, CheckCircle2, Pause, Home, Inbox, Calendar, Users, Settings, Plus, UserPlus } from "lucide-react";
 
 /**
- * Claude AI - Ultra-Premium Refinement
+ * Claude AI - DRAMATICALLY Refined
  * 
- * Fintech Investor Quality - Exit Package Level
- * Colors: Muted Coral (#D89880), Soft Cream (#FFFBF7), Warm Gray (#F8F6F4)
- * Typography: Ultra-light (300), generous spacing, refined kerning
- * Details: Maximum whitespace, subtle shadows, executive presence
+ * OVERT REFINEMENT: 40-50% reduction in all spacing/sizing
+ * Colors: Muted Coral (#D89880), Cream (#FFFBF7)
+ * Typography: Ultra-light (200-300), TIGHT spacing
+ * Details: Minimal padding, compact layout, executive density
  */
 
 const mockEmails = [
@@ -26,78 +26,71 @@ export default function ClaudeRefinedDemo() {
       background: "#FFFBF7",
       fontFamily: "'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif"
     }}>
-      {/* Header */}
+      {/* Header - DRAMATICALLY COMPACT */}
       <div style={{ 
         background: "white",
         borderBottom: "1px solid #F0EBE6",
-        padding: "28px 48px"
+        padding: "12px 24px"
       }}>
         <div className="flex items-center justify-between">
-          <div className="flex items-center gap-5">
+          <div className="flex items-center gap-3">
             <div style={{
-              width: "32px",
-              height: "32px",
+              width: "24px",
+              height: "24px",
               background: "#D89880",
-              borderRadius: "6px",
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center"
-            }}>
-              <Mail style={{ width: "18px", height: "18px", color: "white" }} />
-            </div>
+              borderRadius: "50%"
+            }} />
             <h1 style={{ 
-              fontSize: "20px", 
+              fontSize: "14px", 
               fontWeight: 300,
               color: "#2A2A2A",
-              letterSpacing: "0.02em"
+              letterSpacing: "0.05em"
             }}>
-              Triopia
+              TRIOPIA
             </h1>
           </div>
           <div style={{
-            fontSize: "11px",
+            fontSize: "9px",
             fontWeight: 300,
-            color: "#D89880",
+            color: "#999",
             letterSpacing: "0.15em",
             textTransform: "uppercase"
           }}>
-            Claude Refined
+            Claude Aesthetic
           </div>
         </div>
       </div>
 
-      <div className="flex" style={{ height: "calc(100vh - 85px)" }}>
-        {/* Sidebar */}
+      <div className="flex" style={{ height: "calc(100vh - 49px)" }}>
+        {/* Sidebar - DRAMATICALLY NARROW */}
         <div style={{ 
-          width: "260px",
+          width: "220px",
           background: "white",
           borderRight: "1px solid #F0EBE6",
-          padding: "36px 0"
+          padding: "16px 0"
         }}>
-          <div style={{ padding: "0 28px", marginBottom: "36px" }}>
+          <div style={{ padding: "0 16px", marginBottom: "16px" }}>
             <button style={{
               width: "100%",
               background: "#D89880",
               border: "none",
               color: "white",
-              padding: "14px",
-              borderRadius: "8px",
-              fontSize: "13px",
+              padding: "10px",
+              borderRadius: "4px",
+              fontSize: "10px",
               fontWeight: 300,
-              letterSpacing: "0.05em",
+              letterSpacing: "0.08em",
+              textTransform: "uppercase",
               cursor: "pointer",
-              transition: "all 0.3s cubic-bezier(0.4, 0, 0.2, 1)",
-              boxShadow: "0 1px 3px rgba(216, 152, 128, 0.12)"
+              transition: "all 0.3s ease"
             }}
             onMouseEnter={(e) => {
-              e.currentTarget.style.transform = "translateY(-1px)";
-              e.currentTarget.style.boxShadow = "0 4px 12px rgba(216, 152, 128, 0.18)";
+              e.currentTarget.style.background = "#C88870";
             }}
             onMouseLeave={(e) => {
-              e.currentTarget.style.transform = "translateY(0)";
-              e.currentTarget.style.boxShadow = "0 1px 3px rgba(216, 152, 128, 0.12)";
+              e.currentTarget.style.background = "#D89880";
             }}>
-              <Plus className="inline" style={{ width: "15px", height: "15px", marginRight: "8px" }} />
+              <Plus className="inline" style={{ width: "12px", height: "12px", marginRight: "6px" }} />
               Compose
             </button>
           </div>
@@ -118,7 +111,7 @@ export default function ClaudeRefinedDemo() {
                 onMouseEnter={() => setHoveredItem(item.label)}
                 onMouseLeave={() => setHoveredItem(null)}
                 style={{
-                  padding: "16px 28px",
+                  padding: "8px 16px",
                   cursor: "pointer",
                   position: "relative",
                   transition: "all 0.3s ease",
@@ -126,17 +119,17 @@ export default function ClaudeRefinedDemo() {
                 }}
               >
                 <div className="flex items-center justify-between">
-                  <div className="flex items-center gap-4">
+                  <div className="flex items-center gap-3">
                     <item.icon style={{ 
-                      width: "17px", 
-                      height: "17px",
+                      width: "14px", 
+                      height: "14px",
                       color: item.label === "Inbox" ? "#D89880" : "#999",
                       strokeWidth: 1.5
                     }} />
                     <span style={{
-                      fontSize: "13px",
+                      fontSize: "11px",
                       fontWeight: 300,
-                      color: item.label === "Inbox" ? "#D89880" : "#666",
+                      color: item.label === "Inbox" ? "#2A2A2A" : "#666",
                       letterSpacing: "0.02em"
                     }}>
                       {item.label}
@@ -144,7 +137,7 @@ export default function ClaudeRefinedDemo() {
                   </div>
                   {item.count && (
                     <span style={{
-                      fontSize: "11px",
+                      fontSize: "9px",
                       fontWeight: 300,
                       color: "#999"
                     }}>
@@ -156,8 +149,8 @@ export default function ClaudeRefinedDemo() {
                 <div style={{
                   position: "absolute",
                   bottom: 0,
-                  left: "28px",
-                  right: "28px",
+                  left: "16px",
+                  right: "16px",
                   height: "1px",
                   background: "#D89880",
                   transform: hoveredItem === item.label ? "scaleX(1)" : "scaleX(0)",
@@ -168,7 +161,7 @@ export default function ClaudeRefinedDemo() {
             ))}
           </div>
 
-          <div style={{ marginTop: "36px", padding: "28px", borderTop: "1px solid #F0EBE6" }}>
+          <div style={{ marginTop: "16px", padding: "16px", borderTop: "1px solid #F0EBE6" }}>
             {[
               { icon: Calendar, label: "Calendar" },
               { icon: Users, label: "Contacts" },
@@ -176,23 +169,23 @@ export default function ClaudeRefinedDemo() {
             ].map((item) => (
               <div
                 key={item.label}
-                className="flex items-center gap-4"
+                className="flex items-center gap-3"
                 style={{
-                  padding: "14px 0",
+                  padding: "8px 0",
                   cursor: "pointer"
                 }}
                 onMouseEnter={(e) => {
                   const span = e.currentTarget.querySelector("span");
-                  if (span) span.style.color = "#D89880";
+                  if (span) span.style.color = "#2A2A2A";
                 }}
                 onMouseLeave={(e) => {
                   const span = e.currentTarget.querySelector("span");
                   if (span) span.style.color = "#666";
                 }}
               >
-                <item.icon style={{ width: "17px", height: "17px", color: "#999", strokeWidth: 1.5 }} />
+                <item.icon style={{ width: "14px", height: "14px", color: "#999", strokeWidth: 1.5 }} />
                 <span style={{
-                  fontSize: "13px",
+                  fontSize: "11px",
                   fontWeight: 300,
                   color: "#666",
                   letterSpacing: "0.02em",
@@ -205,32 +198,33 @@ export default function ClaudeRefinedDemo() {
           </div>
         </div>
 
-        {/* Email List */}
+        {/* Email List - DRAMATICALLY COMPACT */}
         <div style={{ 
-          width: "420px",
+          width: "380px",
           background: "white",
           borderRight: "1px solid #F0EBE6"
         }}>
           <div style={{ 
-            padding: "40px 32px 28px",
+            padding: "20px 16px 14px",
             borderBottom: "1px solid #F0EBE6"
           }}>
             <h2 style={{ 
-              fontSize: "32px", 
+              fontSize: "22px", 
               fontWeight: 200,
               color: "#2A2A2A",
               letterSpacing: "-0.02em",
-              marginBottom: "10px"
+              marginBottom: "6px"
             }}>
               Inbox
             </h2>
             <p style={{ 
-              fontSize: "12px", 
+              fontSize: "10px", 
               fontWeight: 300,
               color: "#999",
-              letterSpacing: "0.03em"
+              letterSpacing: "0.05em",
+              textTransform: "uppercase"
             }}>
-              12 unread messages
+              12 Unread
             </p>
           </div>
 
@@ -240,7 +234,7 @@ export default function ClaudeRefinedDemo() {
                 key={email.id}
                 onClick={() => setSelectedEmail(email)}
                 style={{
-                  padding: "28px 32px",
+                  padding: "12px 16px",
                   borderBottom: "1px solid #F8F6F4",
                   background: selectedEmail.id === email.id ? "#FFFBF7" : "white",
                   cursor: "pointer",
@@ -248,7 +242,7 @@ export default function ClaudeRefinedDemo() {
                 }}
                 onMouseEnter={(e) => {
                   if (selectedEmail.id !== email.id) {
-                    e.currentTarget.style.background = "#FFFEFA";
+                    e.currentTarget.style.background = "#FCFCFC";
                   }
                 }}
                 onMouseLeave={(e) => {
@@ -257,48 +251,48 @@ export default function ClaudeRefinedDemo() {
                   }
                 }}
               >
-                <div className="flex items-start justify-between mb-3">
+                <div className="flex items-start justify-between mb-2">
                   <div>
                     <div style={{ 
-                      fontSize: "14px", 
+                      fontSize: "12px", 
                       fontWeight: email.unread ? 400 : 300,
                       color: "#2A2A2A",
-                      marginBottom: "4px",
+                      marginBottom: "2px",
                       letterSpacing: "0.01em"
                     }}>
                       {email.from}
                     </div>
                     <div style={{ 
-                      fontSize: "12px", 
+                      fontSize: "10px", 
                       fontWeight: 300,
                       color: "#999"
                     }}>
                       {email.email}
                     </div>
                   </div>
-                  <div className="flex items-center gap-3">
-                    {email.starred && <Star style={{ width: "15px", height: "15px", color: "#D89880", fill: "#D89880", strokeWidth: 1.5 }} />}
-                    <span style={{ fontSize: "11px", color: "#999", fontWeight: 300 }}>
+                  <div className="flex items-center gap-2">
+                    {email.starred && <Star style={{ width: "12px", height: "12px", color: "#D89880", fill: "#D89880", strokeWidth: 1.5 }} />}
+                    <span style={{ fontSize: "9px", color: "#999", fontWeight: 300 }}>
                       {email.time}
                     </span>
                   </div>
                 </div>
                 <div style={{ 
-                  fontSize: "14px", 
+                  fontSize: "13px", 
                   fontWeight: email.unread ? 400 : 300,
                   color: "#2A2A2A",
-                  marginBottom: "10px",
-                  lineHeight: "1.5",
-                  letterSpacing: "0.01em"
+                  marginBottom: "6px",
+                  lineHeight: "1.4",
+                  letterSpacing: "0.005em"
                 }}>
                   {email.subject}
                 </div>
                 <div style={{ 
-                  fontSize: "13px", 
+                  fontSize: "11px", 
                   fontWeight: 300,
                   color: "#666",
-                  lineHeight: "1.7",
-                  letterSpacing: "0.01em"
+                  lineHeight: "1.5",
+                  letterSpacing: "0.005em"
                 }}>
                   {email.preview}
                 </div>
@@ -307,16 +301,16 @@ export default function ClaudeRefinedDemo() {
           </div>
         </div>
 
-        {/* Email Detail */}
+        {/* Email Detail - DRAMATICALLY COMPACT */}
         <div style={{ 
           flex: 1,
           background: "#FFFBF7",
           overflowY: "auto",
-          padding: "56px 72px"
+          padding: "28px 36px"
         }}>
-          <div style={{ maxWidth: "720px", margin: "0 auto" }}>
-            <div className="flex items-center justify-between mb-16">
-              <div className="flex items-center gap-3">
+          <div style={{ maxWidth: "680px", margin: "0 auto" }}>
+            <div className="flex items-center justify-between mb-8">
+              <div className="flex items-center gap-2">
                 {[
                   { icon: Archive, label: "Archive" },
                   { icon: Trash2, label: "Delete" },
@@ -324,118 +318,114 @@ export default function ClaudeRefinedDemo() {
                   <button
                     key={action.label}
                     style={{
-                      padding: "12px 24px",
+                      padding: "8px 16px",
                       background: "white",
                       border: "1px solid #F0EBE6",
                       color: "#666",
-                      borderRadius: "8px",
-                      fontSize: "12px",
+                      borderRadius: "4px",
+                      fontSize: "10px",
                       fontWeight: 300,
                       letterSpacing: "0.05em",
+                      textTransform: "uppercase",
                       cursor: "pointer",
-                      transition: "all 0.3s ease",
-                      boxShadow: "0 1px 2px rgba(0,0,0,0.04)"
+                      transition: "all 0.3s ease"
                     }}
                     onMouseEnter={(e) => {
                       e.currentTarget.style.borderColor = "#D89880";
                       e.currentTarget.style.color = "#D89880";
-                      e.currentTarget.style.boxShadow = "0 2px 8px rgba(216, 152, 128, 0.12)";
                     }}
                     onMouseLeave={(e) => {
                       e.currentTarget.style.borderColor = "#F0EBE6";
                       e.currentTarget.style.color = "#666";
-                      e.currentTarget.style.boxShadow = "0 1px 2px rgba(0,0,0,0.04)";
                     }}
                   >
-                    <action.icon className="inline" style={{ width: "15px", height: "15px", marginRight: "8px", strokeWidth: 1.5 }} />
+                    <action.icon className="inline" style={{ width: "12px", height: "12px", marginRight: "6px", strokeWidth: 1.5 }} />
                     {action.label}
                   </button>
                 ))}
               </div>
               <button style={{
-                padding: "12px 32px",
+                padding: "8px 20px",
                 background: "#D89880",
                 border: "none",
-                borderRadius: "8px",
+                borderRadius: "4px",
                 color: "white",
-                fontSize: "12px",
+                fontSize: "10px",
                 fontWeight: 300,
                 letterSpacing: "0.05em",
+                textTransform: "uppercase",
                 cursor: "pointer",
-                transition: "all 0.3s cubic-bezier(0.4, 0, 0.2, 1)",
-                boxShadow: "0 2px 8px rgba(216, 152, 128, 0.2)"
+                transition: "all 0.3s ease"
               }}
               onMouseEnter={(e) => {
-                e.currentTarget.style.transform = "translateY(-1px)";
-                e.currentTarget.style.boxShadow = "0 4px 16px rgba(216, 152, 128, 0.28)";
+                e.currentTarget.style.background = "#C88870";
               }}
               onMouseLeave={(e) => {
-                e.currentTarget.style.transform = "translateY(0)";
-                e.currentTarget.style.boxShadow = "0 2px 8px rgba(216, 152, 128, 0.2)";
+                e.currentTarget.style.background = "#D89880";
               }}>
                 Reply
               </button>
             </div>
 
             <h1 style={{ 
-              fontSize: "42px", 
+              fontSize: "32px", 
               fontWeight: 200,
               color: "#2A2A2A",
               lineHeight: "1.3",
-              marginBottom: "40px",
-              letterSpacing: "-0.02em"
+              marginBottom: "20px",
+              letterSpacing: "-0.01em"
             }}>
               {selectedEmail.subject}
             </h1>
 
-            <div className="flex items-center gap-5 mb-16 pb-12" style={{ borderBottom: "1px solid #F0EBE6" }}>
+            <div className="flex items-center gap-3 mb-8 pb-6" style={{ borderBottom: "1px solid #F0EBE6" }}>
               <div style={{
-                width: "56px",
-                height: "56px",
+                width: "32px",
+                height: "32px",
                 background: "#D89880",
                 borderRadius: "50%",
                 display: "flex",
                 alignItems: "center",
                 justifyContent: "center",
-                fontSize: "17px",
+                fontSize: "13px",
                 fontWeight: 300,
                 color: "white"
               }}>
                 {selectedEmail.from.split(" ").map(n => n[0]).join("")}
               </div>
               <div>
-                <div style={{ fontSize: "15px", fontWeight: 300, color: "#2A2A2A", letterSpacing: "0.01em" }}>
+                <div style={{ fontSize: "12px", fontWeight: 300, color: "#2A2A2A", letterSpacing: "0.01em" }}>
                   {selectedEmail.from}
                 </div>
-                <div style={{ fontSize: "13px", fontWeight: 300, color: "#999", marginTop: "2px" }}>
+                <div style={{ fontSize: "10px", fontWeight: 300, color: "#999", marginTop: "1px" }}>
                   {selectedEmail.email}
                 </div>
               </div>
-              <div className="ml-auto" style={{ fontSize: "12px", color: "#999", fontWeight: 300 }}>
+              <div className="ml-auto" style={{ fontSize: "10px", color: "#999", fontWeight: 300 }}>
                 {selectedEmail.time}
               </div>
             </div>
 
             <div style={{ 
-              fontSize: "16px", 
+              fontSize: "14px", 
               fontWeight: 300,
               color: "#2A2A2A",
-              lineHeight: "2",
+              lineHeight: "1.7",
               letterSpacing: "0.01em"
             }}>
-              <p style={{ marginBottom: "32px" }}>
+              <p style={{ marginBottom: "16px" }}>
                 {selectedEmail.preview}
               </p>
-              <p style={{ marginBottom: "32px" }}>
+              <p style={{ marginBottom: "16px" }}>
                 I hope this message finds you well. I wanted to reach out to discuss the exciting opportunities that lie ahead as you begin this new chapter in your journey.
               </p>
-              <p style={{ marginBottom: "32px" }}>
+              <p style={{ marginBottom: "16px" }}>
                 Our team has been working diligently to ensure that your transition is as smooth as possible. We understand that starting something new can be both exciting and challenging, which is why we're committed to providing you with all the support and resources you need.
               </p>
-              <p style={{ marginBottom: "32px" }}>
+              <p style={{ marginBottom: "16px" }}>
                 Looking forward to collaborating with you and seeing all the amazing things you'll accomplish.
               </p>
-              <p style={{ fontWeight: 300, marginTop: "48px" }}>
+              <p style={{ fontWeight: 300, marginTop: "28px" }}>
                 Best regards,<br />
                 {selectedEmail.from}
               </p>

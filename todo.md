@@ -247,3 +247,11 @@
 - [ ] Refine Dior design - executive presence, softer palette
 - [ ] Refine Superhuman design - tone down brightness, add sophistication
 - [ ] Refine Editorial design - less loud, more refined luxury
+
+### Compact Refinement
+- [ ] DRAMATIC refinement - cut padding/spacing/fonts by 40-50%
+- [ ] Email list padding 18px → 8px
+- [ ] Sidebar width 260px → 220px
+- [ ] Font sizes reduced by 30-40%
+- [ ] Line heights 1.7 → 1.4
+- [ ] Avatar sizes 44px → 32px
