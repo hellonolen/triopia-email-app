@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef } from "react";
 import { trpc } from "@/lib/trpc";
-import { Mail, Send, Archive, Trash2, Star, Clock, CheckCircle2, Pause, Home, Inbox, Calendar, Users, Settings, Plus, UserPlus, Search, Zap, Check, Pencil, ChevronDown, ChevronRight, Pin, Info, FileText, HardDrive, BarChart3, Palette, AlertCircle, FilePen, Reply, Forward, Bot, User, Shield, Printer } from "lucide-react";
+import { Mail, Send, Archive, Trash2, Star, Clock, CheckCircle2, Pause, Home, Inbox, Calendar, Users, Settings, Plus, UserPlus, Search, Zap, Check, Pencil, ChevronDown, ChevronRight, Pin, Info, FileText, HardDrive, BarChart3, Palette, AlertCircle, FilePen, Reply, Forward, Bot, User, Shield, Printer, MessageSquare, ListFilter, Mic } from "lucide-react";
 
 /**
  * Claude AI - DRAMATICALLY Refined
@@ -1025,66 +1025,19 @@ export default function ClaudeRefinedDemo() {
             padding: "16px 36px",
             display: "flex",
             alignItems: "center",
-            gap: "16px",
+            justifyContent: "flex-end",
+            gap: "8px",
             background: "#FFFBF7"
           }}>
-            {/* Left side - Reply/Forward (only show in email mode) */}
-            {rightPanelMode === 'email' && (
-              <div className="flex items-center gap-3" style={{ marginRight: "auto" }}>
-                <button
-                  onClick={() => handleReply(selectedEmail.id)}
-                  style={{
-                    padding: 0,
-                    background: "none",
-                    border: "none",
-                    cursor: "pointer",
-                    transition: "all 0.2s ease"
-                  }}
-                  onMouseEnter={(e) => {
-                    const icon = e.currentTarget.querySelector('svg') as any;
-                    if (icon) icon.style.color = "#D89880";
-                  }}
-                  onMouseLeave={(e) => {
-                    const icon = e.currentTarget.querySelector('svg') as any;
-                    if (icon) icon.style.color = "#999";
-                  }}
-                >
-                  <Reply style={{ width: "18px", height: "18px", color: "#999", strokeWidth: 1.5, transition: "color 0.2s ease" }} />
-                </button>
-                <button
-                  onClick={() => handleForward(selectedEmail.id)}
-                  style={{
-                    padding: 0,
-                    background: "none",
-                    border: "none",
-                    cursor: "pointer",
-                    transition: "all 0.2s ease"
-                  }}
-                  onMouseEnter={(e) => {
-                    const icon = e.currentTarget.querySelector('svg') as any;
-                    if (icon) icon.style.color = "#D89880";
-                  }}
-                  onMouseLeave={(e) => {
-                    const icon = e.currentTarget.querySelector('svg') as any;
-                    if (icon) icon.style.color = "#999";
-                  }}
-                >
-                  <Forward style={{ width: "18px", height: "18px", color: "#999", strokeWidth: 1.5, transition: "color 0.2s ease" }} />
-                </button>
-              </div>
-            )}
-            
-            {/* Right side - Mode tabs */}
-            <div className="flex items-center gap-4" style={{ marginLeft: rightPanelMode === 'email' ? 0 : "auto" }}>
+            {/* Mode tabs - No background shading */}
+            <div className="flex items-center gap-2">
               <button
                 onClick={() => setRightPanelMode('compose')}
                 style={{
-                  padding: "8px",
-                  background: rightPanelMode === 'compose' ? "#FFFBF7" : "transparent",
+                  padding: 0,
+                  background: "none",
                   border: "none",
-                  borderRadius: "6px",
-                  cursor: "pointer",
-                  transition: "all 0.2s ease"
+                  cursor: "pointer"
                 }}
               >
                 <Mail style={{ 
@@ -1098,12 +1051,10 @@ export default function ClaudeRefinedDemo() {
               <button
                 onClick={() => setRightPanelMode('ai')}
                 style={{
-                  padding: "8px",
-                  background: rightPanelMode === 'ai' ? "#FFFBF7" : "transparent",
+                  padding: 0,
+                  background: "none",
                   border: "none",
-                  borderRadius: "6px",
-                  cursor: "pointer",
-                  transition: "all 0.2s ease"
+                  cursor: "pointer"
                 }}
               >
                 <Bot style={{ 
@@ -1117,12 +1068,10 @@ export default function ClaudeRefinedDemo() {
               <button
                 onClick={() => setRightPanelMode('notes')}
                 style={{
-                  padding: "8px",
-                  background: rightPanelMode === 'notes' ? "#FFFBF7" : "transparent",
+                  padding: 0,
+                  background: "none",
                   border: "none",
-                  borderRadius: "6px",
-                  cursor: "pointer",
-                  transition: "all 0.2s ease"
+                  cursor: "pointer"
                 }}
               >
                 <FileText style={{ 
@@ -1132,6 +1081,55 @@ export default function ClaudeRefinedDemo() {
                   strokeWidth: 1.5,
                   transition: "color 0.2s ease"
                 }} />
+              </button>
+            </div>
+            
+            {/* Font Size Controls (A- A A+) */}
+            <div className="flex items-center gap-2" style={{ marginLeft: "16px" }}>
+              <button
+                onClick={() => setEmailFontSize('small')}
+                style={{
+                  padding: 0,
+                  background: "none",
+                  border: "none",
+                  cursor: "pointer",
+                  fontSize: "12px",
+                  fontWeight: 300,
+                  color: emailFontSize === 'small' ? "#D89880" : "#999",
+                  transition: "color 0.2s ease"
+                }}
+              >
+                A-
+              </button>
+              <button
+                onClick={() => setEmailFontSize('medium')}
+                style={{
+                  padding: 0,
+                  background: "none",
+                  border: "none",
+                  cursor: "pointer",
+                  fontSize: "14px",
+                  fontWeight: 300,
+                  color: emailFontSize === 'medium' ? "#D89880" : "#999",
+                  transition: "color 0.2s ease"
+                }}
+              >
+                A
+              </button>
+              <button
+                onClick={() => setEmailFontSize('large')}
+                style={{
+                  padding: 0,
+                  background: "none",
+                  border: "none",
+                  cursor: "pointer",
+                  fontSize: "16px",
+                  fontWeight: 300,
+                  color: emailFontSize === 'large' ? "#D89880" : "#999",
+                  transition: "color 0.2s ease"
+                }}
+              >
+                A+
               </button>
             </div>
           </div>
@@ -1421,71 +1419,100 @@ export default function ClaudeRefinedDemo() {
 
             {/* Compose Mode */}
             {rightPanelMode === 'compose' && (
-              <div>
+              <div style={{ display: "flex", flexDirection: "column", height: "100%" }}>
                 <h2 style={{ fontSize: "18px", fontWeight: 300, color: "#2A2A2A", marginBottom: "20px" }}>New Message</h2>
-                <div style={{ display: "flex", flexDirection: "column", gap: "16px" }}>
+                
+                {/* To field */}
+                <div style={{ borderBottom: "1px solid #F0EBE6", paddingBottom: "8px", marginBottom: "8px" }}>
                   <input
                     type="text"
-                    placeholder="To"
+                    placeholder="Recipients"
                     style={{
-                      padding: "12px",
+                      width: "100%",
+                      padding: "8px 0",
                       fontSize: "13px",
-                      border: "1px solid #F0EBE6",
-                      borderRadius: "4px",
-                      background: "white"
+                      fontWeight: 300,
+                      border: "none",
+                      outline: "none",
+                      background: "transparent",
+                      color: "#2A2A2A"
                     }}
                   />
+                </div>
+                
+                {/* Subject field */}
+                <div style={{ borderBottom: "1px solid #F0EBE6", paddingBottom: "8px", marginBottom: "16px" }}>
                   <input
                     type="text"
                     placeholder="Subject"
                     style={{
-                      padding: "12px",
+                      width: "100%",
+                      padding: "8px 0",
                       fontSize: "13px",
-                      border: "1px solid #F0EBE6",
-                      borderRadius: "4px",
-                      background: "white"
+                      fontWeight: 300,
+                      border: "none",
+                      outline: "none",
+                      background: "transparent",
+                      color: "#2A2A2A"
                     }}
                   />
-                  <textarea
-                    placeholder="Compose your message..."
+                </div>
+                
+                {/* Message body */}
+                <textarea
+                  placeholder="Type your message..."
+                  style={{
+                    flex: 1,
+                    padding: "0",
+                    fontSize: "13px",
+                    fontWeight: 300,
+                    border: "none",
+                    outline: "none",
+                    background: "transparent",
+                    color: "#2A2A2A",
+                    resize: "none",
+                    fontFamily: "inherit",
+                    minHeight: "300px"
+                  }}
+                />
+                
+                {/* Action buttons */}
+                <div style={{ display: "flex", gap: "12px", marginTop: "20px", paddingTop: "20px", borderTop: "1px solid #F0EBE6" }}>
+                  <button
                     style={{
-                      padding: "12px",
-                      fontSize: "13px",
-                      border: "1px solid #F0EBE6",
+                      padding: "10px 24px",
+                      background: "#D89880",
+                      border: "none",
                       borderRadius: "4px",
-                      minHeight: "300px",
-                      background: "white",
-                      resize: "vertical"
+                      color: "white",
+                      fontSize: "13px",
+                      fontWeight: 300,
+                      cursor: "pointer",
+                      transition: "background 0.2s ease"
                     }}
-                  />
-                  <div style={{ display: "flex", gap: "8px", justifyContent: "flex-end" }}>
-                    <button
-                      onClick={() => setRightPanelMode('email')}
-                      style={{
-                        padding: "10px 20px",
-                        background: "transparent",
-                        border: "1px solid #F0EBE6",
-                        borderRadius: "4px",
-                        fontSize: "12px",
-                        cursor: "pointer"
-                      }}
-                    >
-                      Cancel
-                    </button>
-                    <button
-                      style={{
-                        padding: "10px 20px",
-                        background: "#D89880",
-                        border: "none",
-                        borderRadius: "4px",
-                        color: "white",
-                        fontSize: "12px",
-                        cursor: "pointer"
-                      }}
-                    >
-                      Send
-                    </button>
-                  </div>
+                    onMouseEnter={(e) => e.currentTarget.style.background = "#C88770"}
+                    onMouseLeave={(e) => e.currentTarget.style.background = "#D89880"}
+                  >
+                    Send
+                  </button>
+                  <button
+                    onClick={() => setRightPanelMode('email')}
+                    style={{
+                      padding: "10px 24px",
+                      background: "transparent",
+                      border: "none",
+                      borderRadius: "4px",
+                      color: "#999",
+                      fontSize: "13px",
+                      fontWeight: 300,
+                      cursor: "pointer",
+                      transition: "color 0.2s ease"
+                    }}
+                    onMouseEnter={(e) => e.currentTarget.style.color = "#D89880"}
+                    onMouseLeave={(e) => e.currentTarget.style.color = "#999"}
+                  >
+                    Discard
+                  </button>
                 </div>
               </div>
             )}
@@ -1494,39 +1521,102 @@ export default function ClaudeRefinedDemo() {
             {rightPanelMode === 'ai' && (
               <div>
                 <h2 style={{ fontSize: "18px", fontWeight: 300, color: "#2A2A2A", marginBottom: "20px" }}>AI Assistant</h2>
-                <div style={{ display: "flex", gap: "8px", marginBottom: "20px" }}>
-                  {['chat', 'triage', 'quick-reply', 'voice'].map((tab) => (
-                    <button
-                      key={tab}
-                      onClick={() => setActiveAITab(tab as any)}
-                      style={{
-                        padding: "8px 16px",
-                        background: activeAITab === tab ? "#FFFBF7" : "transparent",
-                        border: activeAITab === tab ? "1px solid #D89880" : "1px solid #F0EBE6",
-                        borderRadius: "4px",
-                        fontSize: "11px",
-                        cursor: "pointer",
-                        color: activeAITab === tab ? "#D89880" : "#666",
-                        textTransform: "capitalize"
-                      }}
-                    >
-                      {tab.replace('-', ' ')}
-                    </button>
-                  ))}
+                <div style={{ display: "flex", gap: "16px", marginBottom: "20px" }}>
+                  <button
+                    onClick={() => setActiveAITab('chat')}
+                    style={{
+                      padding: 0,
+                      background: "none",
+                      border: "none",
+                      cursor: "pointer"
+                    }}
+                  >
+                    <MessageSquare style={{ 
+                      width: "18px", 
+                      height: "18px", 
+                      color: activeAITab === 'chat' ? "#D89880" : "#999", 
+                      strokeWidth: 1.5,
+                      transition: "color 0.2s ease"
+                    }} />
+                  </button>
+                  <button
+                    onClick={() => setActiveAITab('triage')}
+                    style={{
+                      padding: 0,
+                      background: "none",
+                      border: "none",
+                      cursor: "pointer"
+                    }}
+                  >
+                    <ListFilter style={{ 
+                      width: "18px", 
+                      height: "18px", 
+                      color: activeAITab === 'triage' ? "#D89880" : "#999", 
+                      strokeWidth: 1.5,
+                      transition: "color 0.2s ease"
+                    }} />
+                  </button>
+                  <button
+                    onClick={() => setActiveAITab('quick-reply')}
+                    style={{
+                      padding: 0,
+                      background: "none",
+                      border: "none",
+                      cursor: "pointer"
+                    }}
+                  >
+                    <Zap style={{ 
+                      width: "18px", 
+                      height: "18px", 
+                      color: activeAITab === 'quick-reply' ? "#D89880" : "#999", 
+                      strokeWidth: 1.5,
+                      transition: "color 0.2s ease"
+                    }} />
+                  </button>
+                  <button
+                    onClick={() => setActiveAITab('voice')}
+                    style={{
+                      padding: 0,
+                      background: "none",
+                      border: "none",
+                      cursor: "pointer"
+                    }}
+                  >
+                    <Mic style={{ 
+                      width: "18px", 
+                      height: "18px", 
+                      color: activeAITab === 'voice' ? "#D89880" : "#999", 
+                      strokeWidth: 1.5,
+                      transition: "color 0.2s ease"
+                    }} />
+                  </button>
                 </div>
                 <div style={{ padding: "20px", background: "white", border: "1px solid #F0EBE6", borderRadius: "8px", minHeight: "400px" }}>
-                  <p style={{ fontSize: "12px", color: "#666" }}>AI {activeAITab} interface</p>
+                  <p style={{ fontSize: "14px", fontWeight: 300, color: "#2A2A2A" }}>AI {activeAITab.replace('-', ' ')} interface</p>
                 </div>
               </div>
             )}
 
             {/* Notes Mode */}
             {rightPanelMode === 'notes' && (
-              <div>
+              <div style={{ minHeight: "500px" }}>
                 <h2 style={{ fontSize: "18px", fontWeight: 300, color: "#2A2A2A", marginBottom: "20px" }}>Notes</h2>
-                <div style={{ padding: "20px", background: "white", border: "1px solid #F0EBE6", borderRadius: "8px", minHeight: "400px" }}>
-                  <p style={{ fontSize: "12px", color: "#666" }}>Notes interface - Coming soon</p>
-                </div>
+                <textarea
+                  placeholder="Start typing your notes..."
+                  style={{
+                    width: "100%",
+                    minHeight: "400px",
+                    padding: "16px",
+                    border: "1px solid #F0EBE6",
+                    borderRadius: "8px",
+                    fontSize: "14px",
+                    fontWeight: 300,
+                    color: "#2A2A2A",
+                    background: "white",
+                    resize: "vertical",
+                    fontFamily: "inherit"
+                  }}
+                />
               </div>
             )}
           </div>
