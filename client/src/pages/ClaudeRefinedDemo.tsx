@@ -1,33 +1,104 @@
-import { useState } from "react";
-import { Mail, Send, Archive, Trash2, Star, Clock, CheckCircle2, Pause, Home, Inbox, Calendar, Users, Settings, Plus, UserPlus } from "lucide-react";
+import { useState } from 'react';
+import { Star, Archive, Trash2, Send, Inbox, Mail, Clock, AlertCircle, CheckCircle2, Pause, Users, Calendar, Settings, Home, UserPlus } from 'lucide-react';
 
 /**
- * Claude AI - DRAMATICALLY Refined
- * 
- * OVERT REFINEMENT: 40-50% reduction in all spacing/sizing
- * Colors: Muted Coral (#D89880), Cream (#FFFBF7)
- * Typography: Ultra-light (200-300), TIGHT spacing
- * Details: Minimal padding, compact layout, executive density
+ * Claude AI Aesthetic - Complete Interface
+ * Colors: Warm Orange (#E07B53), Coral (#F4A582), Cream (#FFF8F0)
+ * Typography: Pure black text, light weights
+ * All original EmailApp features with Claude aesthetic
  */
 
-const mockEmails = [
-  { id: 1, from: "Sarah Johnson", email: "sarah@startup.com", subject: "Welcome to your new chapter", preview: "Excited to have you on board! Let's schedule a kickoff call...", time: "Nov 6, 2:30 PM", unread: true, starred: false },
-  { id: 2, from: "David Chen", email: "david@company.com", subject: "Q4 Marketing Strategy Review", preview: "I wanted to share the preliminary results from our Q4 marketing campaign...", time: "Nov 6, 1:15 PM", unread: true, starred: true },
-  { id: 3, from: "Emily Rodriguez", email: "emily@agency.co", subject: "Project Update", preview: "Let me know if this works for you. Looking forward to our meeting...", time: "Nov 6, 12:48 PM", unread: false, starred: false },
+interface Email {
+  id: number;
+  sender: string;
+  senderEmail: string;
+  subject: string;
+  preview: string;
+  body: string;
+  date: string;
+  isStarred: boolean;
+  isRead: boolean;
+  isPaused?: boolean;
+  isComplete?: boolean;
+}
+
+const mockEmails: Email[] = [
+  { 
+    id: 1, 
+    sender: "Sarah Johnson", 
+    senderEmail: "sarah@startup.com", 
+    subject: "Welcome to your new chapter", 
+    preview: "Excited to have you on board! Let's schedule a kickoff call...", 
+    date: "Nov 6, 2:30 PM", 
+    isStarred: true, 
+    isRead: false,
+    body: "Hi! Welcome to your new journey. Let's connect soon to discuss your goals and how we can help you succeed in this new chapter."
+  },
+  { 
+    id: 2, 
+    sender: "David Chen", 
+    senderEmail: "david@company.com", 
+    subject: "Q4 Marketing Strategy Review", 
+    preview: "I wanted to share the preliminary results from our Q4 marketing campaign...", 
+    date: "Nov 6, 1:15 PM", 
+    isStarred: true, 
+    isRead: true,
+    body: "Here are the Q4 results. Overall performance exceeded expectations with a 23% increase in engagement."
+  },
+  { 
+    id: 3, 
+    sender: "Emily Rodriguez", 
+    senderEmail: "emily@agency.co", 
+    subject: "Project Update", 
+    preview: "Let me know if this works for you. Looking forward to our meeting...", 
+    date: "Nov 6, 12:48 PM", 
+    isStarred: false, 
+    isRead: false,
+    body: "Quick update on the project timeline. We're on track for the November 15th deadline."
+  },
 ];
 
 export default function ClaudeRefinedDemo() {
-  const [selectedEmail, setSelectedEmail] = useState(mockEmails[0]);
-  const [hoveredItem, setHoveredItem] = useState<string | null>(null);
+  const [selectedFolder, setSelectedFolder] = useState('inbox');
+  const [selectedEmail, setSelectedEmail] = useState<Email>(mockEmails[0]);
+  const [emails, setEmails] = useState(mockEmails);
+
+  const handleStar = (id: number) => {
+    setEmails(emails.map(e => e.id === id ? { ...e, isStarred: !e.isStarred } : e));
+  };
+
+  const handlePause = (id: number) => {
+    setEmails(emails.map(e => e.id === id ? { ...e, isPaused: !e.isPaused } : e));
+  };
+
+  const handleComplete = (id: number) => {
+    setEmails(emails.map(e => e.id === id ? { ...e, isComplete: !e.isComplete } : e));
+  };
+
+  const folders = [
+    { id: 'home', icon: Home, label: 'Home', count: 0 },
+    { id: 'new-connections', icon: UserPlus, label: 'New Connections', count: 3 },
+    { id: 'paused', icon: Pause, label: 'Paused', count: 5 },
+    { id: 'priority', icon: AlertCircle, label: 'Priority', count: 1 },
+    { id: 'inbox', icon: Inbox, label: 'Inbox', count: 18 },
+    { id: 'sent', icon: Send, label: 'Sent', count: 0 },
+    { id: 'contacts', icon: Users, label: 'Contacts', count: 0 },
+    { id: 'calendar', icon: Calendar, label: 'Calendar', count: 0 },
+    { id: 'starred', icon: Star, label: 'Starred', count: 1 },
+    { id: 'archive', icon: Archive, label: 'Archive', count: 0 },
+    { id: 'trash', icon: Trash2, label: 'Trash', count: 0 },
+  ];
 
   return (
     <div style={{ 
-      minHeight: "100vh",
-      background: "#FFFBF7",
-      fontFamily: "'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif"
+      height: "100vh", 
+      display: "flex", 
+      flexDirection: "column",
+      background: "#FFF8F0",
+      fontFamily: "-apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif"
     }}>
-      {/* Header - DRAMATICALLY COMPACT */}
-      <div style={{ 
+      {/* Header */}
+      <div style={{
         background: "white",
         borderBottom: "1px solid #F0EBE6",
         padding: "12px 24px"
@@ -36,7 +107,7 @@ export default function ClaudeRefinedDemo() {
           <h1 style={{ 
             fontSize: "14px", 
             fontWeight: 300,
-            color: "#2A2A2A",
+            color: "#000000",
             letterSpacing: "0.05em"
           }}>
             TRIOPIA
@@ -44,133 +115,66 @@ export default function ClaudeRefinedDemo() {
           <div style={{
             fontSize: "9px",
             fontWeight: 300,
-            color: "#999",
-            letterSpacing: "0.15em",
-            textTransform: "uppercase"
+            color: "#000000",
+            letterSpacing: "0.02em"
           }}>
-            Claude Aesthetic
+            New Chapter, New Email
           </div>
         </div>
       </div>
 
-      <div className="flex" style={{ height: "calc(100vh - 49px)" }}>
-        {/* Sidebar - DRAMATICALLY NARROW */}
+      <div className="flex" style={{ flex: 1, overflow: "hidden" }}>
+        {/* Sidebar */}
         <div style={{ 
           width: "220px",
           background: "white",
           borderRight: "1px solid #F0EBE6",
-          padding: "16px 0"
+          padding: "16px 0",
+          display: "flex",
+          flexDirection: "column"
         }}>
-
-
-          <div>
-            {[
-              { icon: Home, label: "Fresh Start", count: null },
-              { icon: Inbox, label: "Inbox", count: 12 },
-              { icon: Star, label: "Starred", count: 3 },
-              { icon: UserPlus, label: "New Connections", count: 5 },
-              { icon: Pause, label: "Paused", count: 2 },
-              { icon: CheckCircle2, label: "Complete", count: 8 },
-              { icon: Send, label: "Sent", count: null },
-              { icon: Archive, label: "Archive", count: null },
-            ].map((item) => (
+          <div style={{ flex: 1, overflowY: "auto" }}>
+            {folders.map((folder) => (
               <div
-                key={item.label}
-                onMouseEnter={() => setHoveredItem(item.label)}
-                onMouseLeave={() => setHoveredItem(null)}
+                key={folder.id}
+                onClick={() => setSelectedFolder(folder.id)}
+                className="flex items-center justify-between"
                 style={{
                   padding: "8px 16px",
                   cursor: "pointer",
-                  position: "relative",
-                  transition: "all 0.3s ease",
-                  background: item.label === "Inbox" ? "#FFFBF7" : "transparent"
+                  background: selectedFolder === folder.id ? "#FFF8F0" : "transparent",
+                  borderLeft: selectedFolder === folder.id ? "2px solid #E07B53" : "2px solid transparent"
                 }}
               >
-                <div className="flex items-center justify-between">
-                  <div className="flex items-center gap-3">
-                    <item.icon style={{ 
-                      width: "14px", 
-                      height: "14px",
-                      color: item.label === "Inbox" ? "#D89880" : "#999",
-                      strokeWidth: 1.5
-                    }} />
-                    <span style={{
-                      fontSize: "11px",
-                      fontWeight: 300,
-                      color: item.label === "Inbox" ? "#2A2A2A" : "#666",
-                      letterSpacing: "0.02em"
-                    }}>
-                      {item.label}
-                    </span>
-                  </div>
-                  {item.count && (
-                    <span style={{
-                      fontSize: "9px",
-                      fontWeight: 300,
-                      color: "#999"
-                    }}>
-                      {item.count}
-                    </span>
-                  )}
+                <div className="flex items-center gap-2">
+                  <folder.icon style={{ width: "14px", height: "14px", color: "#000000", strokeWidth: 1.5 }} />
+                  <span style={{
+                    fontSize: "11px",
+                    fontWeight: 300,
+                    color: "#000000",
+                    letterSpacing: "0.02em"
+                  }}>
+                    {folder.label}
+                  </span>
                 </div>
-                {/* Animated underline */}
-                <div style={{
-                  position: "absolute",
-                  bottom: 0,
-                  left: "16px",
-                  right: "16px",
-                  height: "1px",
-                  background: "#D89880",
-                  transform: hoveredItem === item.label ? "scaleX(1)" : "scaleX(0)",
-                  transformOrigin: "left",
-                  transition: "transform 0.4s cubic-bezier(0.4, 0, 0.2, 1)"
-                }} />
+                {folder.count > 0 && (
+                  <span style={{
+                    fontSize: "10px",
+                    fontWeight: 300,
+                    color: "#666"
+                  }}>
+                    {folder.count}
+                  </span>
+                )}
               </div>
             ))}
           </div>
 
           <div style={{ marginTop: "auto", padding: "16px", borderTop: "1px solid #F0EBE6" }}>
-            {[
-              { icon: Calendar, label: "Calendar" },
-              { icon: Users, label: "Contacts" },
-              { icon: Settings, label: "Settings" },
-            ].map((item) => (
-              <div
-                key={item.label}
-                className="flex items-center gap-3"
-                style={{
-                  padding: "8px 0",
-                  cursor: "pointer"
-                }}
-                onMouseEnter={(e) => {
-                  const span = e.currentTarget.querySelector("span");
-                  if (span) span.style.color = "#2A2A2A";
-                }}
-                onMouseLeave={(e) => {
-                  const span = e.currentTarget.querySelector("span");
-                  if (span) span.style.color = "#666";
-                }}
-              >
-                <item.icon style={{ width: "14px", height: "14px", color: "#999", strokeWidth: 1.5 }} />
-                <span style={{
-                  fontSize: "11px",
-                  fontWeight: 300,
-                  color: "#666",
-                  letterSpacing: "0.02em",
-                  transition: "color 0.3s ease"
-                }}>
-                  {item.label}
-                </span>
-              </div>
-            ))}
-            
             <div style={{ 
-              marginTop: "24px", 
-              paddingTop: "16px", 
-              borderTop: "1px solid #F0EBE6",
               fontSize: "9px",
               fontWeight: 300,
-              color: "#999",
+              color: "#000000",
               letterSpacing: "0.02em"
             }}>
               © 2025 Triopia. All rights reserved.
@@ -178,113 +182,135 @@ export default function ClaudeRefinedDemo() {
           </div>
         </div>
 
-        {/* Email List - DRAMATICALLY COMPACT */}
+        {/* Email List */}
         <div style={{ 
           width: "380px",
           background: "white",
-          borderRight: "1px solid #F0EBE6"
+          borderRight: "1px solid #F0EBE6",
+          overflowY: "auto"
         }}>
-          <div style={{ 
-            padding: "20px 16px 14px",
-            borderBottom: "1px solid #F0EBE6"
-          }}>
-            <h2 style={{ 
-              fontSize: "22px", 
-              fontWeight: 200,
-              color: "#2A2A2A",
-              letterSpacing: "-0.02em",
-              marginBottom: "6px"
-            }}>
-              Inbox
-            </h2>
-            <p style={{ 
-              fontSize: "10px", 
-              fontWeight: 300,
-              color: "#999",
-              letterSpacing: "0.05em",
-              textTransform: "uppercase"
-            }}>
-              12 Unread
-            </p>
-          </div>
-
-          <div>
-            {mockEmails.map((email) => (
-              <div
-                key={email.id}
-                onClick={() => setSelectedEmail(email)}
-                style={{
-                  padding: "12px 16px",
-                  borderBottom: "1px solid #F8F6F4",
-                  background: selectedEmail.id === email.id ? "#FFFBF7" : "white",
-                  cursor: "pointer",
-                  transition: "background 0.3s ease"
-                }}
-                onMouseEnter={(e) => {
-                  if (selectedEmail.id !== email.id) {
-                    e.currentTarget.style.background = "#FCFCFC";
-                  }
-                }}
-                onMouseLeave={(e) => {
-                  if (selectedEmail.id !== email.id) {
-                    e.currentTarget.style.background = "white";
-                  }
-                }}
-              >
-                <div className="flex items-start justify-between mb-2">
-                  <div>
-                    <div style={{ 
-                      fontSize: "12px", 
-                      fontWeight: email.unread ? 400 : 300,
-                      color: "#2A2A2A",
-                      marginBottom: "2px",
-                      letterSpacing: "0.01em"
-                    }}>
-                      {email.from}
-                    </div>
-                    <div style={{ 
-                      fontSize: "10px", 
-                      fontWeight: 300,
-                      color: "#999"
-                    }}>
-                      {email.email}
-                    </div>
-                  </div>
-                  <div className="flex items-center gap-2">
-                    {email.starred && <Star style={{ width: "12px", height: "12px", color: "#D89880", fill: "#D89880", strokeWidth: 1.5 }} />}
-                    <span style={{ fontSize: "9px", color: "#999", fontWeight: 300 }}>
-                      {email.time}
-                    </span>
-                  </div>
+          {emails.map((email) => (
+            <div
+              key={email.id}
+              onClick={() => setSelectedEmail(email)}
+              style={{
+                padding: "12px 16px",
+                borderBottom: "1px solid #F0EBE6",
+                cursor: "pointer",
+                background: selectedEmail.id === email.id ? "#FFF8F0" : "white"
+              }}
+            >
+              <div className="flex items-start justify-between mb-1">
+                <div className="flex items-center gap-2">
+                  <button
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      handleStar(email.id);
+                    }}
+                    style={{
+                      background: "none",
+                      border: "none",
+                      cursor: "pointer",
+                      padding: 0
+                    }}
+                  >
+                    <Star 
+                      style={{ 
+                        width: "14px", 
+                        height: "14px", 
+                        color: email.isStarred ? "#E07B53" : "#999",
+                        fill: email.isStarred ? "#E07B53" : "none",
+                        strokeWidth: 1.5
+                      }} 
+                    />
+                  </button>
+                  <span style={{
+                    fontSize: "12px",
+                    fontWeight: email.isRead ? 300 : 500,
+                    color: "#000000"
+                  }}>
+                    {email.sender}
+                  </span>
                 </div>
-                <div style={{ 
-                  fontSize: "13px", 
-                  fontWeight: email.unread ? 400 : 300,
-                  color: "#2A2A2A",
-                  marginBottom: "6px",
-                  lineHeight: "1.4",
-                  letterSpacing: "0.005em"
-                }}>
-                  {email.subject}
-                </div>
-                <div style={{ 
-                  fontSize: "11px", 
+                <span style={{
+                  fontSize: "10px",
                   fontWeight: 300,
-                  color: "#666",
-                  lineHeight: "1.5",
-                  letterSpacing: "0.005em"
+                  color: "#666"
                 }}>
-                  {email.preview}
-                </div>
+                  {email.date}
+                </span>
               </div>
-            ))}
-          </div>
+              <div style={{
+                fontSize: "11px",
+                fontWeight: email.isRead ? 300 : 500,
+                color: "#000000",
+                marginBottom: "4px"
+              }}>
+                {email.subject}
+              </div>
+              <div style={{
+                fontSize: "10px",
+                fontWeight: 300,
+                color: "#666",
+                overflow: "hidden",
+                textOverflow: "ellipsis",
+                whiteSpace: "nowrap"
+              }}>
+                {email.preview}
+              </div>
+              <div className="flex items-center gap-2 mt-2">
+                <button
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    handlePause(email.id);
+                  }}
+                  style={{
+                    background: "none",
+                    border: "none",
+                    cursor: "pointer",
+                    padding: 0
+                  }}
+                >
+                  <Pause 
+                    style={{ 
+                      width: "12px", 
+                      height: "12px", 
+                      color: email.isPaused ? "#E07B53" : "#ccc",
+                      strokeWidth: 1.5
+                    }} 
+                  />
+                </button>
+                <button
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    handleComplete(email.id);
+                  }}
+                  style={{
+                    background: "none",
+                    border: "none",
+                    cursor: "pointer",
+                    padding: 0
+                  }}
+                >
+                  <CheckCircle2 
+                    style={{ 
+                      width: "12px", 
+                      height: "12px", 
+                      color: email.isComplete ? "#E07B53" : "#ccc",
+                      fill: email.isComplete ? "#E07B53" : "none",
+                      strokeWidth: 1.5
+                    }} 
+                  />
+                </button>
+              </div>
+            </div>
+          ))}
         </div>
 
-        {/* Email Detail - DRAMATICALLY COMPACT */}
+        {/* Email Detail */}
         <div style={{ 
           flex: 1,
-          background: "#FFFBF7",
+          background: "white",
           overflowY: "auto",
           padding: "28px 36px"
         }}>
@@ -301,7 +327,7 @@ export default function ClaudeRefinedDemo() {
                     padding: "0",
                     background: "transparent",
                     border: "none",
-                    color: "#999",
+                    color: "#000000",
                     fontSize: "10px",
                     fontWeight: 300,
                     letterSpacing: "0.05em",
@@ -314,12 +340,12 @@ export default function ClaudeRefinedDemo() {
                     position: "relative"
                   }}
                   onMouseEnter={(e) => {
-                    e.currentTarget.style.color = "#D89880";
+                    e.currentTarget.style.color = "#E07B53";
                     const underline = e.currentTarget.querySelector(".underline") as HTMLElement;
                     if (underline) underline.style.transform = "scaleX(1)";
                   }}
                   onMouseLeave={(e) => {
-                    e.currentTarget.style.color = "#999";
+                    e.currentTarget.style.color = "#000000";
                     const underline = e.currentTarget.querySelector(".underline") as HTMLElement;
                     if (underline) underline.style.transform = "scaleX(0)";
                   }}
@@ -334,7 +360,7 @@ export default function ClaudeRefinedDemo() {
                       left: 0,
                       right: 0,
                       height: "1px",
-                      background: "#D89880",
+                      background: "#E07B53",
                       transform: "scaleX(0)",
                       transformOrigin: "left",
                       transition: "transform 0.4s cubic-bezier(0.4, 0, 0.2, 1)"
@@ -347,65 +373,63 @@ export default function ClaudeRefinedDemo() {
             <h1 style={{ 
               fontSize: "32px", 
               fontWeight: 200,
-              color: "#2A2A2A",
-              lineHeight: "1.3",
-              marginBottom: "20px",
-              letterSpacing: "-0.01em"
+              color: "#000000",
+              marginBottom: "24px",
+              lineHeight: 1.4
             }}>
               {selectedEmail.subject}
             </h1>
 
-            <div className="flex items-center gap-3 mb-8 pb-6" style={{ borderBottom: "1px solid #F0EBE6" }}>
+            <div className="flex items-center gap-3 mb-8">
               <div style={{
                 width: "32px",
                 height: "32px",
-                background: "#D89880",
                 borderRadius: "50%",
+                background: "#E07B53",
                 display: "flex",
                 alignItems: "center",
                 justifyContent: "center",
-                fontSize: "13px",
+                fontSize: "12px",
                 fontWeight: 300,
                 color: "white"
               }}>
-                {selectedEmail.from.split(" ").map(n => n[0]).join("")}
+                {selectedEmail.sender.charAt(0)}
               </div>
               <div>
-                <div style={{ fontSize: "12px", fontWeight: 300, color: "#2A2A2A", letterSpacing: "0.01em" }}>
-                  {selectedEmail.from}
+                <div style={{
+                  fontSize: "12px",
+                  fontWeight: 300,
+                  color: "#000000",
+                  marginBottom: "2px"
+                }}>
+                  {selectedEmail.sender}
                 </div>
-                <div style={{ fontSize: "10px", fontWeight: 300, color: "#999", marginTop: "1px" }}>
-                  {selectedEmail.email}
+                <div style={{
+                  fontSize: "10px",
+                  fontWeight: 300,
+                  color: "#666"
+                }}>
+                  {selectedEmail.senderEmail}
                 </div>
               </div>
-              <div className="ml-auto" style={{ fontSize: "10px", color: "#999", fontWeight: 300 }}>
-                {selectedEmail.time}
+              <div style={{
+                marginLeft: "auto",
+                fontSize: "10px",
+                fontWeight: 300,
+                color: "#666"
+              }}>
+                {selectedEmail.date}
               </div>
             </div>
 
-            <div style={{ 
-              fontSize: "14px", 
+            <div style={{
+              fontSize: "14px",
               fontWeight: 300,
-              color: "#2A2A2A",
-              lineHeight: "1.7",
-              letterSpacing: "0.01em"
+              color: "#000000",
+              lineHeight: 1.7,
+              whiteSpace: "pre-wrap"
             }}>
-              <p style={{ marginBottom: "16px" }}>
-                {selectedEmail.preview}
-              </p>
-              <p style={{ marginBottom: "16px" }}>
-                I hope this message finds you well. I wanted to reach out to discuss the exciting opportunities that lie ahead as you begin this new chapter in your journey.
-              </p>
-              <p style={{ marginBottom: "16px" }}>
-                Our team has been working diligently to ensure that your transition is as smooth as possible. We understand that starting something new can be both exciting and challenging, which is why we're committed to providing you with all the support and resources you need.
-              </p>
-              <p style={{ marginBottom: "16px" }}>
-                Looking forward to collaborating with you and seeing all the amazing things you'll accomplish.
-              </p>
-              <p style={{ fontWeight: 300, marginTop: "28px" }}>
-                Best regards,<br />
-                {selectedEmail.from}
-              </p>
+              {selectedEmail.body}
             </div>
           </div>
         </div>
