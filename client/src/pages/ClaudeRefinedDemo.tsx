@@ -378,8 +378,8 @@ export default function ClaudeRefinedDemo() {
                 }}
                 onMouseEnter={(e) => {
                   if (selectedEmail.id !== email.id) {
-                    e.currentTarget.style.background = "#F5F5F5";
-                    e.currentTarget.style.borderLeft = "3px solid #E8E8E8";
+                    e.currentTarget.style.background = "#FDF9F5";
+                    e.currentTarget.style.borderLeft = "3px solid #F0E6DC";
                   }
                 }}
                 onMouseLeave={(e) => {
