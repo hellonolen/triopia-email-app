@@ -57,10 +57,12 @@ export default function ClaudeRefinedDemo() {
   const [selectedEmailIndex, setSelectedEmailIndex] = useState(0);
 
   // Email action handlers
+  const [isReplying, setIsReplying] = useState(false);
+  
   const handleReply = (emailId: number) => {
     console.log('Reply to email:', emailId);
-    setRightPanelMode('compose');
-    // TODO: Pre-fill compose panel with reply data
+    setIsReplying(true);
+    setRightPanelMode('email'); // Stay in email mode to show thread
   };
 
   const handleForward = (emailId: number) => {
@@ -1414,6 +1416,92 @@ export default function ClaudeRefinedDemo() {
                 </button>
               ))}
             </div>
+            
+            {/* Inline Reply Compose Area */}
+            {isReplying && (
+              <div style={{
+                marginTop: "32px",
+                paddingTop: "24px",
+                borderTop: "2px solid #F0EBE6"
+              }}>
+                <div style={{ display: "flex", alignItems: "center", gap: "12px", marginBottom: "16px" }}>
+                  <div style={{
+                    width: "32px",
+                    height: "32px",
+                    background: "#D89880",
+                    borderRadius: "50%",
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    fontSize: "13px",
+                    fontWeight: 300,
+                    color: "white"
+                  }}>
+                    You
+                  </div>
+                  <div>
+                    <div style={{ fontSize: "13px", fontWeight: 300, color: "#2A2A2A" }}>
+                      Reply to {selectedEmail.from}
+                    </div>
+                  </div>
+                </div>
+                
+                <textarea
+                  placeholder="Type your reply..."
+                  style={{
+                    width: "100%",
+                    minHeight: "120px",
+                    padding: "12px",
+                    fontSize: "13px",
+                    fontWeight: 300,
+                    border: "1px solid #F0EBE6",
+                    borderRadius: "4px",
+                    outline: "none",
+                    background: "white",
+                    color: "#2A2A2A",
+                    resize: "vertical",
+                    fontFamily: "inherit",
+                    marginBottom: "12px"
+                  }}
+                />
+                
+                <div style={{ display: "flex", gap: "16px", alignItems: "center" }}>
+                  <button
+                    style={{
+                      padding: 0,
+                      background: "none",
+                      border: "none",
+                      color: "#D89880",
+                      fontSize: "13px",
+                      fontWeight: 300,
+                      cursor: "pointer",
+                      transition: "color 0.2s ease"
+                    }}
+                    onMouseEnter={(e) => e.currentTarget.style.color = "#C88770"}
+                    onMouseLeave={(e) => e.currentTarget.style.color = "#D89880"}
+                  >
+                    Send
+                  </button>
+                  <button
+                    onClick={() => setIsReplying(false)}
+                    style={{
+                      padding: 0,
+                      background: "none",
+                      border: "none",
+                      color: "#999",
+                      fontSize: "13px",
+                      fontWeight: 300,
+                      cursor: "pointer",
+                      transition: "color 0.2s ease"
+                    }}
+                    onMouseEnter={(e) => e.currentTarget.style.color = "#D89880"}
+                    onMouseLeave={(e) => e.currentTarget.style.color = "#999"}
+                  >
+                    Discard
+                  </button>
+                </div>
+              </div>
+            )}
             </>
             )}
 
