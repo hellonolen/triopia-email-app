@@ -29,6 +29,9 @@ type SidebarNavProps = {
 
 const STORAGE_KEY_EXPANDED = 'triopia:sidebar:v1:expanded';
 const STORAGE_KEY_LAST = 'triopia:sidebar:v1:last';
+const STORAGE_KEY_INBOXES_COLLAPSED = 'triopia:sidebar:v1:inboxes-collapsed';
+const STORAGE_KEY_TOOLS_COLLAPSED = 'triopia:sidebar:v1:tools-collapsed';
+const STORAGE_KEY_SETTINGS_COLLAPSED = 'triopia:sidebar:v1:settings-collapsed';
 
 const coreIcons: Record<string, React.ComponentType<{ className?: string }>> = {
   'Fresh Start': Home,
@@ -65,7 +68,18 @@ export function SidebarNav({ model, onAddSource }: SidebarNavProps) {
   const [location] = useLocation();
   const [expanded, setExpanded] = useState<Record<string, boolean>>({});
   const [searchQuery, setSearchQuery] = useState('');
-  const [inboxesCollapsed, setInboxesCollapsed] = useState(true); // Collapsed by default
+  const [inboxesCollapsed, setInboxesCollapsed] = useState(() => {
+    const stored = localStorage.getItem(STORAGE_KEY_INBOXES_COLLAPSED);
+    return stored ? JSON.parse(stored) : true; // Collapsed by default
+  });
+  const [toolsCollapsed, setToolsCollapsed] = useState(() => {
+    const stored = localStorage.getItem(STORAGE_KEY_TOOLS_COLLAPSED);
+    return stored ? JSON.parse(stored) : false; // Expanded by default
+  });
+  const [settingsCollapsed, setSettingsCollapsed] = useState(() => {
+    const stored = localStorage.getItem(STORAGE_KEY_SETTINGS_COLLAPSED);
+    return stored ? JSON.parse(stored) : false; // Expanded by default
+  });
   const inboxesRef = useRef<HTMLDivElement>(null);
 
   // Load expanded state from localStorage
@@ -83,6 +97,19 @@ export function SidebarNav({ model, onAddSource }: SidebarNavProps) {
     localStorage.setItem(STORAGE_KEY_EXPANDED, JSON.stringify(expanded));
   }, [expanded]);
 
+  // Save group collapse states to localStorage
+  useEffect(() => {
+    localStorage.setItem(STORAGE_KEY_INBOXES_COLLAPSED, JSON.stringify(inboxesCollapsed));
+  }, [inboxesCollapsed]);
+
+  useEffect(() => {
+    localStorage.setItem(STORAGE_KEY_TOOLS_COLLAPSED, JSON.stringify(toolsCollapsed));
+  }, [toolsCollapsed]);
+
+  useEffect(() => {
+    localStorage.setItem(STORAGE_KEY_SETTINGS_COLLAPSED, JSON.stringify(settingsCollapsed));
+  }, [settingsCollapsed]);
+
   // Save last selected source
   const saveLastSource = (sourceId: string) => {
     localStorage.setItem(STORAGE_KEY_LAST, sourceId);
@@ -95,6 +122,9 @@ export function SidebarNav({ model, onAddSource }: SidebarNavProps) {
   const filteredInboxes = model.inboxes.filter(inbox =>
     inbox.label.toLowerCase().includes(searchQuery.toLowerCase())
   );
+
+  // Calculate total unread count across all inboxes
+  const totalUnread = model.inboxes.reduce((sum, inbox) => sum + inbox.unread, 0);
 
   // Simple virtualization: only render visible items when >20
   const shouldVirtualize = filteredInboxes.length > 20;
@@ -281,6 +311,14 @@ export function SidebarNav({ model, onAddSource }: SidebarNavProps) {
             color: '#CCC',
             fontWeight: 400
           }}>Inboxes</span>
+          {totalUnread > 0 && (
+            <span style={{
+              fontSize: '9px',
+              fontWeight: 500,
+              color: '#D89880', // Peach
+              marginLeft: 'auto'
+            }}>({totalUnread})</span>
+          )}
         </div>
 
         {/* Search */}
@@ -368,7 +406,22 @@ export function SidebarNav({ model, onAddSource }: SidebarNavProps) {
 
       {/* TOOLS Group */}
       <div style={{ marginBottom: '12px' }} data-testid="sidebar-group-tools">
-        <div style={{ padding: '0 8px', marginBottom: '4px' }}>
+        <div 
+          style={{ 
+            padding: '0 8px', 
+            marginBottom: '4px',
+            display: 'flex',
+            alignItems: 'center',
+            gap: '4px',
+            cursor: 'pointer'
+          }}
+          onClick={() => setToolsCollapsed(!toolsCollapsed)}
+        >
+          {toolsCollapsed ? (
+            <ChevronRight style={{ width: '10px', height: '10px', color: '#CCC', strokeWidth: 1.5 }} />
+          ) : (
+            <ChevronDown style={{ width: '10px', height: '10px', color: '#CCC', strokeWidth: 1.5 }} />
+          )}
           <span style={{
             fontSize: '9px',
             textTransform: 'uppercase',
@@ -377,18 +430,35 @@ export function SidebarNav({ model, onAddSource }: SidebarNavProps) {
             fontWeight: 400
           }}>Tools</span>
         </div>
-        <div style={{ display: 'flex', flexDirection: 'column', gap: '1px' }}>
-          {model.tools.map((label) => {
-            const icon = toolIcons[label] || FileText;
-            const path = `/${label.toLowerCase()}`;
-            return renderNavItem(label, icon, path, `sidebar-link-${label.toLowerCase()}`);
-          })}
-        </div>
+        {!toolsCollapsed && (
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '1px' }}>
+            {model.tools.map((label) => {
+              const icon = toolIcons[label] || FileText;
+              const path = `/${label.toLowerCase()}`;
+              return renderNavItem(label, icon, path, `sidebar-link-${label.toLowerCase()}`);
+            })}
+          </div>
+        )}
       </div>
 
       {/* SETTINGS Group */}
       <div data-testid="sidebar-group-settings">
-        <div style={{ padding: '0 8px', marginBottom: '4px' }}>
+        <div 
+          style={{ 
+            padding: '0 8px', 
+            marginBottom: '4px',
+            display: 'flex',
+            alignItems: 'center',
+            gap: '4px',
+            cursor: 'pointer'
+          }}
+          onClick={() => setSettingsCollapsed(!settingsCollapsed)}
+        >
+          {settingsCollapsed ? (
+            <ChevronRight style={{ width: '10px', height: '10px', color: '#CCC', strokeWidth: 1.5 }} />
+          ) : (
+            <ChevronDown style={{ width: '10px', height: '10px', color: '#CCC', strokeWidth: 1.5 }} />
+          )}
           <span style={{
             fontSize: '9px',
             textTransform: 'uppercase',
@@ -397,13 +467,15 @@ export function SidebarNav({ model, onAddSource }: SidebarNavProps) {
             fontWeight: 400
           }}>Settings</span>
         </div>
-        <div style={{ display: 'flex', flexDirection: 'column', gap: '1px' }}>
-          {model.settings.map((label) => {
-            const icon = settingsIcons[label] || Settings;
-            const path = `/${label.toLowerCase()}`;
-            return renderNavItem(label, icon, path, `sidebar-link-${label.toLowerCase()}`);
-          })}
-        </div>
+        {!settingsCollapsed && (
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '1px' }}>
+            {model.settings.map((label) => {
+              const icon = settingsIcons[label] || Settings;
+              const path = `/${label.toLowerCase()}`;
+              return renderNavItem(label, icon, path, `sidebar-link-${label.toLowerCase()}`);
+            })}
+          </div>
+        )}
       </div>
     </div>
   );

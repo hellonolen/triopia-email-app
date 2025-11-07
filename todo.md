@@ -403,3 +403,11 @@
 - [x] Make INBOXES section collapsible (rolled up by default)
 - [x] Add expand/collapse chevron icon for INBOXES group
 - [x] Test collapse/expand interaction
+
+## SIDEBAR ENHANCEMENTS (Pre-Demo)
+
+- [x] Persist INBOXES collapse state to localStorage
+- [x] Make TOOLS section collapsible with chevron icon
+- [x] Make SETTINGS section collapsible with chevron icon
+- [x] Add unread count badge to INBOXES header (e.g., "INBOXES (12)")
+- [x] Test all collapse/expand interactions
