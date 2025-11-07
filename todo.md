@@ -316,3 +316,12 @@
 - [x] Add small paperclip icon next to sender name in email list when email has attachments
 - [x] Add star icon next to date in email list (top right) for quick star/unstar toggle
 - [x] Keep star icon in both places: next to date AND in bottom icon tray
+
+## Toolbar Icon Fixes
+- [x] Make search box smaller and more compact to match icon family
+- [x] Ensure all toolbar icons are same size (consistent 16px)
+- [x] Ensure all icons have same stroke weight (1.5)
+- [x] Ensure consistent spacing between icons
+- [x] Make compose email icon (envelope) functional - opens compose mode
+- [x] Make all toolbar icons functional with clear actions (Check = mark all read, Zap = quick actions)
+- [x] Visual design consistency - icons look like same family

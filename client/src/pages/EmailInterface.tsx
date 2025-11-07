@@ -761,34 +761,35 @@ export default function ClaudeRefinedDemo() {
                     <Mail style={{ width: "16px", height: "16px", color: "#666", strokeWidth: 1.5 }} />
                   </button>
                   {/* Search Bar */}
-                  <div style={{ position: "relative", flex: 1, maxWidth: "400px" }}>
+                  <div style={{ position: "relative", flex: 1, maxWidth: "280px" }}>
                     <input
                       type="text"
-                      placeholder="Search emails..."
+                      placeholder="Search..."
                       value={searchQuery}
                       onChange={(e) => setSearchQuery(e.target.value)}
                       style={{
                         width: "100%",
-                        padding: "6px 32px 6px 12px",
-                        fontSize: "12px",
+                        padding: "4px 28px 4px 8px",
+                        fontSize: "11px",
                         fontWeight: 300,
-                        border: "1px solid #F0EBE6",
-                        borderRadius: "4px",
+                        border: "1px solid #E8E3DE",
+                        borderRadius: "3px",
                         outline: "none",
                         background: "white",
                         color: "#2A2A2A",
-                        transition: "border 0.2s ease"
+                        transition: "border 0.2s ease",
+                        height: "24px"
                       }}
                       onFocus={(e) => e.currentTarget.style.border = "1px solid #D89880"}
-                      onBlur={(e) => e.currentTarget.style.border = "1px solid #F0EBE6"}
+                      onBlur={(e) => e.currentTarget.style.border = "1px solid #E8E3DE"}
                     />
                     <Search style={{ 
                       position: "absolute", 
-                      right: "10px", 
+                      right: "8px", 
                       top: "50%", 
                       transform: "translateY(-50%)",
-                      width: "14px", 
-                      height: "14px", 
+                      width: "12px", 
+                      height: "12px", 
                       color: "#999", 
                       strokeWidth: 1.5,
                       pointerEvents: "none"
@@ -798,14 +799,14 @@ export default function ClaudeRefinedDemo() {
                         onClick={() => setSearchQuery('')}
                         style={{
                           position: "absolute",
-                          right: "30px",
+                          right: "26px",
                           top: "50%",
                           transform: "translateY(-50%)",
                           padding: 0,
                           background: "none",
                           border: "none",
                           color: "#999",
-                          fontSize: "16px",
+                          fontSize: "14px",
                           cursor: "pointer",
                           lineHeight: 1
                         }}
@@ -829,51 +830,42 @@ export default function ClaudeRefinedDemo() {
                   </button>
                 </div>
               </div>
-              {/* Toggle and Zap on right */}
+              {/* Right toolbar icons */}
               <div className="flex items-center gap-3">
                 <button
+                  onClick={() => {
+                    // Toggle select all emails
+                    const allSelected = emails.filter(e => e.folder === 'inbox').every(e => e.unread === false);
+                    setEmails(prev => prev.map(e => 
+                      e.folder === 'inbox' ? { ...e, unread: allSelected } : e
+                    ));
+                  }}
                   style={{
                     background: "none",
                     border: "none",
                     cursor: "pointer",
-                    padding: 0,
-                    display: "flex",
-                    alignItems: "center",
-                    gap: "2px"
+                    padding: 0
                   }}
+                  onMouseEnter={(e) => setHoveredTooltip({ label: 'Mark all as read', x: e.clientX, y: e.clientY + 20 })}
+                  onMouseLeave={() => setHoveredTooltip(null)}
                 >
-                  <Check style={{ width: "14px", height: "14px", color: "#666", strokeWidth: 1.5 }} />
-                  <div style={{
-                    width: "24px",
-                    height: "12px",
-                    borderRadius: "12px",
-                    border: "1px solid #ccc",
-                    background: "white",
-                    position: "relative"
-                  }}>
-                    <div style={{
-                      width: "8px",
-                      height: "8px",
-                      borderRadius: "50%",
-                      background: "#666",
-                      position: "absolute",
-                      top: "1px",
-                      left: "2px"
-                    }} />
-                  </div>
+                  <Check style={{ width: "16px", height: "16px", color: "#666", strokeWidth: 1.5 }} />
                 </button>
                 <button
+                  onClick={() => {
+                    // Quick actions menu
+                    console.log('Quick actions');
+                  }}
                   style={{
                     background: "none",
                     border: "none",
                     cursor: "pointer",
-                    padding: 0,
-                    display: "flex",
-                    alignItems: "center",
-                    gap: "2px"
+                    padding: 0
                   }}
+                  onMouseEnter={(e) => setHoveredTooltip({ label: 'Quick actions', x: e.clientX, y: e.clientY + 20 })}
+                  onMouseLeave={() => setHoveredTooltip(null)}
                 >
-                  <Zap style={{ width: "14px", height: "14px", color: "#666", strokeWidth: 1.5 }} />
+                  <Zap style={{ width: "16px", height: "16px", color: "#666", strokeWidth: 1.5 }} />
                 </button>
               </div>
             </div>
