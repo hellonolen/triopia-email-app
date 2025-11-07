@@ -540,13 +540,12 @@ export default function ClaudeRefinedDemo() {
         {/* Email Detail - DRAMATICALLY COMPACT */}
         <div style={{ 
           flex: 1,
-          maxWidth: "650px",
           background: "#FFFBF7",
           overflowY: "auto",
           padding: "28px 36px"
         }}>
           <div style={{ maxWidth: "680px", margin: "0 auto" }}>
-            <div className="flex items-center justify-between mb-10">
+            <div className="flex items-center gap-6 mb-10">
               <div className="flex items-center gap-3">
               {[
                 { icon: Reply, label: "Reply" },
