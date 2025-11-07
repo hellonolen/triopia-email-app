@@ -634,19 +634,6 @@ export default function ClaudeRefinedDemo() {
                       </button>
                     )}
                   </div>
-                  <button
-                    onClick={() => setRightPanelMode('ai')}
-                    style={{
-                      background: "none",
-                      border: "none",
-                      cursor: "pointer",
-                      padding: 0
-                    }}
-                    onMouseEnter={(e) => setHoveredTooltip({ label: 'AI Assistant', x: e.clientX, y: e.clientY + 20 })}
-                    onMouseLeave={() => setHoveredTooltip(null)}
-                  >
-                    <Bot style={{ width: "16px", height: "16px", color: "#666", strokeWidth: 1.5 }} />
-                  </button>
                 </div>
               </div>
               {/* Right toolbar icons */}
