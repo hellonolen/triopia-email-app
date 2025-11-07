@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Mail, Send, Archive, Trash2, Star, Clock, CheckCircle2, Pause, Home, Inbox, Calendar, Users, Settings, Plus, UserPlus, Search, Zap, Check, Pencil, ChevronDown, ChevronRight } from "lucide-react";
+import { Mail, Send, Archive, Trash2, Star, Clock, CheckCircle2, Pause, Home, Inbox, Calendar, Users, Settings, Plus, UserPlus, Search, Zap, Check, Pencil, ChevronDown, ChevronRight, Pin, Info, FileText } from "lucide-react";
 
 /**
  * Claude AI - DRAMATICALLY Refined
@@ -227,6 +227,7 @@ export default function ClaudeRefinedDemo() {
 
           <div style={{ marginTop: "auto", padding: "16px", borderTop: "1px solid #F0EBE6" }}>
             {[
+              { icon: FileText, label: "Notes" },
               { icon: Calendar, label: "Calendar" },
               { icon: Users, label: "Contacts" },
               { icon: Settings, label: "Settings" },
@@ -370,18 +371,21 @@ export default function ClaudeRefinedDemo() {
                 style={{
                   padding: "12px 16px",
                   borderBottom: "1px solid #F8F6F4",
+                  borderLeft: selectedEmail.id === email.id ? "3px solid #D89880" : "3px solid transparent",
                   background: selectedEmail.id === email.id ? "#FFFBF7" : "white",
                   cursor: "pointer",
-                  transition: "background 0.3s ease"
+                  transition: "all 0.3s ease"
                 }}
                 onMouseEnter={(e) => {
                   if (selectedEmail.id !== email.id) {
-                    e.currentTarget.style.background = "#FCFCFC";
+                    e.currentTarget.style.background = "#F5F5F5";
+                    e.currentTarget.style.borderLeft = "3px solid #E8E8E8";
                   }
                 }}
                 onMouseLeave={(e) => {
                   if (selectedEmail.id !== email.id) {
                     e.currentTarget.style.background = "white";
+                    e.currentTarget.style.borderLeft = "3px solid transparent";
                   }
                 }}
               >
@@ -431,40 +435,28 @@ export default function ClaudeRefinedDemo() {
                 }}>
                   {email.preview}
                 </div>
-                {/* Email action icons */}
-                <div className="flex items-center gap-3">
-                  <button
-                    onClick={(e) => { e.stopPropagation(); }}
-                    style={{
-                      background: "none",
-                      border: "none",
-                      cursor: "pointer",
-                      padding: 0
-                    }}
-                  >
-                    <Star style={{ width: "12px", height: "12px", color: "#ccc", strokeWidth: 1.5 }} />
+                {/* Email action icons - 7 icons from screenshot */}
+                <div className="flex items-center gap-2">
+                  <button onClick={(e) => { e.stopPropagation(); }} style={{ background: "none", border: "none", cursor: "pointer", padding: 0 }}>
+                    <Mail style={{ width: "14px", height: "14px", color: "#ccc", strokeWidth: 1.5 }} />
                   </button>
-                  <button
-                    onClick={(e) => { e.stopPropagation(); }}
-                    style={{
-                      background: "none",
-                      border: "none",
-                      cursor: "pointer",
-                      padding: 0
-                    }}
-                  >
-                    <Pause style={{ width: "12px", height: "12px", color: "#ccc", strokeWidth: 1.5 }} />
+                  <button onClick={(e) => { e.stopPropagation(); }} style={{ background: "none", border: "none", cursor: "pointer", padding: 0 }}>
+                    <Pin style={{ width: "14px", height: "14px", color: "#ccc", strokeWidth: 1.5 }} />
                   </button>
-                  <button
-                    onClick={(e) => { e.stopPropagation(); }}
-                    style={{
-                      background: "none",
-                      border: "none",
-                      cursor: "pointer",
-                      padding: 0
-                    }}
-                  >
-                    <CheckCircle2 style={{ width: "12px", height: "12px", color: "#ccc", strokeWidth: 1.5 }} />
+                  <button onClick={(e) => { e.stopPropagation(); }} style={{ background: "none", border: "none", cursor: "pointer", padding: 0 }}>
+                    <Clock style={{ width: "14px", height: "14px", color: "#ccc", strokeWidth: 1.5 }} />
+                  </button>
+                  <button onClick={(e) => { e.stopPropagation(); }} style={{ background: "none", border: "none", cursor: "pointer", padding: 0 }}>
+                    <CheckCircle2 style={{ width: "14px", height: "14px", color: "#ccc", strokeWidth: 1.5 }} />
+                  </button>
+                  <button onClick={(e) => { e.stopPropagation(); }} style={{ background: "none", border: "none", cursor: "pointer", padding: 0 }}>
+                    <Archive style={{ width: "14px", height: "14px", color: "#ccc", strokeWidth: 1.5 }} />
+                  </button>
+                  <button onClick={(e) => { e.stopPropagation(); }} style={{ background: "none", border: "none", cursor: "pointer", padding: 0 }}>
+                    <Info style={{ width: "14px", height: "14px", color: "#ccc", strokeWidth: 1.5 }} />
+                  </button>
+                  <button onClick={(e) => { e.stopPropagation(); }} style={{ background: "none", border: "none", cursor: "pointer", padding: 0 }}>
+                    <Trash2 style={{ width: "14px", height: "14px", color: "#ccc", strokeWidth: 1.5 }} />
                   </button>
                 </div>
               </div>
@@ -542,7 +534,7 @@ export default function ClaudeRefinedDemo() {
                 <button
                   onClick={() => setEmailFontSize('small')}
                   style={{
-                    padding: "4px 8px",
+                    padding: "3px 6px",
                     background: emailFontSize === 'small' ? "#FFFBF7" : "transparent",
                     border: "1px solid",
                     borderColor: emailFontSize === 'small' ? "#D89880" : "#F0EBE6",
@@ -560,7 +552,7 @@ export default function ClaudeRefinedDemo() {
                 <button
                   onClick={() => setEmailFontSize('medium')}
                   style={{
-                    padding: "4px 8px",
+                    padding: "3px 6px",
                     background: emailFontSize === 'medium' ? "#FFFBF7" : "transparent",
                     border: "1px solid",
                     borderColor: emailFontSize === 'medium' ? "#D89880" : "#F0EBE6",
@@ -578,7 +570,7 @@ export default function ClaudeRefinedDemo() {
                 <button
                   onClick={() => setEmailFontSize('large')}
                   style={{
-                    padding: "4px 8px",
+                    padding: "3px 6px",
                     background: emailFontSize === 'large' ? "#FFFBF7" : "transparent",
                     border: "1px solid",
                     borderColor: emailFontSize === 'large' ? "#D89880" : "#F0EBE6",
