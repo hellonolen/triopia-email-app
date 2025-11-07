@@ -310,3 +310,9 @@
 - [x] Filter buttons: unread, starred, has attachments
 - [x] Clear search button
 - [ ] Highlight matching text in search results (optional enhancement)
+
+## UI Fixes
+- [x] Remove bulky filter buttons (Unread, Starred, Has Attachments) from toolbar
+- [x] Add small paperclip icon next to sender name in email list when email has attachments
+- [x] Add star icon next to date in email list (top right) for quick star/unstar toggle
+- [x] Keep star icon in both places: next to date AND in bottom icon tray

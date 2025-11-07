@@ -92,7 +92,6 @@ export default function ClaudeRefinedDemo() {
   const [showSignatureSelector, setShowSignatureSelector] = useState(false);
   const [signatureEnabled, setSignatureEnabled] = useState(true);
   const [searchQuery, setSearchQuery] = useState('');
-  const [searchFilters, setSearchFilters] = useState({ unread: false, starred: false, hasAttachments: false });
   const signatures = [
     { id: 0, name: 'No Signature', content: '' },
     { id: 1, name: 'Work', content: 'Best regards,\nYour Name\nYour Title\nYour Company' },
@@ -815,58 +814,6 @@ export default function ClaudeRefinedDemo() {
                       </button>
                     )}
                   </div>
-                  
-                  {/* Search Filters */}
-                  <div style={{ display: "flex", gap: "8px", alignItems: "center" }}>
-                    <button
-                      onClick={() => setSearchFilters(prev => ({ ...prev, unread: !prev.unread }))}
-                      style={{
-                        padding: "4px 8px",
-                        background: searchFilters.unread ? "#D89880" : "none",
-                        border: "1px solid #D89880",
-                        borderRadius: "3px",
-                        color: searchFilters.unread ? "white" : "#D89880",
-                        fontSize: "10px",
-                        fontWeight: 300,
-                        cursor: "pointer",
-                        transition: "all 0.2s ease"
-                      }}
-                    >
-                      Unread
-                    </button>
-                    <button
-                      onClick={() => setSearchFilters(prev => ({ ...prev, starred: !prev.starred }))}
-                      style={{
-                        padding: "4px 8px",
-                        background: searchFilters.starred ? "#D89880" : "none",
-                        border: "1px solid #D89880",
-                        borderRadius: "3px",
-                        color: searchFilters.starred ? "white" : "#D89880",
-                        fontSize: "10px",
-                        fontWeight: 300,
-                        cursor: "pointer",
-                        transition: "all 0.2s ease"
-                      }}
-                    >
-                      Starred
-                    </button>
-                    <button
-                      onClick={() => setSearchFilters(prev => ({ ...prev, hasAttachments: !prev.hasAttachments }))}
-                      style={{
-                        padding: "4px 8px",
-                        background: searchFilters.hasAttachments ? "#D89880" : "none",
-                        border: "1px solid #D89880",
-                        borderRadius: "3px",
-                        color: searchFilters.hasAttachments ? "white" : "#D89880",
-                        fontSize: "10px",
-                        fontWeight: 300,
-                        cursor: "pointer",
-                        transition: "all 0.2s ease"
-                      }}
-                    >
-                      Has Attachments
-                    </button>
-                  </div>
                   <button
                     onClick={() => setRightPanelMode('ai')}
                     style={{
@@ -944,12 +891,6 @@ export default function ClaudeRefinedDemo() {
                        e.preview.toLowerCase().includes(query) ||
                        e.email.toLowerCase().includes(query);
               })
-              .filter(e => {
-                if (searchFilters.unread && !e.unread) return false;
-                if (searchFilters.starred && !e.starred) return false;
-                if (searchFilters.hasAttachments && (!e.attachments || e.attachments.length === 0)) return false;
-                return true;
-              })
               .map((email) => (
               <div
                 key={email.id}
@@ -985,9 +926,15 @@ export default function ClaudeRefinedDemo() {
                       fontWeight: email.unread ? 400 : 300,
                       color: "#2A2A2A",
                       marginBottom: "2px",
-                      letterSpacing: "0.01em"
+                      letterSpacing: "0.01em",
+                      display: "flex",
+                      alignItems: "center",
+                      gap: "6px"
                     }}>
                       {email.from}
+                      {email.attachments && email.attachments.length > 0 && (
+                        <Paperclip style={{ width: "10px", height: "10px", color: "#999", strokeWidth: 1.5 }} />
+                      )}
                     </div>
                     <div style={{ 
                       fontSize: "10px", 
@@ -998,7 +945,31 @@ export default function ClaudeRefinedDemo() {
                     </div>
                   </div>
                   <div className="flex items-center gap-2">
-                    {email.starred && <Star style={{ width: "12px", height: "12px", color: "#D89880", fill: "#D89880", strokeWidth: 1.5 }} />}
+                    <button
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        setEmails(prev => prev.map(em => 
+                          em.id === email.id ? { ...em, starred: !em.starred } : em
+                        ));
+                      }}
+                      style={{
+                        padding: 0,
+                        background: "none",
+                        border: "none",
+                        cursor: "pointer",
+                        display: "flex",
+                        alignItems: "center"
+                      }}
+                    >
+                      <Star style={{ 
+                        width: "12px", 
+                        height: "12px", 
+                        color: email.starred ? "#D89880" : "#DDD", 
+                        fill: email.starred ? "#D89880" : "none", 
+                        strokeWidth: 1.5,
+                        transition: "all 0.2s ease"
+                      }} />
+                    </button>
                     <span style={{ fontSize: "9px", color: "#999", fontWeight: 300 }}>
                       {email.time}
                     </span>
@@ -1496,15 +1467,52 @@ export default function ClaudeRefinedDemo() {
                     >
                       <div className="flex items-start justify-between mb-2">
                         <div>
-                          <div style={{ fontSize: "12px", fontWeight: 300, color: "#2A2A2A" }}>
+                          <div style={{ 
+                            fontSize: "12px", 
+                            fontWeight: 300, 
+                            color: "#2A2A2A",
+                            display: "flex",
+                            alignItems: "center",
+                            gap: "6px"
+                          }}>
                             {email.from}
+                            {email.attachments && email.attachments.length > 0 && (
+                              <Paperclip style={{ width: "10px", height: "10px", color: "#999", strokeWidth: 1.5 }} />
+                            )}
                           </div>
                           <div style={{ fontSize: "11px", color: "#999", marginTop: "2px" }}>
                             {email.email}
                           </div>
                         </div>
-                        <div style={{ fontSize: "10px", color: "#999", fontWeight: 300 }}>
-                          {email.time}
+                        <div className="flex items-center gap-2">
+                          <button
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              setEmails(prev => prev.map(em => 
+                                em.id === email.id ? { ...em, starred: !em.starred } : em
+                              ));
+                            }}
+                            style={{
+                              padding: 0,
+                              background: "none",
+                              border: "none",
+                              cursor: "pointer",
+                              display: "flex",
+                              alignItems: "center"
+                            }}
+                          >
+                            <Star style={{ 
+                              width: "12px", 
+                              height: "12px", 
+                              color: email.starred ? "#D89880" : "#DDD", 
+                              fill: email.starred ? "#D89880" : "none", 
+                              strokeWidth: 1.5,
+                              transition: "all 0.2s ease"
+                            }} />
+                          </button>
+                          <span style={{ fontSize: "9px", color: "#999" }}>
+                            {email.time}
+                          </span>
                         </div>
                       </div>
                       <div style={{ fontSize: "12px", fontWeight: 400, color: "#2A2A2A", marginBottom: "4px" }}>
@@ -1574,15 +1582,52 @@ export default function ClaudeRefinedDemo() {
                     >
                       <div className="flex items-start justify-between mb-2">
                         <div>
-                          <div style={{ fontSize: "12px", fontWeight: 300, color: "#2A2A2A" }}>
+                          <div style={{ 
+                            fontSize: "12px", 
+                            fontWeight: 300, 
+                            color: "#2A2A2A",
+                            display: "flex",
+                            alignItems: "center",
+                            gap: "6px"
+                          }}>
                             {email.from}
+                            {email.attachments && email.attachments.length > 0 && (
+                              <Paperclip style={{ width: "10px", height: "10px", color: "#999", strokeWidth: 1.5 }} />
+                            )}
                           </div>
                           <div style={{ fontSize: "11px", color: "#999", marginTop: "2px" }}>
                             {email.email}
                           </div>
                         </div>
-                        <div style={{ fontSize: "10px", color: "#999", fontWeight: 300 }}>
-                          {email.time}
+                        <div className="flex items-center gap-2">
+                          <button
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              setEmails(prev => prev.map(em => 
+                                em.id === email.id ? { ...em, starred: !em.starred } : em
+                              ));
+                            }}
+                            style={{
+                              padding: 0,
+                              background: "none",
+                              border: "none",
+                              cursor: "pointer",
+                              display: "flex",
+                              alignItems: "center"
+                            }}
+                          >
+                            <Star style={{ 
+                              width: "12px", 
+                              height: "12px", 
+                              color: email.starred ? "#D89880" : "#DDD", 
+                              fill: email.starred ? "#D89880" : "none", 
+                              strokeWidth: 1.5,
+                              transition: "all 0.2s ease"
+                            }} />
+                          </button>
+                          <div style={{ fontSize: "10px", color: "#999", fontWeight: 300 }}>
+                            {email.time}
+                          </div>
                         </div>
                       </div>
                       <div style={{ fontSize: "12px", fontWeight: 400, color: "#2A2A2A", marginBottom: "4px" }}>
