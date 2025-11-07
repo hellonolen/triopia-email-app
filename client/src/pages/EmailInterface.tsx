@@ -38,6 +38,11 @@ export default function ClaudeRefinedDemo() {
   const [rightPanelMode, setRightPanelMode] = useState<'email' | 'compose' | 'ai' | 'notes'>('email');
   const [showStoragePanel, setShowStoragePanel] = useState(false);
   const [showPrintPanel, setShowPrintPanel] = useState(false);
+  const [viewDensity, setViewDensity] = useState<'compact' | 'default' | 'comfortable'>('default');
+  
+  // Calculate email counts
+  const totalEmails = mockEmails.length;
+  const unreadEmails = mockEmails.filter(e => e.unread).length;
 
   // Backend data hooks
   const { data: notesData = [], refetch: refetchNotes } = trpc.notes.list.useQuery(undefined, { enabled: activeView === 'Notes' });
@@ -562,7 +567,7 @@ export default function ClaudeRefinedDemo() {
                     letterSpacing: "0.05em",
                     textTransform: "uppercase"
                   }}>
-                    12 Unread
+                    {unreadEmails} Unread · {totalEmails} Total
                   </p>
                 </div>
                 {/* Compose and Search next to Inbox */}

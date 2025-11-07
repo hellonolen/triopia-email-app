@@ -413,3 +413,68 @@
 - [ ] Display calendar events from backend (calendarData)
 - [ ] Add month/week/day calendar views
 
+
+
+## IMMEDIATE TASKS (Nov 7, 2025) - User Priority
+
+### Email Count Display
+- [x] Add total email count display in inbox header
+- [x] Add unread count display
+- [x] Show count in format "12 UNREAD" or "50 total"
+
+### Compact View for Inbox
+- [ ] Add view density toggle (Compact/Default/Comfortable)
+- [ ] Implement compact view - single line per email (sender, subject, date only)
+- [ ] Implement comfortable view - more spacing and preview text
+- [ ] Save view preference to user settings
+
+### White Background Consistency
+- [ ] Ensure all backgrounds are white (no #FFFBF7 shaded backgrounds)
+- [ ] Remove any remaining peach/cream backgrounds from panels
+- [ ] Keep only white backgrounds throughout interface
+
+### Compose Mode Complete Features
+- [ ] Add CC/BCC fields to compose mode (already added but verify)
+- [ ] Add formatting toolbar (Bold, Italic, Underline, Link, Attach) (already added but verify)
+- [ ] Make formatting toolbar functional (not just icons)
+- [ ] Add file attachment upload functionality
+- [ ] Add emoji picker
+- [ ] Add insert image functionality
+
+### Reply Mode Complete Features
+- [ ] Add CC/BCC fields to reply mode (already added but verify)
+- [ ] Add formatting toolbar to reply (already added but verify)
+- [ ] Make formatting toolbar functional
+- [ ] Show full email thread history in reply (already implemented but verify)
+- [ ] Add Reply All functionality
+
+### Print & Storage Functionality
+- [ ] Make Print button functional - generate PDF and show print dialog
+- [ ] Make Storage button functional - connect to Dropbox/Mega/OneDrive
+- [ ] Implement actual file saving to storage services
+
+### AI Integration Throughout Platform
+- [ ] Add AI suggestions inline in every email (not just AI panel)
+- [ ] Add Smart Compose auto-complete while typing
+- [ ] Add Smart Reply quick response buttons
+- [ ] Add email summarization in email view
+- [ ] Add action item extraction display
+- [ ] Make AI contextually aware of current email
+- [ ] Add AI voice-to-text for composing
+- [ ] Add AI voice conversation capability
+
+### Search & Advanced Features
+- [ ] Implement search functionality
+- [ ] Add advanced search filters
+- [ ] Add email threading/conversation view
+- [ ] Add bulk email operations
+- [ ] Add snooze functionality
+- [ ] Add schedule send
+- [ ] Add undo send
+
+### Brand Consistency
+- [ ] Maintain TRIOPIA peach/cream color scheme
+- [ ] Keep minimal, clean design (no bulky boxes)
+- [ ] No shaded backgrounds on buttons
+- [ ] Use lucide-react icons consistently
+- [ ] Keep font weights light (300)
