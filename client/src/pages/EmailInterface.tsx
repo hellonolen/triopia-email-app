@@ -558,7 +558,7 @@ export default function ClaudeRefinedDemo() {
                       padding: 0
                     }}
                   >
-                    <Pencil style={{ width: "16px", height: "16px", color: "#666", strokeWidth: 1.5 }} />
+                    <Mail style={{ width: "16px", height: "16px", color: "#666", strokeWidth: 1.5 }} />
                   </button>
                   <button
                     style={{
@@ -1348,31 +1348,34 @@ export default function ClaudeRefinedDemo() {
               <div style={{ marginBottom: "16px" }}>
                 <input type="text" placeholder="To" style={{
                   width: "100%",
-                  padding: "8px 12px",
-                  border: "1px solid #F0EBE6",
-                  borderRadius: "4px",
-                  fontSize: "13px"
+                  padding: "10px 14px",
+                  border: "2px solid #D89880",
+                  borderRadius: "6px",
+                  fontSize: "13px",
+                  outline: "none"
                 }} />
               </div>
               <div style={{ marginBottom: "16px" }}>
                 <input type="text" placeholder="Subject" style={{
                   width: "100%",
-                  padding: "8px 12px",
-                  border: "1px solid #F0EBE6",
-                  borderRadius: "4px",
-                  fontSize: "13px"
+                  padding: "10px 14px",
+                  border: "2px solid #D89880",
+                  borderRadius: "6px",
+                  fontSize: "13px",
+                  outline: "none"
                 }} />
               </div>
               <div style={{ marginBottom: "16px" }}>
                 <textarea placeholder="Compose email..." style={{
                   width: "100%",
-                  padding: "12px",
-                  border: "1px solid #F0EBE6",
-                  borderRadius: "4px",
+                  padding: "14px",
+                  border: "2px solid #D89880",
+                  borderRadius: "6px",
                   fontSize: "13px",
-                  minHeight: "200px",
+                  minHeight: "250px",
                   fontFamily: "inherit",
-                  resize: "vertical"
+                  resize: "vertical",
+                  outline: "none"
                 }} />
               </div>
               <div style={{ display: "flex", gap: "8px", justifyContent: "flex-end" }}>
@@ -1480,23 +1483,102 @@ export default function ClaudeRefinedDemo() {
           {/* Tab Content */}
           <div style={{ flex: 1, overflow: "auto", padding: "20px" }}>
             {activeAITab === 'chat' && (
-              <div>
-                <p style={{ fontSize: "13px", color: "#666" }}>AI Chat Assistant - Coming soon</p>
+              <div style={{ display: "flex", flexDirection: "column", height: "100%" }}>
+                <div style={{ flex: 1, overflowY: "auto", marginBottom: "16px" }}>
+                  <div style={{ padding: "12px", background: "#FFFBF7", borderRadius: "6px", marginBottom: "12px" }}>
+                    <p style={{ fontSize: "12px", color: "#666", marginBottom: "8px" }}>AI Assistant</p>
+                    <p style={{ fontSize: "13px", color: "#2A2A2A" }}>How can I help you with your emails today?</p>
+                  </div>
+                </div>
+                <div style={{ borderTop: "1px solid #F0EBE6", paddingTop: "12px" }}>
+                  <textarea
+                    placeholder="Ask AI anything about your emails..."
+                    style={{
+                      width: "100%",
+                      padding: "12px",
+                      border: "1px solid #F0EBE6",
+                      borderRadius: "6px",
+                      fontSize: "13px",
+                      minHeight: "80px",
+                      resize: "vertical",
+                      fontFamily: "inherit"
+                    }}
+                  />
+                  <button style={{
+                    marginTop: "8px",
+                    padding: "8px 16px",
+                    background: "#D89880",
+                    color: "white",
+                    border: "none",
+                    borderRadius: "4px",
+                    cursor: "pointer",
+                    fontSize: "13px",
+                    width: "100%"
+                  }}>Send</button>
+                </div>
               </div>
             )}
             {activeAITab === 'triage' && (
               <div>
-                <p style={{ fontSize: "13px", color: "#666" }}>Smart Email Triage - Coming soon</p>
+                <h4 style={{ fontSize: "14px", fontWeight: 400, color: "#2A2A2A", marginBottom: "16px" }}>Smart Email Triage</h4>
+                <div style={{ display: "grid", gap: "12px" }}>
+                  {['Urgent', 'VIP', 'Action Required', 'Opportunities'].map(category => (
+                    <div key={category} style={{
+                      padding: "12px",
+                      background: "#FFFBF7",
+                      border: "1px solid #F0EBE6",
+                      borderRadius: "6px"
+                    }}>
+                      <div style={{ fontSize: "13px", fontWeight: 400, color: "#2A2A2A", marginBottom: "4px" }}>{category}</div>
+                      <div style={{ fontSize: "11px", color: "#999" }}>0 emails</div>
+                    </div>
+                  ))}
+                </div>
               </div>
             )}
             {activeAITab === 'quick-reply' && (
               <div>
-                <p style={{ fontSize: "13px", color: "#666" }}>Quick Reply Suggestions - Coming soon</p>
+                <h4 style={{ fontSize: "14px", fontWeight: 400, color: "#2A2A2A", marginBottom: "16px" }}>Quick Reply Suggestions</h4>
+                <div style={{ display: "grid", gap: "8px" }}>
+                  {['Thank you for reaching out', 'I\'ll get back to you soon', 'Let\'s schedule a call'].map(reply => (
+                    <button key={reply} style={{
+                      padding: "12px",
+                      background: "#FFFBF7",
+                      border: "1px solid #F0EBE6",
+                      borderRadius: "6px",
+                      cursor: "pointer",
+                      fontSize: "12px",
+                      color: "#2A2A2A",
+                      textAlign: "left",
+                      transition: "all 0.2s"
+                    }}
+                    onMouseEnter={(e) => e.currentTarget.style.borderColor = "#D89880"}
+                    onMouseLeave={(e) => e.currentTarget.style.borderColor = "#F0EBE6"}
+                    >{reply}</button>
+                  ))}
+                </div>
               </div>
             )}
             {activeAITab === 'voice' && (
               <div>
-                <p style={{ fontSize: "13px", color: "#666" }}>Voice to Text - Coming soon</p>
+                <h4 style={{ fontSize: "14px", fontWeight: 400, color: "#2A2A2A", marginBottom: "16px" }}>Voice to Text</h4>
+                <div style={{ textAlign: "center", padding: "40px 20px" }}>
+                  <div style={{
+                    width: "80px",
+                    height: "80px",
+                    borderRadius: "50%",
+                    background: "#FFFBF7",
+                    border: "2px solid #D89880",
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    margin: "0 auto 16px",
+                    cursor: "pointer"
+                  }}>
+                    <div style={{ fontSize: "32px" }}>🎤</div>
+                  </div>
+                  <p style={{ fontSize: "13px", color: "#666" }}>Click to start recording</p>
+                </div>
               </div>
             )}
           </div>
