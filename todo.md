@@ -513,3 +513,11 @@
 - [x] Update all sidebar links to use /app prefix
 - [x] Test triopia.com/ shows clean landing page
 - [x] Test triopia.com/app shows email interface without query params
+
+## USER FEEDBACK IMPLEMENTATION
+
+- [x] Bold sender names for unread emails in email list
+- [x] Unbold sender names after email is read
+- [x] Increase default mobile font size
+- [x] Make font size controls more prominent on mobile
+- [ ] Test mobile experience with larger fonts

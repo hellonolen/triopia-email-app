@@ -10,7 +10,9 @@ interface TextSizeContextType {
 const TextSizeContext = createContext<TextSizeContextType | undefined>(undefined);
 
 export function TextSizeProvider({ children }: { children: ReactNode }) {
-  const [textSize, setTextSize] = useState<TextSize>('sm');
+  // Detect mobile and set larger default font size
+  const isMobile = typeof window !== 'undefined' && window.innerWidth < 768;
+  const [textSize, setTextSize] = useState<TextSize>(isMobile ? 'md' : 'sm');
 
   return (
     <TextSizeContext.Provider value={{ textSize, setTextSize }}>

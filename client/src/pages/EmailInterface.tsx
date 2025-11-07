@@ -1930,15 +1930,16 @@ export default function ClaudeRefinedDemo({ view = 'inbox' }: EmailInterfaceProp
                     >
                       <div className="flex items-start justify-between mb-2">
                         <div>
-                          <div style={{ 
-                            fontSize: "12px", 
-                            fontWeight: 300, 
-                            color: "#2A2A2A",
-                            display: "flex",
-                            alignItems: "center",
-                            gap: "6px"
-                          }}>
-                            {email.from}
+                    <div style={{ 
+                      fontSize: "11px", 
+                      color: "#000", 
+                      letterSpacing: "0.01em",
+                      display: "flex",
+                      alignItems: "center",
+                      gap: "6px",
+                      fontWeight: email.unread ? 600 : 400
+                    }}>
+                      {email.from}
                             {email.attachments && email.attachments.length > 0 && (
                               <Paperclip style={{ width: "10px", height: "10px", color: "#000", strokeWidth: 1.5 }} />
                             )}
@@ -2046,12 +2047,12 @@ export default function ClaudeRefinedDemo({ view = 'inbox' }: EmailInterfaceProp
                       <div className="flex items-start justify-between mb-2">
                         <div>
                           <div style={{ 
-                            fontSize: "12px", 
-                            fontWeight: 300, 
+                            fontSize: "11px", 
                             color: "#2A2A2A",
                             display: "flex",
                             alignItems: "center",
-                            gap: "6px"
+                            gap: "6px",
+                            fontWeight: email.unread ? 600 : 400
                           }}>
                             {email.from}
                             {email.attachments && email.attachments.length > 0 && (
