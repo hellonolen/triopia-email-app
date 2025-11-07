@@ -231,3 +231,6 @@
 - [ ] Pause For Later - Set aside emails temporarily
 - [ ] Mark Complete - Done marker for emails
 - [ ] Group by Sender - Bundle emails from same person
+
+### UI Polish
+- [x] Reduce sidebar padding for more compact layout

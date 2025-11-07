@@ -70,8 +70,8 @@ export default function Sidebar({ selectedFolder, onFolderSelect, getUnreadCount
   ];
 
   return (
-    <aside className="w-[280px] bg-card border-r border-border flex flex-col h-full p-3">
-      <div className="mb-4">
+    <aside className="w-[260px] bg-card border-r border-border flex flex-col h-full p-2">
+      <div className="mb-2">
         <Button
           onClick={onCompose}
           className="w-full bg-primary hover:bg-primary text-primary-foreground font-medium shadow-sm hover:shadow-md transition-all duration-200 hover:-translate-y-0.5"
@@ -82,7 +82,7 @@ export default function Sidebar({ selectedFolder, onFolderSelect, getUnreadCount
         </Button>
       </div>
 
-      <nav className="flex-1 space-y-0.5">
+      <nav className="flex-1 space-y-0">
         {/* Collapsible Inboxes Section */}
         <InboxesSection
           accounts={emailAccounts}
@@ -103,7 +103,7 @@ export default function Sidebar({ selectedFolder, onFolderSelect, getUnreadCount
               onDragLeave={handleDragLeave}
               onDrop={(e) => handleDrop(e, folder.id)}
               className={`
-                w-full flex items-center justify-between px-3 py-2 rounded-lg
+                w-full flex items-center justify-between px-2 py-1.5 rounded-md
                 transition-all duration-200
                 ${isActive 
                   ? 'bg-muted font-medium' 
@@ -112,7 +112,7 @@ export default function Sidebar({ selectedFolder, onFolderSelect, getUnreadCount
                 ${folder.id === 'calendar' && isDragOver ? 'bg-primary/20 border-2 border-primary border-dashed' : ''}
               `}
             >
-              <div className="flex items-center gap-3">
+              <div className="flex items-center gap-2">
                 <Icon className={`w-4 h-4 transition-all duration-200 ${isActive ? 'text-primary scale-110' : 'text-muted-foreground'}`} />
                 <span className="text-xs">{folder.label}</span>
               </div>
@@ -126,14 +126,14 @@ export default function Sidebar({ selectedFolder, onFolderSelect, getUnreadCount
         })}
       </nav>
 
-      <div className="pt-3 border-t border-border space-y-0.5">
+      <div className="pt-2 border-t border-border space-y-0">
         {utilities.map((item) => {
           const Icon = item.icon;
           return (
             <button
               key={item.id}
               onClick={() => onFolderSelect(item.id)}
-              className="w-full flex items-center gap-2 px-3 py-2 rounded-lg hover:bg-muted transition-all duration-200"
+              className="w-full flex items-center gap-2 px-2 py-1.5 rounded-md hover:bg-muted transition-all duration-200"
             >
               <Icon className="w-4 h-4 text-muted-foreground" />
               <span className="text-xs">{item.label}</span>
