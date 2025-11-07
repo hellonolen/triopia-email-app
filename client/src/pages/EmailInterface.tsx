@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef } from "react";
 import { trpc } from "@/lib/trpc";
-import { Mail, Send, Archive, Trash2, Star, Clock, CheckCircle2, Pause, Home, Inbox, Calendar, Users, Settings, Plus, UserPlus, Search, Zap, Check, Pencil, ChevronDown, ChevronRight, Pin, Info, FileText, HardDrive, BarChart3, Palette, AlertCircle, FilePen, Reply, Forward, Bot, User, Shield } from "lucide-react";
+import { Mail, Send, Archive, Trash2, Star, Clock, CheckCircle2, Pause, Home, Inbox, Calendar, Users, Settings, Plus, UserPlus, Search, Zap, Check, Pencil, ChevronDown, ChevronRight, Pin, Info, FileText, HardDrive, BarChart3, Palette, AlertCircle, FilePen, Reply, Forward, Bot, User, Shield, Printer } from "lucide-react";
 
 /**
  * Claude AI - DRAMATICALLY Refined
@@ -35,7 +35,9 @@ export default function ClaudeRefinedDemo() {
   const [hoveredTooltip, setHoveredTooltip] = useState<{label: string, x: number, y: number} | null>(null);
   const [emailDetailWidth, setEmailDetailWidth] = useState(1000);
   const [activeView, setActiveView] = useState('Inbox');
-  const [rightPanelMode, setRightPanelMode] = useState<'email' | 'compose' | 'ai'>('email');
+  const [rightPanelMode, setRightPanelMode] = useState<'email' | 'compose' | 'ai' | 'notes'>('email');
+  const [showStoragePanel, setShowStoragePanel] = useState(false);
+  const [showPrintPanel, setShowPrintPanel] = useState(false);
 
   // Backend data hooks
   const { data: notesData = [], refetch: refetchNotes } = trpc.notes.list.useQuery(undefined, { enabled: activeView === 'Notes' });
@@ -641,7 +643,10 @@ export default function ClaudeRefinedDemo() {
             {activeView === 'Inbox' && mockEmails.map((email) => (
               <div
                 key={email.id}
-                onClick={() => setSelectedEmail(email)}
+                onClick={() => {
+                  setSelectedEmail(email);
+                  setRightPanelMode('email');
+                }}
                 style={{
                   padding: "12px 16px",
                   borderBottom: "1px solid #F8F6F4",
@@ -1007,13 +1012,132 @@ export default function ClaudeRefinedDemo() {
           </div>
         </div>
 
-        {/* Right Panel - Multi-purpose (Email/Compose/AI) */}
+        {/* Right Panel - Multi-purpose (Email/Compose/AI/Notes) */}
         <div ref={emailDetailRef} style={{ 
           flex: 1,
           background: "#FFFBF7",
-          overflowY: "auto",
-          padding: "28px 36px"
+          display: "flex",
+          flexDirection: "column"
         }}>
+          {/* Icon Tab Bar - Always Visible */}
+          <div style={{
+            borderBottom: "1px solid #F0EBE6",
+            padding: "16px 36px",
+            display: "flex",
+            alignItems: "center",
+            gap: "16px",
+            background: "#FFFBF7"
+          }}>
+            {/* Left side - Reply/Forward (only show in email mode) */}
+            {rightPanelMode === 'email' && (
+              <div className="flex items-center gap-3" style={{ marginRight: "auto" }}>
+                <button
+                  onClick={() => handleReply(selectedEmail.id)}
+                  style={{
+                    padding: 0,
+                    background: "none",
+                    border: "none",
+                    cursor: "pointer",
+                    transition: "all 0.2s ease"
+                  }}
+                  onMouseEnter={(e) => {
+                    const icon = e.currentTarget.querySelector('svg') as any;
+                    if (icon) icon.style.color = "#D89880";
+                  }}
+                  onMouseLeave={(e) => {
+                    const icon = e.currentTarget.querySelector('svg') as any;
+                    if (icon) icon.style.color = "#999";
+                  }}
+                >
+                  <Reply style={{ width: "18px", height: "18px", color: "#999", strokeWidth: 1.5, transition: "color 0.2s ease" }} />
+                </button>
+                <button
+                  onClick={() => handleForward(selectedEmail.id)}
+                  style={{
+                    padding: 0,
+                    background: "none",
+                    border: "none",
+                    cursor: "pointer",
+                    transition: "all 0.2s ease"
+                  }}
+                  onMouseEnter={(e) => {
+                    const icon = e.currentTarget.querySelector('svg') as any;
+                    if (icon) icon.style.color = "#D89880";
+                  }}
+                  onMouseLeave={(e) => {
+                    const icon = e.currentTarget.querySelector('svg') as any;
+                    if (icon) icon.style.color = "#999";
+                  }}
+                >
+                  <Forward style={{ width: "18px", height: "18px", color: "#999", strokeWidth: 1.5, transition: "color 0.2s ease" }} />
+                </button>
+              </div>
+            )}
+            
+            {/* Right side - Mode tabs */}
+            <div className="flex items-center gap-4" style={{ marginLeft: rightPanelMode === 'email' ? 0 : "auto" }}>
+              <button
+                onClick={() => setRightPanelMode('compose')}
+                style={{
+                  padding: "8px",
+                  background: rightPanelMode === 'compose' ? "#FFFBF7" : "transparent",
+                  border: "none",
+                  borderRadius: "6px",
+                  cursor: "pointer",
+                  transition: "all 0.2s ease"
+                }}
+              >
+                <Mail style={{ 
+                  width: "18px", 
+                  height: "18px", 
+                  color: rightPanelMode === 'compose' ? "#D89880" : "#999", 
+                  strokeWidth: 1.5,
+                  transition: "color 0.2s ease"
+                }} />
+              </button>
+              <button
+                onClick={() => setRightPanelMode('ai')}
+                style={{
+                  padding: "8px",
+                  background: rightPanelMode === 'ai' ? "#FFFBF7" : "transparent",
+                  border: "none",
+                  borderRadius: "6px",
+                  cursor: "pointer",
+                  transition: "all 0.2s ease"
+                }}
+              >
+                <Bot style={{ 
+                  width: "18px", 
+                  height: "18px", 
+                  color: rightPanelMode === 'ai' ? "#D89880" : "#999", 
+                  strokeWidth: 1.5,
+                  transition: "color 0.2s ease"
+                }} />
+              </button>
+              <button
+                onClick={() => setRightPanelMode('notes')}
+                style={{
+                  padding: "8px",
+                  background: rightPanelMode === 'notes' ? "#FFFBF7" : "transparent",
+                  border: "none",
+                  borderRadius: "6px",
+                  cursor: "pointer",
+                  transition: "all 0.2s ease"
+                }}
+              >
+                <FileText style={{ 
+                  width: "18px", 
+                  height: "18px", 
+                  color: rightPanelMode === 'notes' ? "#D89880" : "#999", 
+                  strokeWidth: 1.5,
+                  transition: "color 0.2s ease"
+                }} />
+              </button>
+            </div>
+          </div>
+
+          {/* Panel Content Area */}
+          <div style={{ flex: 1, overflowY: "auto", padding: "28px 36px" }}>
           <div style={{ maxWidth: "680px", margin: "0 auto" }}>
             {/* Email View Mode */}
             {rightPanelMode === 'email' && (
@@ -1163,8 +1287,55 @@ export default function ClaudeRefinedDemo() {
                   {selectedEmail.email}
                 </div>
               </div>
-              <div className="ml-auto" style={{ fontSize: "10px", color: "#999", fontWeight: 300 }}>
-                {selectedEmail.time}
+              <div className="ml-auto flex items-center gap-3">
+                {/* Storage Icon */}
+                <button
+                  onClick={() => setShowStoragePanel(true)}
+                  style={{
+                    padding: 0,
+                    background: "none",
+                    border: "none",
+                    cursor: "pointer",
+                    transition: "all 0.2s ease"
+                  }}
+                  onMouseEnter={(e) => {
+                    const icon = e.currentTarget.querySelector('svg') as any;
+                    if (icon) icon.style.color = "#D89880";
+                  }}
+                  onMouseLeave={(e) => {
+                    const icon = e.currentTarget.querySelector('svg') as any;
+                    if (icon) icon.style.color = "#999";
+                  }}
+                >
+                  <HardDrive style={{ width: "16px", height: "16px", color: "#999", strokeWidth: 1.5, transition: "color 0.2s ease" }} />
+                </button>
+                
+                {/* Printer Icon */}
+                <button
+                  onClick={() => setShowPrintPanel(true)}
+                  style={{
+                    padding: 0,
+                    background: "none",
+                    border: "none",
+                    cursor: "pointer",
+                    transition: "all 0.2s ease"
+                  }}
+                  onMouseEnter={(e) => {
+                    const icon = e.currentTarget.querySelector('svg') as any;
+                    if (icon) icon.style.color = "#D89880";
+                  }}
+                  onMouseLeave={(e) => {
+                    const icon = e.currentTarget.querySelector('svg') as any;
+                    if (icon) icon.style.color = "#999";
+                  }}
+                >
+                  <Printer style={{ width: "16px", height: "16px", color: "#999", strokeWidth: 1.5, transition: "color 0.2s ease" }} />
+                </button>
+                
+                {/* Date */}
+                <div style={{ fontSize: "10px", color: "#999", fontWeight: 300 }}>
+                  {selectedEmail.time}
+                </div>
               </div>
             </div>
 
@@ -1348,9 +1519,217 @@ export default function ClaudeRefinedDemo() {
                 </div>
               </div>
             )}
+
+            {/* Notes Mode */}
+            {rightPanelMode === 'notes' && (
+              <div>
+                <h2 style={{ fontSize: "18px", fontWeight: 300, color: "#2A2A2A", marginBottom: "20px" }}>Notes</h2>
+                <div style={{ padding: "20px", background: "white", border: "1px solid #F0EBE6", borderRadius: "8px", minHeight: "400px" }}>
+                  <p style={{ fontSize: "12px", color: "#666" }}>Notes interface - Coming soon</p>
+                </div>
+              </div>
+            )}
+          </div>
           </div>
         </div>
       </div>
+
+      {/* Storage Slide-out Panel */}
+      {showStoragePanel && (
+        <div style={{
+          position: "fixed",
+          top: 0,
+          right: 0,
+          bottom: 0,
+          width: "320px",
+          background: "#FFFBF7",
+          boxShadow: "-4px 0 12px rgba(0,0,0,0.1)",
+          zIndex: 1000,
+          padding: "24px",
+          overflowY: "auto"
+        }}>
+          <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "24px" }}>
+            <h3 style={{ fontSize: "16px", fontWeight: 300, color: "#2A2A2A" }}>Save to Storage</h3>
+            <button
+              onClick={() => setShowStoragePanel(false)}
+              style={{
+                padding: 0,
+                background: "none",
+                border: "none",
+                cursor: "pointer",
+                fontSize: "20px",
+                color: "#999"
+              }}
+            >
+              ×
+            </button>
+          </div>
+          
+          <div style={{ display: "flex", flexDirection: "column", gap: "12px" }}>
+            {[
+              { name: "Dropbox", icon: "📦" },
+              { name: "Mega", icon: "☁️" },
+              { name: "OneDrive", icon: "📁" }
+            ].map((storage) => (
+              <button
+                key={storage.name}
+                onClick={() => {
+                  alert(`Saving email to ${storage.name}...`);
+                  setShowStoragePanel(false);
+                }}
+                style={{
+                  padding: "16px",
+                  background: "white",
+                  border: "1px solid #F0EBE6",
+                  borderRadius: "8px",
+                  cursor: "pointer",
+                  textAlign: "left",
+                  fontSize: "14px",
+                  fontWeight: 300,
+                  color: "#2A2A2A",
+                  display: "flex",
+                  alignItems: "center",
+                  gap: "12px",
+                  transition: "all 0.2s ease"
+                }}
+                onMouseEnter={(e) => {
+                  e.currentTarget.style.borderColor = "#D89880";
+                  e.currentTarget.style.background = "#FFFBF7";
+                }}
+                onMouseLeave={(e) => {
+                  e.currentTarget.style.borderColor = "#F0EBE6";
+                  e.currentTarget.style.background = "white";
+                }}
+              >
+                <span style={{ fontSize: "24px" }}>{storage.icon}</span>
+                {storage.name}
+              </button>
+            ))}
+          </div>
+        </div>
+      )}
+
+      {/* Print Slide-out Panel */}
+      {showPrintPanel && (
+        <div style={{
+          position: "fixed",
+          top: 0,
+          right: 0,
+          bottom: 0,
+          width: "320px",
+          background: "#FFFBF7",
+          boxShadow: "-4px 0 12px rgba(0,0,0,0.1)",
+          zIndex: 1000,
+          padding: "24px",
+          overflowY: "auto"
+        }}>
+          <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "24px" }}>
+            <h3 style={{ fontSize: "16px", fontWeight: 300, color: "#2A2A2A" }}>Print Options</h3>
+            <button
+              onClick={() => setShowPrintPanel(false)}
+              style={{
+                padding: 0,
+                background: "none",
+                border: "none",
+                cursor: "pointer",
+                fontSize: "20px",
+                color: "#999"
+              }}
+            >
+              ×
+            </button>
+          </div>
+          
+          <div style={{ display: "flex", flexDirection: "column", gap: "12px" }}>
+            <button
+              onClick={() => {
+                window.print();
+                setShowPrintPanel(false);
+              }}
+              style={{
+                padding: "16px",
+                background: "white",
+                border: "1px solid #F0EBE6",
+                borderRadius: "8px",
+                cursor: "pointer",
+                textAlign: "left",
+                fontSize: "14px",
+                fontWeight: 300,
+                color: "#2A2A2A",
+                transition: "all 0.2s ease"
+              }}
+              onMouseEnter={(e) => {
+                e.currentTarget.style.borderColor = "#D89880";
+                e.currentTarget.style.background = "#FFFBF7";
+              }}
+              onMouseLeave={(e) => {
+                e.currentTarget.style.borderColor = "#F0EBE6";
+                e.currentTarget.style.background = "white";
+              }}
+            >
+              🖨️ Print to Printer
+            </button>
+            
+            <button
+              onClick={() => {
+                alert("Generating PDF...");
+                setShowPrintPanel(false);
+              }}
+              style={{
+                padding: "16px",
+                background: "white",
+                border: "1px solid #F0EBE6",
+                borderRadius: "8px",
+                cursor: "pointer",
+                textAlign: "left",
+                fontSize: "14px",
+                fontWeight: 300,
+                color: "#2A2A2A",
+                transition: "all 0.2s ease"
+              }}
+              onMouseEnter={(e) => {
+                e.currentTarget.style.borderColor = "#D89880";
+                e.currentTarget.style.background = "#FFFBF7";
+              }}
+              onMouseLeave={(e) => {
+                e.currentTarget.style.borderColor = "#F0EBE6";
+                e.currentTarget.style.background = "white";
+              }}
+            >
+              📄 Download as PDF
+            </button>
+            
+            <button
+              onClick={() => {
+                setShowPrintPanel(false);
+                setShowStoragePanel(true);
+              }}
+              style={{
+                padding: "16px",
+                background: "white",
+                border: "1px solid #F0EBE6",
+                borderRadius: "8px",
+                cursor: "pointer",
+                textAlign: "left",
+                fontSize: "14px",
+                fontWeight: 300,
+                color: "#2A2A2A",
+                transition: "all 0.2s ease"
+              }}
+              onMouseEnter={(e) => {
+                e.currentTarget.style.borderColor = "#D89880";
+                e.currentTarget.style.background = "#FFFBF7";
+              }}
+              onMouseLeave={(e) => {
+                e.currentTarget.style.borderColor = "#F0EBE6";
+                e.currentTarget.style.background = "white";
+              }}
+            >
+              💾 Save PDF to Storage
+            </button>
+          </div>
+        </div>
+      )}
 
       {/* Fixed Footer */}
       <div style={{
