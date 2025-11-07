@@ -272,3 +272,46 @@
 - [ ] Move copyright to fixed footer at bottom of page (not in sidebar)
 - [ ] Fix email detail area proportions (too large)
 - [ ] Balance layout between sidebar, email list, and detail
+
+
+## CURRENT FUNCTIONALITY TASKS (Nov 6, 2025 - Elite Agent Execution)
+
+### Compose & Email Actions
+- [x] Fix compose modal - make pencil button open modal properly
+- [x] Implement Reply functionality (all 3 locations)
+- [x] Implement Forward functionality (all 3 locations)
+- [x] Implement Archive functionality (all 3 locations)
+- [x] Implement Spam functionality (all 3 locations)
+- [x] Implement Delete functionality (all 3 locations)
+- [x] Implement Pin functionality (all 3 locations)
+- [x] Implement Star/Favorite functionality (all 3 locations)
+- [ ] Make Search button functional
+
+### Sidebar Navigation Content Views
+- [ ] Fresh Start view - dashboard/welcome screen
+- [ ] Starred view - show starred emails
+- [ ] New Connections view - gatekeeper for new senders
+- [ ] Paused view - emails set aside temporarily
+- [ ] Complete view - emails marked as done
+- [ ] Sent view - sent emails
+- [ ] Drafts view - draft emails
+- [ ] Archive view - archived emails
+- [ ] Spam view - spam emails
+- [ ] Trash view - deleted emails
+- [ ] Storage view - storage management
+- [ ] Notes view - notes interface
+- [ ] Calendar view - calendar interface
+- [ ] Contacts view - contacts management
+- [ ] Analytics view - email analytics dashboard
+- [ ] Appearance view - theme switching (4+ themes)
+- [ ] Settings view - settings panel
+
+### Email Onboarding
+- [ ] Add email account connection UI in Settings
+- [ ] Multi-inbox management (add/remove accounts)
+- [ ] Display connected accounts
+
+### UI Refinements
+- [ ] Verify underline only covers text (not full width)
+- [ ] Ensure all tooltips display instantly on hover
+- [ ] Test responsive behavior across all views

@@ -36,6 +36,44 @@ export default function ClaudeRefinedDemo() {
   const [activeView, setActiveView] = useState('Inbox');
   const [showComposeModal, setShowComposeModal] = useState(false);
 
+  // Email action handlers
+  const handleReply = (emailId: number) => {
+    console.log('Reply to email:', emailId);
+    setShowComposeModal(true);
+    // TODO: Pre-fill compose modal with reply data
+  };
+
+  const handleForward = (emailId: number) => {
+    console.log('Forward email:', emailId);
+    setShowComposeModal(true);
+    // TODO: Pre-fill compose modal with forward data
+  };
+
+  const handleArchive = (emailId: number) => {
+    console.log('Archive email:', emailId);
+    // TODO: Move email to archive
+  };
+
+  const handleSpam = (emailId: number) => {
+    console.log('Mark as spam:', emailId);
+    // TODO: Move email to spam
+  };
+
+  const handleDelete = (emailId: number) => {
+    console.log('Delete email:', emailId);
+    // TODO: Move email to trash
+  };
+
+  const handlePin = (emailId: number) => {
+    console.log('Pin email:', emailId);
+    // TODO: Toggle pin status
+  };
+
+  const handleStar = (emailId: number) => {
+    console.log('Star email:', emailId);
+    // TODO: Toggle star status
+  };
+
   useEffect(() => {
     const handleMouseMove = (e: MouseEvent) => {
       if (isResizing) {
@@ -545,7 +583,16 @@ export default function ClaudeRefinedDemo() {
                   ].map((action) => (
                     <button
                       key={action.label}
-                      onClick={(e) => { e.stopPropagation(); }}
+                      onClick={(e) => { 
+                        e.stopPropagation(); 
+                        if (action.label === 'Reply') handleReply(email.id);
+                        else if (action.label === 'Forward') handleForward(email.id);
+                        else if (action.label === 'Archive') handleArchive(email.id);
+                        else if (action.label === 'Spam') handleSpam(email.id);
+                        else if (action.label === 'Delete') handleDelete(email.id);
+                        else if (action.label === 'Pin') handlePin(email.id);
+                        else if (action.label === 'Star') handleStar(email.id);
+                      }}
                       style={{
                         background: "none",
                         border: "none",
@@ -597,6 +644,15 @@ export default function ClaudeRefinedDemo() {
               ].filter(action => action.alwaysShow || emailDetailWidth >= 700).map((action) => (
                 <button
                   key={action.label}
+                  onClick={() => {
+                    if (action.label === 'Reply') handleReply(selectedEmail.id);
+                    else if (action.label === 'Forward') handleForward(selectedEmail.id);
+                    else if (action.label === 'Archive') handleArchive(selectedEmail.id);
+                    else if (action.label === 'Spam') handleSpam(selectedEmail.id);
+                    else if (action.label === 'Delete') handleDelete(selectedEmail.id);
+                    else if (action.label === 'Pin') handlePin(selectedEmail.id);
+                    else if (action.label === 'Star') handleStar(selectedEmail.id);
+                  }}
                   style={{
                     padding: 0,
                     background: "none",
@@ -770,6 +826,15 @@ export default function ClaudeRefinedDemo() {
               ].map((action) => (
                 <button
                   key={action.label}
+                  onClick={() => {
+                    if (action.label === 'Reply') handleReply(selectedEmail.id);
+                    else if (action.label === 'Forward') handleForward(selectedEmail.id);
+                    else if (action.label === 'Archive') handleArchive(selectedEmail.id);
+                    else if (action.label === 'Spam') handleSpam(selectedEmail.id);
+                    else if (action.label === 'Delete') handleDelete(selectedEmail.id);
+                    else if (action.label === 'Pin') handlePin(selectedEmail.id);
+                    else if (action.label === 'Star') handleStar(selectedEmail.id);
+                  }}
                   style={{
                     padding: 0,
                     background: "none",
