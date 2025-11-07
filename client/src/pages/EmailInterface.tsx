@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef } from "react";
-import { Mail, Send, Archive, Trash2, Star, Clock, CheckCircle2, Pause, Home, Inbox, Calendar, Users, Settings, Plus, UserPlus, Search, Zap, Check, Pencil, ChevronDown, ChevronRight, Pin, Info, FileText, HardDrive, BarChart3, Palette, AlertCircle, FilePen, Reply, Forward, Sparkles } from "lucide-react";
+import { Mail, Send, Archive, Trash2, Star, Clock, CheckCircle2, Pause, Home, Inbox, Calendar, Users, Settings, Plus, UserPlus, Search, Zap, Check, Pencil, ChevronDown, ChevronRight, Pin, Info, FileText, HardDrive, BarChart3, Palette, AlertCircle, FilePen, Reply, Forward, Bot } from "lucide-react";
 
 /**
  * Claude AI - DRAMATICALLY Refined
@@ -567,7 +567,7 @@ export default function ClaudeRefinedDemo() {
                     onMouseEnter={(e) => setHoveredTooltip({ label: 'AI Assistant', x: e.clientX, y: e.clientY + 20 })}
                     onMouseLeave={() => setHoveredTooltip(null)}
                   >
-                    <Sparkles style={{ width: "16px", height: "16px", color: "#666", strokeWidth: 1.5 }} />
+                    <Bot style={{ width: "16px", height: "16px", color: "#666", strokeWidth: 1.5 }} />
                   </button>
                 </div>
               </div>
