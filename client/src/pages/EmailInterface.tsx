@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef } from "react";
 import { trpc } from "@/lib/trpc";
-import { Mail, Send, Archive, Trash2, Star, Clock, CheckCircle2, Pause, Home, Inbox, Calendar, Users, Settings, Plus, UserPlus, Search, Zap, Check, Pencil, ChevronDown, ChevronRight, Pin, Info, FileText, HardDrive, BarChart3, Palette, AlertCircle, FilePen, Reply, Forward, Bot, User, Shield, Printer, MessageSquare, ListFilter, Mic } from "lucide-react";
+import { Mail, Send, Archive, Trash2, Star, Clock, CheckCircle2, Pause, Home, Inbox, Calendar, Users, Settings, Plus, UserPlus, Search, Zap, Check, Pencil, ChevronDown, ChevronRight, Pin, Info, FileText, HardDrive, BarChart3, Palette, AlertCircle, FilePen, Reply, Forward, Bot, User, Shield, Printer, MessageSquare, ListFilter, Mic, Paperclip } from "lucide-react";
 
 /**
  * Claude AI - DRAMATICALLY Refined
@@ -60,6 +60,14 @@ export default function ClaudeRefinedDemo() {
   const [newNoteContent, setNewNoteContent] = useState('');
   const [editingNoteId, setEditingNoteId] = useState<number | null>(null);
   const [selectedEmailIndex, setSelectedEmailIndex] = useState(0);
+  const [showCcBcc, setShowCcBcc] = useState(false);
+  const [composeTo, setComposeTo] = useState('');
+  const [composeCc, setComposeCc] = useState('');
+  const [composeBcc, setComposeBcc] = useState('');
+  const [composeSubject, setComposeSubject] = useState('');
+  const [composeBody, setComposeBody] = useState('');
+  const [attachments, setAttachments] = useState<File[]>([]);
+  const fileInputRef = useRef<HTMLInputElement>(null);
 
   // Email action handlers
   const [isReplying, setIsReplying] = useState(false);
@@ -1530,12 +1538,14 @@ export default function ClaudeRefinedDemo() {
                 <h2 style={{ fontSize: "18px", fontWeight: 300, color: "#2A2A2A", marginBottom: "20px" }}>New Message</h2>
                 
                 {/* To field */}
-                <div style={{ borderBottom: "1px solid #F0EBE6", paddingBottom: "8px", marginBottom: "8px" }}>
+                <div style={{ borderBottom: "1px solid #F0EBE6", paddingBottom: "8px", marginBottom: "8px", display: "flex", alignItems: "center", gap: "8px" }}>
                   <input
                     type="text"
                     placeholder="Recipients"
+                    value={composeTo}
+                    onChange={(e) => setComposeTo(e.target.value)}
                     style={{
-                      width: "100%",
+                      flex: 1,
                       padding: "8px 0",
                       fontSize: "13px",
                       fontWeight: 300,
@@ -1545,13 +1555,74 @@ export default function ClaudeRefinedDemo() {
                       color: "#2A2A2A"
                     }}
                   />
+                  <button
+                    onClick={() => setShowCcBcc(!showCcBcc)}
+                    style={{
+                      padding: 0,
+                      background: "none",
+                      border: "none",
+                      color: "#999",
+                      fontSize: "11px",
+                      fontWeight: 300,
+                      cursor: "pointer",
+                      transition: "color 0.2s ease"
+                    }}
+                    onMouseEnter={(e) => e.currentTarget.style.color = "#D89880"}
+                    onMouseLeave={(e) => e.currentTarget.style.color = "#999"}
+                  >
+                    Cc/Bcc
+                  </button>
                 </div>
+                
+                {/* CC/BCC fields */}
+                {showCcBcc && (
+                  <>
+                    <div style={{ borderBottom: "1px solid #F0EBE6", paddingBottom: "8px", marginBottom: "8px" }}>
+                      <input
+                        type="text"
+                        placeholder="Cc"
+                        value={composeCc}
+                        onChange={(e) => setComposeCc(e.target.value)}
+                        style={{
+                          width: "100%",
+                          padding: "8px 0",
+                          fontSize: "13px",
+                          fontWeight: 300,
+                          border: "none",
+                          outline: "none",
+                          background: "transparent",
+                          color: "#2A2A2A"
+                        }}
+                      />
+                    </div>
+                    <div style={{ borderBottom: "1px solid #F0EBE6", paddingBottom: "8px", marginBottom: "8px" }}>
+                      <input
+                        type="text"
+                        placeholder="Bcc"
+                        value={composeBcc}
+                        onChange={(e) => setComposeBcc(e.target.value)}
+                        style={{
+                          width: "100%",
+                          padding: "8px 0",
+                          fontSize: "13px",
+                          fontWeight: 300,
+                          border: "none",
+                          outline: "none",
+                          background: "transparent",
+                          color: "#2A2A2A"
+                        }}
+                      />
+                    </div>
+                  </>
+                )}
                 
                 {/* Subject field */}
                 <div style={{ borderBottom: "1px solid #F0EBE6", paddingBottom: "8px", marginBottom: "16px" }}>
                   <input
                     type="text"
                     placeholder="Subject"
+                    value={composeSubject}
+                    onChange={(e) => setComposeSubject(e.target.value)}
                     style={{
                       width: "100%",
                       padding: "8px 0",
@@ -1568,6 +1639,8 @@ export default function ClaudeRefinedDemo() {
                 {/* Message body */}
                 <textarea
                   placeholder="Type your message..."
+                  value={composeBody}
+                  onChange={(e) => setComposeBody(e.target.value)}
                   style={{
                     flex: 1,
                     padding: "0",
@@ -1582,6 +1655,37 @@ export default function ClaudeRefinedDemo() {
                     minHeight: "300px"
                   }}
                 />
+                
+                {/* Formatting toolbar */}
+                <div style={{ display: "flex", gap: "12px", marginTop: "12px", paddingTop: "12px", borderTop: "1px solid #F0EBE6" }}>
+                  <input
+                    ref={fileInputRef}
+                    type="file"
+                    multiple
+                    style={{ display: "none" }}
+                    onChange={(e) => {
+                      if (e.target.files) {
+                        setAttachments(Array.from(e.target.files));
+                      }
+                    }}
+                  />
+                  <button
+                    onClick={() => fileInputRef.current?.click()}
+                    style={{
+                      padding: 0,
+                      background: "none",
+                      border: "none",
+                      cursor: "pointer"
+                    }}
+                  >
+                    <Paperclip style={{ width: "16px", height: "16px", color: "#999", strokeWidth: 1.5 }} />
+                  </button>
+                  {attachments.length > 0 && (
+                    <span style={{ fontSize: "11px", color: "#999", fontWeight: 300 }}>
+                      {attachments.length} file{attachments.length > 1 ? 's' : ''} attached
+                    </span>
+                  )}
+                </div>
                 
                 {/* Action buttons */}
                 <div style={{ display: "flex", gap: "16px", marginTop: "20px", paddingTop: "20px", borderTop: "1px solid #F0EBE6" }}>
