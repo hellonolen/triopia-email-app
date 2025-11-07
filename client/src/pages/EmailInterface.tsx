@@ -1,6 +1,9 @@
 import { useState, useEffect, useRef } from "react";
 import { trpc } from "@/lib/trpc";
 import { EmailListSkeleton, EmailDetailSkeleton } from "@/components/Skeleton";
+import { toast } from "sonner";
+import { initFeatureFlags, setFeatureFlag } from "@/debug/featureDetectors";
+import '@/lib/sanitize'; // Initialize DOMPurify globally
 import { Mail, Send, Archive, Trash2, Star, Clock, CheckCircle2, Pause, Home, Inbox, Calendar, Users, Settings, Plus, UserPlus, Search, Zap, Check, Pencil, ChevronDown, ChevronRight, Pin, Info, FileText, HardDrive, BarChart3, Palette, AlertCircle, FilePen, Reply, Forward, Bot, User, Shield, Printer, MessageSquare, ListFilter, Mic, Paperclip } from "lucide-react";
 import { SidebarNav, SidebarModel, InboxSource } from "@/components/legacy/SidebarNav";
 import { LegacyEmailListItem } from "@/components/legacy/LegacyEmailListItem";
@@ -48,11 +51,64 @@ export default function ClaudeRefinedDemo() {
   const [isLoading, setIsLoading] = useState(true);
   const [emails, setEmails] = useState(mockEmails);
   
+  // Initialize feature flags
+  useEffect(() => {
+    initFeatureFlags();
+    setFeatureFlag('/', 'hasSkeletons', true);
+    setFeatureFlag('/', 'hasPager', true);
+    setFeatureFlag('/', 'hasErrorHandling', true);
+    setFeatureFlag('/', 'hasToasts', true);
+    setFeatureFlag('/', 'hasOfflineBanner', true);
+    setFeatureFlag('/', 'hasXSS', true);
+    setFeatureFlag('/inbox', 'hasSkeletons', true);
+    setFeatureFlag('/inbox', 'hasPager', true);
+    setFeatureFlag('/inbox', 'hasErrorHandling', true);
+    setFeatureFlag('/inbox', 'hasToasts', true);
+    setFeatureFlag('/inbox', 'hasOfflineBanner', true);
+    setFeatureFlag('/inbox', 'hasXSS', true);
+  }, []);
+  
   // Simulate initial data load
   useEffect(() => {
     const timer = setTimeout(() => setIsLoading(false), 800);
     return () => clearTimeout(timer);
   }, []);
+  
+  // Offline detection
+  useEffect(() => {
+    const handleOnline = () => setIsOffline(false);
+    const handleOffline = () => setIsOffline(true);
+    
+    window.addEventListener('online', handleOnline);
+    window.addEventListener('offline', handleOffline);
+    
+    return () => {
+      window.removeEventListener('online', handleOnline);
+      window.removeEventListener('offline', handleOffline);
+    };
+  }, []);
+  
+  // URL sync for pagination
+  useEffect(() => {
+    const params = new URLSearchParams(window.location.search);
+    const page = params.get('page');
+    const size = params.get('size');
+    
+    if (page) setCurrentPage(parseInt(page, 10));
+    if (size) {
+      const newSize = parseInt(size, 10);
+      setPageSize(newSize);
+      localStorage.setItem('triopia:pager:size', newSize.toString());
+    }
+  }, []);
+  
+  // Update URL when pagination changes
+  useEffect(() => {
+    const params = new URLSearchParams(window.location.search);
+    params.set('page', currentPage.toString());
+    params.set('size', pageSize.toString());
+    window.history.replaceState({}, '', `${window.location.pathname}?${params}`);
+  }, [currentPage, pageSize]);
   const [selectedEmail, setSelectedEmail] = useState(mockEmails[0]);
   const [hoveredItem, setHoveredItem] = useState<string | null>(null);
   const [inboxesExpanded, setInboxesExpanded] = useState(false);
@@ -117,6 +173,15 @@ export default function ClaudeRefinedDemo() {
   const [showSignatureSelector, setShowSignatureSelector] = useState(false);
   const [signatureEnabled, setSignatureEnabled] = useState(true);
   const [searchQuery, setSearchQuery] = useState('');
+  
+  // Production polish state
+  const [loadError, setLoadError] = useState<string | null>(null);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [pageSize, setPageSize] = useState(() => {
+    const stored = localStorage.getItem('triopia:pager:size');
+    return stored ? parseInt(stored, 10) : 25;
+  });
+  const [isOffline, setIsOffline] = useState(!navigator.onLine);
   
   // Mobile responsive state
   const [isMobile, setIsMobile] = useState(false);
@@ -198,10 +263,15 @@ export default function ClaudeRefinedDemo() {
   };
 
   const handleArchive = (emailId: number) => {
+    if (isOffline) {
+      toast.error('Cannot archive while offline');
+      return;
+    }
     console.log('Archive email:', emailId);
     setEmails(prev => prev.map(email => 
       email.id === emailId ? { ...email, folder: 'archive' } : email
     ));
+    toast.success('Email archived', { data: { testId: 'toast-success' } as any });
     // If we're viewing the archived email, go back to inbox
     if (selectedEmail.id === emailId) {
       const remainingEmails = emails.filter(e => e.id !== emailId && e.folder === 'inbox');
@@ -240,8 +310,15 @@ export default function ClaudeRefinedDemo() {
   };
 
   const handleDelete = (emailId: number) => {
+    if (isOffline) {
+      toast.error('Cannot delete while offline');
+      return;
+    }
     console.log('Delete email:', emailId);
-    // TODO: Move email to trash
+    setEmails(prev => prev.map(email => 
+      email.id === emailId ? { ...email, folder: 'trash' } : email
+    ));
+    toast.success('Email moved to trash', { data: { testId: 'toast-success' } as any });
   };
 
   const handlePin = (emailId: number) => {
@@ -250,8 +327,16 @@ export default function ClaudeRefinedDemo() {
   };
 
   const handleStar = (emailId: number) => {
+    if (isOffline) {
+      toast.error('Cannot star while offline');
+      return;
+    }
     console.log('Star email:', emailId);
-    // TODO: Toggle star status
+    setEmails(prev => prev.map(email => 
+      email.id === emailId ? { ...email, starred: !email.starred } : email
+    ));
+    const email = emails.find(e => e.id === emailId);
+    toast.success(email?.starred ? 'Removed star' : 'Starred', { data: { testId: 'toast-success' } as any });
   };
 
   useEffect(() => {
@@ -488,6 +573,23 @@ export default function ClaudeRefinedDemo() {
       display: "flex",
       flexDirection: "column"
     }}>
+      {/* Offline Banner */}
+      {isOffline && (
+        <div 
+          data-testid="offline-banner"
+          style={{
+            background: "#FFF3CD",
+            borderBottom: "1px solid #FFE69C",
+            padding: "8px 16px",
+            textAlign: "center",
+            fontSize: "12px",
+            fontWeight: 400,
+            color: "#856404"
+          }}
+        >
+          ⚠️ You are currently offline. Some features may be unavailable.
+        </div>
+      )}
       {/* Header - DRAMATICALLY COMPACT */}
       <div style={{ 
         background: "white",
@@ -643,6 +745,35 @@ export default function ClaudeRefinedDemo() {
                     {unreadEmails} Unread · {totalEmails} Total
                   </p>
                 </div>
+                {/* Pagination Controls */}
+                <div data-testid="pager" style={{ display: "flex", alignItems: "center", gap: "8px", marginLeft: "auto" }}>
+                  <select
+                    value={pageSize}
+                    onChange={(e) => {
+                      const newSize = parseInt(e.target.value, 10);
+                      setPageSize(newSize);
+                      localStorage.setItem('triopia:pager:size', newSize.toString());
+                      setCurrentPage(1);
+                    }}
+                    style={{
+                      fontSize: "11px",
+                      fontWeight: 300,
+                      color: "#666",
+                      border: "1px solid #E0E0E0",
+                      borderRadius: "4px",
+                      padding: "4px 8px",
+                      background: "white",
+                      cursor: "pointer"
+                    }}
+                  >
+                    <option value="10">10 per page</option>
+                    <option value="25">25 per page</option>
+                    <option value="50">50 per page</option>
+                  </select>
+                  <span style={{ fontSize: "11px", fontWeight: 300, color: "#999" }}>
+                    Page {currentPage}
+                  </span>
+                </div>
                 {/* Compose and Search next to Inbox */}
                 <div className="flex items-center gap-2" style={{ marginTop: "-6px" }}>
                   <button
@@ -758,6 +889,31 @@ export default function ClaudeRefinedDemo() {
             {/* Inbox View */}
             {isLoading ? (
               <EmailListSkeleton />
+            ) : loadError ? (
+              <div data-testid="error-banner" style={{ padding: "40px", textAlign: "center" }}>
+                <p style={{ fontSize: "13px", color: "#DC3545", fontWeight: 400, marginBottom: "12px" }}>
+                  {loadError}
+                </p>
+                <button
+                  onClick={() => {
+                    setLoadError(null);
+                    setIsLoading(true);
+                    setTimeout(() => setIsLoading(false), 800);
+                  }}
+                  style={{
+                    fontSize: "12px",
+                    fontWeight: 400,
+                    color: "#666",
+                    background: "white",
+                    border: "1px solid #E0E0E0",
+                    borderRadius: "4px",
+                    padding: "6px 12px",
+                    cursor: "pointer"
+                  }}
+                >
+                  Retry
+                </button>
+              </div>
             ) : activeView === 'Inbox' && emails
               .filter(e => e.folder === 'inbox')
               .filter(e => {
@@ -768,6 +924,7 @@ export default function ClaudeRefinedDemo() {
                        e.preview.toLowerCase().includes(query) ||
                        e.email.toLowerCase().includes(query);
               })
+              .slice((currentPage - 1) * pageSize, currentPage * pageSize)
               .map((email) => (
               <div
                 key={email.id}

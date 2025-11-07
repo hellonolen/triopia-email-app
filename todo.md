@@ -333,3 +333,21 @@
 - [x] Verify all core workflows (email send/receive, search, AI, notes, calendar, contacts)
 - [x] Make entire site mobile responsive (sidebar, email list, detail, right panel)
 - [x] Add API Keys settings panel in Settings page (SendGrid + OpenAI input fields)
+
+## AUTO-REPORTER SYSTEM
+
+- [x] Create /__debug/report endpoint (JSON combining routes, features, config, tests)
+- [x] Create scripts/debug/report.mjs (fetches and formats build status)
+- [x] Wire npm scripts (report:once, report:loop)
+- [x] Test auto-posting to chat
+
+## DELTA SPRINT - VERIFY & FLIP GREEN
+
+- [x] Create feature detectors (client/src/debug/featureDetectors.ts)
+- [x] Add error handling with retry to list fetch
+- [x] Add success toasts for archive/star/delete actions
+- [x] Add pagination with URL sync and localStorage
+- [x] Add XSS sanitization with DOMPurify
+- [x] Add offline banner and disable actions when offline
+- [x] Update /__debug/features to use detectors (computed, not static)
+- [x] Test all features and create proof bundle

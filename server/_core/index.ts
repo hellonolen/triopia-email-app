@@ -89,15 +89,17 @@ async function startServer() {
     res.send(`commit=${commit}\nbranch=${branch}\ntotal_routes=${routes.length}\n${routes.join("\n")}`);
   });
 
-  app.get("/__debug/features", (req, res) => {
+  app.get("/__debug/features", async (req, res) => {
+    const { detectFeaturesForRoute } = await import('../lib/featureDetection.js');
+    
     res.json({
       commit: execSync("git rev-parse --short HEAD").toString().trim(),
       branch: execSync("git branch --show-current").toString().trim(),
       routes: {
-        "/": { skeletons: true, errorHandling: false, successToasts: false, emailValidation: "NA", pagination: false, xssSanitization: false, localStorage: false, autoSaveDrafts: false, offline: false, s3Upload: "NA" },
-        "/inbox": { skeletons: true, errorHandling: false, successToasts: false, emailValidation: "NA", pagination: false, xssSanitization: false, localStorage: false, autoSaveDrafts: false, offline: false, s3Upload: "NA" },
-        "/contacts": { skeletons: false, errorHandling: false, successToasts: false, emailValidation: "NA", pagination: false, xssSanitization: false, localStorage: false, autoSaveDrafts: "NA", offline: false, s3Upload: "NA" },
-        "/settings": { skeletons: false, errorHandling: false, successToasts: false, emailValidation: false, pagination: "NA", xssSanitization: false, localStorage: false, autoSaveDrafts: "NA", offline: false, s3Upload: "NA" },
+        "/": detectFeaturesForRoute("/"),
+        "/inbox": detectFeaturesForRoute("/inbox"),
+        "/contacts": detectFeaturesForRoute("/contacts"),
+        "/settings": detectFeaturesForRoute("/settings"),
       },
     });
   });
@@ -114,6 +116,69 @@ async function startServer() {
     res.json({
       unit: { status: "not_run", passed: 0, failed: 0 },
       e2e: { status: "not_run", passed: 0, failed: 0 },
+    });
+  });
+
+  // Combined debug report endpoint
+  app.get("/__debug/report", async (req, res) => {
+    const { detectFeaturesForRoute } = await import('../lib/featureDetection.js');
+    const commit = execSync("git rev-parse --short HEAD").toString().trim();
+    const branch = execSync("git branch --show-current").toString().trim();
+    const timestamp = new Date().toISOString();
+    
+    // Get preview URL from env or use default
+    const preview = process.env.PREVIEW_URL || "https://3000-isnj9ofymsbtrhk650nk1-b6a5c71b.manus.computer";
+    
+    // Routes as text
+    const routes = [
+      "/ -> EmailInterface (content=present)",
+      "/inbox -> EmailInterface (content=present)",
+      "/starred -> EmailInterface (content=present)",
+      "/archive -> EmailInterface (content=present)",
+      "/spam -> EmailInterface (content=present)",
+      "/trash -> EmailInterface (content=present)",
+      "/settings -> EmailInterface (content=present)",
+      "/notes -> EmailInterface (content=present)",
+      "/calendar -> EmailInterface (content=present)",
+      "/contacts -> EmailInterface (content=present)",
+      "/404 -> NotFound (content=present)",
+    ];
+    const routesText = `commit=${commit}\nbranch=${branch}\ntotal_routes=${routes.length}\n${routes.join("\n")}`;
+    
+    // Features as JSON (computed via detectors)
+    const features = {
+      commit,
+      branch,
+      routes: {
+        "/": detectFeaturesForRoute("/"),
+        "/inbox": detectFeaturesForRoute("/inbox"),
+        "/contacts": detectFeaturesForRoute("/contacts"),
+        "/settings": detectFeaturesForRoute("/settings"),
+      },
+    };
+    
+    // Config subset
+    const config = {
+      brand: { peach: "#D89880", cream: "#FFFBF7", dark: "#2A2A2A" },
+      fontSizes: { sm: "0.9375rem", md: "1rem", lg: "1.0625rem" },
+      tailwind: "configured",
+    };
+    
+    // Tests
+    const tests = {
+      unit: "N/A",
+      e2e: "N/A",
+    };
+    
+    res.json({
+      branch,
+      commit,
+      preview,
+      timestamp,
+      routes: routesText,
+      features,
+      config,
+      tests,
     });
   });
 
