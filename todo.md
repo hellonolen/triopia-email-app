@@ -340,3 +340,19 @@
 - [ ] Implement AI shortcuts (Cmd+K for AI assistant, Cmd+J for quick reply)
 - [ ] Add keyboard shortcuts help modal (? key)
 - [ ] Test all keyboard shortcuts
+
+### Sidebar View Implementation
+- [ ] Implement Notes view with note-taking functionality
+- [ ] Implement Contacts view with contact management
+- [ ] Implement Calendar view with calendar integration
+- [ ] Implement Analytics view with email analytics dashboard
+- [ ] Implement Appearance view with theme customization
+- [ ] Implement Settings view with user preferences
+- [ ] Implement Starred view with starred emails
+- [ ] Implement Drafts view with draft emails
+- [ ] Implement Sent view with sent emails
+- [ ] Implement Archive view with archived emails
+- [ ] Implement Spam view with spam emails
+- [ ] Implement Trash view with deleted emails
+- [ ] Implement Storage view with storage management
+- [ ] Connect all views to backend/database

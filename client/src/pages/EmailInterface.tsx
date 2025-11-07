@@ -622,7 +622,8 @@ export default function ClaudeRefinedDemo() {
           </div>
 
           <div>
-            {mockEmails.map((email) => (
+            {/* Inbox View */}
+            {activeView === 'Inbox' && mockEmails.map((email) => (
               <div
                 key={email.id}
                 onClick={() => setSelectedEmail(email)}
@@ -742,6 +743,97 @@ export default function ClaudeRefinedDemo() {
                 </div>
               </div>
             ))}
+
+            {/* Notes View */}
+            {activeView === 'Notes' && (
+              <div style={{ padding: "20px" }}>
+                <p style={{ fontSize: "13px", color: "#666" }}>Notes feature - Coming soon</p>
+              </div>
+            )}
+
+            {/* Contacts View */}
+            {activeView === 'Contacts' && (
+              <div style={{ padding: "20px" }}>
+                <p style={{ fontSize: "13px", color: "#666" }}>Contacts management - Coming soon</p>
+              </div>
+            )}
+
+            {/* Calendar View */}
+            {activeView === 'Calendar' && (
+              <div style={{ padding: "20px" }}>
+                <p style={{ fontSize: "13px", color: "#666" }}>Calendar integration - Coming soon</p>
+              </div>
+            )}
+
+            {/* Analytics View */}
+            {activeView === 'Analytics' && (
+              <div style={{ padding: "20px" }}>
+                <p style={{ fontSize: "13px", color: "#666" }}>Email analytics dashboard - Coming soon</p>
+              </div>
+            )}
+
+            {/* Appearance View */}
+            {activeView === 'Appearance' && (
+              <div style={{ padding: "20px" }}>
+                <p style={{ fontSize: "13px", color: "#666" }}>Theme customization - Coming soon</p>
+              </div>
+            )}
+
+            {/* Settings View */}
+            {activeView === 'Settings' && (
+              <div style={{ padding: "20px" }}>
+                <p style={{ fontSize: "13px", color: "#666" }}>User settings - Coming soon</p>
+              </div>
+            )}
+
+            {/* Starred View */}
+            {activeView === 'Starred' && (
+              <div style={{ padding: "20px" }}>
+                <p style={{ fontSize: "13px", color: "#666" }}>Starred emails - Coming soon</p>
+              </div>
+            )}
+
+            {/* Drafts View */}
+            {activeView === 'Drafts' && (
+              <div style={{ padding: "20px" }}>
+                <p style={{ fontSize: "13px", color: "#666" }}>Draft emails - Coming soon</p>
+              </div>
+            )}
+
+            {/* Sent View */}
+            {activeView === 'Sent' && (
+              <div style={{ padding: "20px" }}>
+                <p style={{ fontSize: "13px", color: "#666" }}>Sent emails - Coming soon</p>
+              </div>
+            )}
+
+            {/* Archive View */}
+            {activeView === 'Archive' && (
+              <div style={{ padding: "20px" }}>
+                <p style={{ fontSize: "13px", color: "#666" }}>Archived emails - Coming soon</p>
+              </div>
+            )}
+
+            {/* Spam View */}
+            {activeView === 'Spam' && (
+              <div style={{ padding: "20px" }}>
+                <p style={{ fontSize: "13px", color: "#666" }}>Spam emails - Coming soon</p>
+              </div>
+            )}
+
+            {/* Trash View */}
+            {activeView === 'Trash' && (
+              <div style={{ padding: "20px" }}>
+                <p style={{ fontSize: "13px", color: "#666" }}>Deleted emails - Coming soon</p>
+              </div>
+            )}
+
+            {/* Storage View */}
+            {activeView === 'Storage' && (
+              <div style={{ padding: "20px" }}>
+                <p style={{ fontSize: "13px", color: "#666" }}>Storage management - Coming soon</p>
+              </div>
+            )}
           </div>
         </div>
 
