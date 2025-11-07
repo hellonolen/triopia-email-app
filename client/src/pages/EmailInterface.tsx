@@ -11,11 +11,10 @@ import { Mail, Send, Archive, Trash2, Star, Clock, CheckCircle2, Pause, Home, In
  * Details: Minimal padding, compact layout, executive density
  */
 
-// Mock emails as fallback
 const mockEmails = [
-  { id: 1, from: "Sarah Johnson", email: "sarah@startup.com", subject: "Welcome to your new chapter", preview: "Excited to have you on board! Let's schedule a kickoff call...", time: "Nov 6, 2:30 PM", unread: true, starred: false, body: "Excited to have you on board! Let's schedule a kickoff call to discuss the exciting opportunities that lie ahead as you begin this new chapter." },
-  { id: 2, from: "David Chen", email: "david@company.com", subject: "Q4 Marketing Strategy Review", preview: "I wanted to share the preliminary results from our Q4 marketing campaign...", time: "Nov 6, 1:15 PM", unread: true, starred: true, body: "I wanted to share the preliminary results from our Q4 marketing campaign. The numbers are looking promising and I'd love to get your thoughts." },
-  { id: 3, from: "Emily Rodriguez", email: "emily@agency.co", subject: "Project Update", preview: "Let me know if this works for you. Looking forward to our meeting...", time: "Nov 6, 12:48 PM", unread: false, starred: false, body: "Let me know if this works for you. Looking forward to our meeting to discuss the next steps for the project." },
+  { id: 1, from: "Sarah Johnson", email: "sarah@startup.com", subject: "Welcome to your new chapter", preview: "Excited to have you on board! Let's schedule a kickoff call...", time: "Nov 6, 2:30 PM", unread: true, starred: false },
+  { id: 2, from: "David Chen", email: "david@company.com", subject: "Q4 Marketing Strategy Review", preview: "I wanted to share the preliminary results from our Q4 marketing campaign...", time: "Nov 6, 1:15 PM", unread: true, starred: true },
+  { id: 3, from: "Emily Rodriguez", email: "emily@agency.co", subject: "Project Update", preview: "Let me know if this works for you. Looking forward to our meeting...", time: "Nov 6, 12:48 PM", unread: false, starred: false },
 ];
 
 const mockAccounts = [
@@ -27,15 +26,7 @@ const mockAccounts = [
 ];
 
 export default function ClaudeRefinedDemo() {
-  const [selectedEmail, setSelectedEmail] = useState<any>(null);
-
-  // Set first email as selected when emails load
-  useEffect(() => {
-    const emails = emailsData.length > 0 ? emailsData : mockEmails;
-    if (emails.length > 0 && !selectedEmail) {
-      setSelectedEmail(emails[0]);
-    }
-  }, [emailsData, selectedEmail]);
+  const [selectedEmail, setSelectedEmail] = useState(mockEmails[0]);
   const [hoveredItem, setHoveredItem] = useState<string | null>(null);
   const [inboxesExpanded, setInboxesExpanded] = useState(false);
   const [emailFontSize, setEmailFontSize] = useState<'small' | 'medium' | 'large'>('medium');
@@ -49,16 +40,10 @@ export default function ClaudeRefinedDemo() {
   const { data: notesData = [], refetch: refetchNotes } = trpc.notes.list.useQuery(undefined, { enabled: activeView === 'Notes' });
   const { data: contactsData = [], refetch: refetchContacts } = trpc.contacts.list.useQuery(undefined, { enabled: activeView === 'Contacts' });
   const { data: calendarData = [], refetch: refetchCalendar } = trpc.calendar.list.useQuery({}, { enabled: activeView === 'Calendar' });
-  const { data: emailsData = [], refetch: refetchEmails } = trpc.emails.list.useQuery(
-    { folder: activeView.toLowerCase() },
-    { enabled: ['Inbox', 'Starred', 'Drafts', 'Sent', 'Archive', 'Spam', 'Trash'].includes(activeView) }
-  );
-  const { data: emailAccountsData = [] } = trpc.emailAccounts.list.useQuery();
   const createNoteMutation = trpc.notes.create.useMutation({ onSuccess: () => refetchNotes() });
   const deleteNoteMutation = trpc.notes.delete.useMutation({ onSuccess: () => refetchNotes() });
   const createContactMutation = trpc.contacts.create.useMutation({ onSuccess: () => refetchContacts() });
   const createEventMutation = trpc.calendar.create.useMutation({ onSuccess: () => refetchCalendar() });
-  const updateEmailMutation = trpc.emails.update.useMutation({ onSuccess: () => refetchEmails() });
   const [showComposeModal, setShowComposeModal] = useState(false);
   const [showAIPanel, setShowAIPanel] = useState(false);
   const [activeAITab, setActiveAITab] = useState<'chat' | 'triage' | 'quick-reply' | 'voice'>('chat');
@@ -652,7 +637,7 @@ export default function ClaudeRefinedDemo() {
 
           <div>
             {/* Inbox View */}
-            {activeView === 'Inbox' && (emailsData.length > 0 ? emailsData : mockEmails).map((email: any) => (
+            {activeView === 'Inbox' && mockEmails.map((email) => (
               <div
                 key={email.id}
                 onClick={() => setSelectedEmail(email)}
