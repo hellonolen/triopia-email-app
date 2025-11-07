@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Mail, Send, Archive, Trash2, Star, Clock, CheckCircle2, Pause, Home, Inbox, Calendar, Users, Settings, Plus, UserPlus, Search, Zap, Check, Pencil } from "lucide-react";
+import { Mail, Send, Archive, Trash2, Star, Clock, CheckCircle2, Pause, Home, Inbox, Calendar, Users, Settings, Plus, UserPlus, Search, Zap, Check, Pencil, ChevronDown, ChevronRight } from "lucide-react";
 
 /**
  * Claude AI - DRAMATICALLY Refined
@@ -16,9 +16,19 @@ const mockEmails = [
   { id: 3, from: "Emily Rodriguez", email: "emily@agency.co", subject: "Project Update", preview: "Let me know if this works for you. Looking forward to our meeting...", time: "Nov 6, 12:48 PM", unread: false, starred: false },
 ];
 
+const mockAccounts = [
+  { id: 1, email: "work@company.com", unread: 5, color: "#D89880" },
+  { id: 2, email: "personal@gmail.com", unread: 3, color: "#8B9DC3" },
+  { id: 3, email: "startup@venture.io", unread: 2, color: "#C9ADA7" },
+  { id: 4, email: "consulting@freelance.com", unread: 1, color: "#9A8C98" },
+  { id: 5, email: "side@project.dev", unread: 1, color: "#B5838D" },
+];
+
 export default function ClaudeRefinedDemo() {
   const [selectedEmail, setSelectedEmail] = useState(mockEmails[0]);
   const [hoveredItem, setHoveredItem] = useState<string | null>(null);
+  const [inboxesExpanded, setInboxesExpanded] = useState(false);
+  const [emailFontSize, setEmailFontSize] = useState<'small' | 'medium' | 'large'>('medium');
 
   return (
     <div style={{ 
@@ -129,6 +139,90 @@ export default function ClaudeRefinedDemo() {
                 }} />
               </div>
             ))}
+          </div>
+
+          {/* Multi-Inbox Section */}
+          <div style={{ marginTop: "16px", paddingTop: "16px", borderTop: "1px solid #F0EBE6" }}>
+            <div
+              onClick={() => setInboxesExpanded(!inboxesExpanded)}
+              className="flex items-center justify-between"
+              style={{
+                padding: "8px 16px",
+                cursor: "pointer"
+              }}
+            >
+              <div className="flex items-center gap-2">
+                {inboxesExpanded ? (
+                  <ChevronDown style={{ width: "12px", height: "12px", color: "#999", strokeWidth: 1.5 }} />
+                ) : (
+                  <ChevronRight style={{ width: "12px", height: "12px", color: "#999", strokeWidth: 1.5 }} />
+                )}
+                <span style={{
+                  fontSize: "10px",
+                  fontWeight: 300,
+                  color: "#666",
+                  letterSpacing: "0.05em",
+                  textTransform: "uppercase"
+                }}>
+                  Inboxes
+                </span>
+              </div>
+              <span style={{
+                fontSize: "9px",
+                fontWeight: 300,
+                color: "#999"
+              }}>
+                {inboxesExpanded ? mockAccounts.length : mockAccounts.reduce((sum, acc) => sum + acc.unread, 0)}
+              </span>
+            </div>
+            
+            {inboxesExpanded && (
+              <div style={{ marginTop: "4px" }}>
+                {mockAccounts.map((account) => (
+                  <div
+                    key={account.id}
+                    className="flex items-center justify-between"
+                    style={{
+                      padding: "6px 16px 6px 32px",
+                      cursor: "pointer",
+                      transition: "background 0.2s ease"
+                    }}
+                    onMouseEnter={(e) => {
+                      e.currentTarget.style.background = "#FFFBF7";
+                    }}
+                    onMouseLeave={(e) => {
+                      e.currentTarget.style.background = "transparent";
+                    }}
+                  >
+                    <div className="flex items-center gap-2">
+                      <div style={{
+                        width: "6px",
+                        height: "6px",
+                        borderRadius: "50%",
+                        background: account.color
+                      }} />
+                      <span style={{
+                        fontSize: "10px",
+                        fontWeight: 300,
+                        color: "#666",
+                        letterSpacing: "0.01em"
+                      }}>
+                        {account.email}
+                      </span>
+                    </div>
+                    {account.unread > 0 && (
+                      <span style={{
+                        fontSize: "9px",
+                        fontWeight: 300,
+                        color: "#999"
+                      }}>
+                        {account.unread}
+                      </span>
+                    )}
+                  </div>
+                ))}
+              </div>
+            )}
           </div>
 
           <div style={{ marginTop: "auto", padding: "16px", borderTop: "1px solid #F0EBE6" }}>
@@ -387,7 +481,8 @@ export default function ClaudeRefinedDemo() {
           padding: "28px 36px"
         }}>
           <div style={{ maxWidth: "680px", margin: "0 auto" }}>
-            <div className="flex items-center gap-3 mb-10">
+            <div className="flex items-center justify-between mb-10">
+              <div className="flex items-center gap-3">
               {[
                 { icon: Archive, label: "Archive" },
                 { icon: Trash2, label: "Delete" },
@@ -440,10 +535,69 @@ export default function ClaudeRefinedDemo() {
                   />
                 </button>
               ))}
+              </div>
+              
+              {/* Font Size Controls */}
+              <div className="flex items-center gap-2">
+                <button
+                  onClick={() => setEmailFontSize('small')}
+                  style={{
+                    padding: "4px 8px",
+                    background: emailFontSize === 'small' ? "#FFFBF7" : "transparent",
+                    border: "1px solid",
+                    borderColor: emailFontSize === 'small' ? "#D89880" : "#F0EBE6",
+                    color: emailFontSize === 'small' ? "#D89880" : "#999",
+                    fontSize: "9px",
+                    fontWeight: 300,
+                    letterSpacing: "0.02em",
+                    cursor: "pointer",
+                    borderRadius: "4px",
+                    transition: "all 0.2s ease"
+                  }}
+                >
+                  A-
+                </button>
+                <button
+                  onClick={() => setEmailFontSize('medium')}
+                  style={{
+                    padding: "4px 8px",
+                    background: emailFontSize === 'medium' ? "#FFFBF7" : "transparent",
+                    border: "1px solid",
+                    borderColor: emailFontSize === 'medium' ? "#D89880" : "#F0EBE6",
+                    color: emailFontSize === 'medium' ? "#D89880" : "#999",
+                    fontSize: "10px",
+                    fontWeight: 300,
+                    letterSpacing: "0.02em",
+                    cursor: "pointer",
+                    borderRadius: "4px",
+                    transition: "all 0.2s ease"
+                  }}
+                >
+                  A
+                </button>
+                <button
+                  onClick={() => setEmailFontSize('large')}
+                  style={{
+                    padding: "4px 8px",
+                    background: emailFontSize === 'large' ? "#FFFBF7" : "transparent",
+                    border: "1px solid",
+                    borderColor: emailFontSize === 'large' ? "#D89880" : "#F0EBE6",
+                    color: emailFontSize === 'large' ? "#D89880" : "#999",
+                    fontSize: "11px",
+                    fontWeight: 300,
+                    letterSpacing: "0.02em",
+                    cursor: "pointer",
+                    borderRadius: "4px",
+                    transition: "all 0.2s ease"
+                  }}
+                >
+                  A+
+                </button>
+              </div>
             </div>
 
             <h1 style={{ 
-              fontSize: "32px", 
+              fontSize: emailFontSize === 'small' ? "24px" : emailFontSize === 'large' ? "40px" : "32px", 
               fontWeight: 200,
               color: "#2A2A2A",
               lineHeight: "1.3",
@@ -482,7 +636,7 @@ export default function ClaudeRefinedDemo() {
             </div>
 
             <div style={{ 
-              fontSize: "14px", 
+              fontSize: emailFontSize === 'small' ? "12px" : emailFontSize === 'large' ? "16px" : "14px", 
               fontWeight: 300,
               color: "#2A2A2A",
               lineHeight: "1.7",
