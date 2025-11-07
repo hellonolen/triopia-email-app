@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef } from "react";
-import { Mail, Send, Archive, Trash2, Star, Clock, CheckCircle2, Pause, Home, Inbox, Calendar, Users, Settings, Plus, UserPlus, Search, Zap, Check, Pencil, ChevronDown, ChevronRight, Pin, Info, FileText, HardDrive, BarChart3, Palette, AlertCircle, FilePen, Reply, Forward } from "lucide-react";
+import { Mail, Send, Archive, Trash2, Star, Clock, CheckCircle2, Pause, Home, Inbox, Calendar, Users, Settings, Plus, UserPlus, Search, Zap, Check, Pencil, ChevronDown, ChevronRight, Pin, Info, FileText, HardDrive, BarChart3, Palette, AlertCircle, FilePen, Reply, Forward, Sparkles } from "lucide-react";
 
 /**
  * Claude AI - DRAMATICALLY Refined
@@ -35,6 +35,10 @@ export default function ClaudeRefinedDemo() {
   const [emailDetailWidth, setEmailDetailWidth] = useState(1000);
   const [activeView, setActiveView] = useState('Inbox');
   const [showComposeModal, setShowComposeModal] = useState(false);
+  const [showAIPanel, setShowAIPanel] = useState(false);
+  const [activeAITab, setActiveAITab] = useState<'chat' | 'triage' | 'quick-reply' | 'voice'>('chat');
+  const [showKeyboardHelp, setShowKeyboardHelp] = useState(false);
+  const [selectedEmailIndex, setSelectedEmailIndex] = useState(0);
 
   // Email action handlers
   const handleReply = (emailId: number) => {
@@ -116,6 +120,112 @@ export default function ClaudeRefinedDemo() {
       resizeObserver.disconnect();
     };
   }, []);
+
+  // Keyboard shortcuts
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      // Ignore if typing in input/textarea
+      if (e.target instanceof HTMLInputElement || e.target instanceof HTMLTextAreaElement) return;
+
+      // ? - Show keyboard shortcuts help
+      if (e.key === '?' && e.shiftKey) {
+        e.preventDefault();
+        setShowKeyboardHelp(true);
+        return;
+      }
+
+      // Esc - Close modals/panels
+      if (e.key === 'Escape') {
+        setShowComposeModal(false);
+        setShowAIPanel(false);
+        setShowKeyboardHelp(false);
+        return;
+      }
+
+      // c - Compose new email
+      if (e.key === 'c') {
+        e.preventDefault();
+        setShowComposeModal(true);
+        return;
+      }
+
+      // Cmd/Ctrl+K - Open AI assistant
+      if ((e.metaKey || e.ctrlKey) && e.key === 'k') {
+        e.preventDefault();
+        setShowAIPanel(true);
+        setActiveAITab('chat');
+        return;
+      }
+
+      // Cmd/Ctrl+J - Quick reply AI
+      if ((e.metaKey || e.ctrlKey) && e.key === 'j') {
+        e.preventDefault();
+        setShowAIPanel(true);
+        setActiveAITab('quick-reply');
+        return;
+      }
+
+      // r - Reply to email
+      if (e.key === 'r') {
+        e.preventDefault();
+        handleReply(selectedEmailIndex);
+        return;
+      }
+
+      // f - Forward email
+      if (e.key === 'f') {
+        e.preventDefault();
+        handleForward(selectedEmailIndex);
+        return;
+      }
+
+      // e - Archive email
+      if (e.key === 'e') {
+        e.preventDefault();
+        handleArchive(selectedEmailIndex);
+        return;
+      }
+
+      // # - Delete email
+      if (e.key === '#' && e.shiftKey) {
+        e.preventDefault();
+        handleDelete(selectedEmailIndex);
+        return;
+      }
+
+      // s - Star email
+      if (e.key === 's') {
+        e.preventDefault();
+        handleStar(selectedEmailIndex);
+        return;
+      }
+
+      // ! - Mark as spam
+      if (e.key === '!' && e.shiftKey) {
+        e.preventDefault();
+        handleSpam(selectedEmailIndex);
+        return;
+      }
+
+      // g+i - Go to Inbox
+      if (e.key === 'g') {
+        const handleSecondKey = (e2: KeyboardEvent) => {
+          if (e2.key === 'i') setActiveView('Inbox');
+          if (e2.key === 's') setActiveView('Starred');
+          if (e2.key === 'd') setActiveView('Drafts');
+          if (e2.key === 't') setActiveView('Sent');
+          if (e2.key === 'a') setActiveView('Archive');
+          document.removeEventListener('keydown', handleSecondKey);
+        };
+        document.addEventListener('keydown', handleSecondKey);
+        setTimeout(() => document.removeEventListener('keydown', handleSecondKey), 2000);
+        return;
+      }
+    };
+
+    document.addEventListener('keydown', handleKeyDown);
+    return () => document.removeEventListener('keydown', handleKeyDown);
+  }, [selectedEmailIndex]);
 
   return (
     <div style={{ 
@@ -445,6 +555,19 @@ export default function ClaudeRefinedDemo() {
                     }}
                   >
                     <Search style={{ width: "16px", height: "16px", color: "#666", strokeWidth: 1.5 }} />
+                  </button>
+                  <button
+                    onClick={() => setShowAIPanel(true)}
+                    style={{
+                      background: "none",
+                      border: "none",
+                      cursor: "pointer",
+                      padding: 0
+                    }}
+                    onMouseEnter={(e) => setHoveredTooltip({ label: 'AI Assistant', x: e.clientX, y: e.clientY + 20 })}
+                    onMouseLeave={() => setHoveredTooltip(null)}
+                  >
+                    <Sparkles style={{ width: "16px", height: "16px", color: "#666", strokeWidth: 1.5 }} />
                   </button>
                 </div>
               </div>
@@ -930,29 +1053,34 @@ export default function ClaudeRefinedDemo() {
         </div>
       )}
 
-      {/* Compose Email Modal */}
+      {/* Compose Email Slide-in Panel */}
       {showComposeModal && (
+        <>
+        {/* Overlay */}
         <div style={{
           position: "fixed",
           top: 0,
           left: 0,
           right: 0,
           bottom: 0,
-          background: "rgba(0,0,0,0.3)",
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "center",
+          background: "rgba(0,0,0,0.2)",
           zIndex: 10000
-        }} onClick={() => setShowComposeModal(false)}>
-          <div style={{
-            background: "white",
-            borderRadius: "8px",
-            width: "600px",
-            maxWidth: "90%",
-            maxHeight: "80vh",
-            overflow: "auto",
-            boxShadow: "0 4px 20px rgba(0,0,0,0.15)"
-          }} onClick={(e) => e.stopPropagation()}>
+        }} onClick={() => setShowComposeModal(false)} />
+        {/* Slide-in Panel */}
+        <div style={{
+          position: "fixed",
+          top: 0,
+          right: 0,
+          bottom: 0,
+          width: "500px",
+          maxWidth: "90%",
+          background: "white",
+          boxShadow: "-4px 0 20px rgba(0,0,0,0.1)",
+          zIndex: 10001,
+          display: "flex",
+          flexDirection: "column",
+          animation: "slideInRight 0.3s ease-out"
+        }}>
             <div style={{
               padding: "20px",
               borderBottom: "1px solid #F0EBE6",
@@ -1021,8 +1149,112 @@ export default function ClaudeRefinedDemo() {
                 }}>Send</button>
               </div>
             </div>
+        </div>
+        </>
+      )}
+
+      {/* AI Assistant Slide-in Panel */}
+      {showAIPanel && (
+        <>
+        {/* Overlay */}
+        <div style={{
+          position: "fixed",
+          top: 0,
+          left: 0,
+          right: 0,
+          bottom: 0,
+          background: "rgba(0,0,0,0.2)",
+          zIndex: 10000
+        }} onClick={() => setShowAIPanel(false)} />
+        {/* Slide-in Panel */}
+        <div style={{
+          position: "fixed",
+          top: 0,
+          right: 0,
+          bottom: 0,
+          width: "600px",
+          maxWidth: "90%",
+          background: "white",
+          boxShadow: "-4px 0 20px rgba(0,0,0,0.1)",
+          zIndex: 10001,
+          display: "flex",
+          flexDirection: "column"
+        }}>
+          {/* Header */}
+          <div style={{
+            padding: "20px",
+            borderBottom: "1px solid #F0EBE6",
+            display: "flex",
+            justifyContent: "space-between",
+            alignItems: "center"
+          }}>
+            <h3 style={{ fontSize: "16px", fontWeight: 300, color: "#2A2A2A" }}>AI Assistant</h3>
+            <button onClick={() => setShowAIPanel(false)} style={{
+              background: "none",
+              border: "none",
+              cursor: "pointer",
+              fontSize: "20px",
+              color: "#999"
+            }}>×</button>
+          </div>
+          
+          {/* Tabs */}
+          <div style={{
+            display: "flex",
+            borderBottom: "1px solid #F0EBE6",
+            padding: "0 20px"
+          }}>
+            {[
+              { id: 'chat', label: 'Chat' },
+              { id: 'triage', label: 'Smart Triage' },
+              { id: 'quick-reply', label: 'Quick Reply' },
+              { id: 'voice', label: 'Voice' }
+            ].map((tab) => (
+              <button
+                key={tab.id}
+                onClick={() => setActiveAITab(tab.id as any)}
+                style={{
+                  padding: "12px 16px",
+                  background: "none",
+                  border: "none",
+                  borderBottom: activeAITab === tab.id ? "2px solid #D89880" : "2px solid transparent",
+                  cursor: "pointer",
+                  fontSize: "13px",
+                  fontWeight: activeAITab === tab.id ? 400 : 300,
+                  color: activeAITab === tab.id ? "#2A2A2A" : "#666",
+                  transition: "all 0.2s ease"
+                }}
+              >
+                {tab.label}
+              </button>
+            ))}
+          </div>
+
+          {/* Tab Content */}
+          <div style={{ flex: 1, overflow: "auto", padding: "20px" }}>
+            {activeAITab === 'chat' && (
+              <div>
+                <p style={{ fontSize: "13px", color: "#666" }}>AI Chat Assistant - Coming soon</p>
+              </div>
+            )}
+            {activeAITab === 'triage' && (
+              <div>
+                <p style={{ fontSize: "13px", color: "#666" }}>Smart Email Triage - Coming soon</p>
+              </div>
+            )}
+            {activeAITab === 'quick-reply' && (
+              <div>
+                <p style={{ fontSize: "13px", color: "#666" }}>Quick Reply Suggestions - Coming soon</p>
+              </div>
+            )}
+            {activeAITab === 'voice' && (
+              <div>
+                <p style={{ fontSize: "13px", color: "#666" }}>Voice to Text - Coming soon</p>
+              </div>
+            )}
           </div>
         </div>
+        </>
       )}
     </div>
   );

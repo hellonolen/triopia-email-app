@@ -315,3 +315,28 @@
 - [ ] Verify underline only covers text (not full width)
 - [ ] Ensure all tooltips display instantly on hover
 - [ ] Test responsive behavior across all views
+
+### UI/UX Changes
+- [ ] Remove popup compose modal - replace with slide-in panel from right
+- [ ] Add AI assistant slide-in panel with Superhuman-level capabilities
+- [ ] Implement email sharing functionality
+- [ ] Implement attachment sharing functionality
+
+### AI Panel Integration
+- [x] Fix compose panel JSX error
+- [x] Create slide-in AI panel from right side
+- [x] Add tabbed interface for AI features
+- [ ] Integrate AIChatBox component
+- [ ] Integrate SmartTriage component
+- [ ] Integrate QuickReply component
+- [ ] Integrate SpeechToText component
+- [x] Add AI panel trigger button (Sparkles icon)
+- [ ] Test all 13 AI agent integrations
+
+### Keyboard Shortcuts
+- [ ] Implement navigation shortcuts (j/k for up/down, g+i for inbox, etc.)
+- [ ] Implement email action shortcuts (e for archive, # for delete, s for star, etc.)
+- [ ] Implement compose shortcuts (c for compose, r for reply, f for forward)
+- [ ] Implement AI shortcuts (Cmd+K for AI assistant, Cmd+J for quick reply)
+- [ ] Add keyboard shortcuts help modal (? key)
+- [ ] Test all keyboard shortcuts
