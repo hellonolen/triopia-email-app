@@ -508,6 +508,8 @@
 
 ## URL CLEANUP (URGENT)
 
-- [x] Remove automatic ?page=1&size=25 query params from homepage
-- [x] Only add URL params when user manually changes pagination
-- [x] Keep triopia.com clean without query string on initial load
+- [x] Move email interface from root (/) to /app route
+- [x] Create placeholder landing page at root /
+- [x] Update all sidebar links to use /app prefix
+- [x] Test triopia.com/ shows clean landing page
+- [x] Test triopia.com/app shows email interface without query params
