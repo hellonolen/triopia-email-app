@@ -32,7 +32,7 @@ export default function ClaudeRefinedDemo() {
   const [emailListWidth, setEmailListWidth] = useState(420);
   const [isResizing, setIsResizing] = useState(false);
   const [hoveredTooltip, setHoveredTooltip] = useState<{label: string, x: number, y: number} | null>(null);
-  const [emailDetailWidth, setEmailDetailWidth] = useState(0);
+  const [emailDetailWidth, setEmailDetailWidth] = useState(1000);
 
   useEffect(() => {
     const handleMouseMove = (e: MouseEvent) => {
