@@ -303,6 +303,84 @@ export default function ClaudeRefinedDemo() {
         return;
       }
 
+      // a - Reply All
+      if (e.key === 'a') {
+        e.preventDefault();
+        handleReplyAll(selectedEmailIndex);
+        return;
+      }
+
+      // j - Next email
+      if (e.key === 'j') {
+        e.preventDefault();
+        if (selectedEmailIndex < emails.length - 1) {
+          const nextIndex = selectedEmailIndex + 1;
+          setSelectedEmailIndex(nextIndex);
+          setSelectedEmail(emails[nextIndex]);
+        }
+        return;
+      }
+
+      // k - Previous email
+      if (e.key === 'k') {
+        e.preventDefault();
+        if (selectedEmailIndex > 0) {
+          const prevIndex = selectedEmailIndex - 1;
+          setSelectedEmailIndex(prevIndex);
+          setSelectedEmail(emails[prevIndex]);
+        }
+        return;
+      }
+
+      // x - Select/deselect email
+      if (e.key === 'x') {
+        e.preventDefault();
+        toggleEmailSelection(selectedEmail.id);
+        return;
+      }
+
+      // * then a - Select all
+      if (e.key === '*' && e.shiftKey) {
+        const handleSecondKey = (e2: KeyboardEvent) => {
+          if (e2.key === 'a') selectAllEmails();
+          if (e2.key === 'n') deselectAllEmails();
+          document.removeEventListener('keydown', handleSecondKey);
+        };
+        document.addEventListener('keydown', handleSecondKey);
+        setTimeout(() => document.removeEventListener('keydown', handleSecondKey), 2000);
+        return;
+      }
+
+      // Shift+U - Mark as unread
+      if (e.key === 'U' && e.shiftKey) {
+        e.preventDefault();
+        toggleReadStatus(selectedEmail.id);
+        return;
+      }
+
+      // Shift+I - Mark as read
+      if (e.key === 'I' && e.shiftKey) {
+        e.preventDefault();
+        toggleReadStatus(selectedEmail.id);
+        return;
+      }
+
+      // u - Return to inbox
+      if (e.key === 'u') {
+        e.preventDefault();
+        setActiveView('Inbox');
+        setRightPanelMode('email');
+        return;
+      }
+
+      // / - Focus search
+      if (e.key === '/') {
+        e.preventDefault();
+        const searchInput = document.querySelector('input[placeholder="Search emails..."]') as HTMLInputElement;
+        if (searchInput) searchInput.focus();
+        return;
+      }
+
       // g+i - Go to Inbox
       if (e.key === 'g') {
         const handleSecondKey = (e2: KeyboardEvent) => {
