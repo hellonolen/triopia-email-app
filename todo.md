@@ -356,3 +356,60 @@
 - [ ] Implement Trash view with deleted emails
 - [ ] Implement Storage view with storage management
 - [ ] Connect all views to backend/database
+
+
+## NEW REQUIREMENTS (Nov 6, 2025 22:13) - ELITE EXECUTION
+
+### Notes CRUD Operations
+- [ ] Add create note modal with title and content fields
+- [ ] Implement edit note functionality with inline editing or modal
+- [ ] Add delete note confirmation dialog and functionality
+- [ ] Connect + New Note button to createNoteMutation
+- [ ] Display notes from backend (notesData) - DONE
+- [ ] Add note search/filter capability
+
+### Contacts CRUD Operations
+- [ ] Add create contact modal with all fields
+- [ ] Implement edit contact functionality
+- [ ] Add delete contact confirmation
+- [ ] Connect + Add Contact button to createContactMutation
+- [ ] Display contacts from backend (contactsData) - DONE
+
+### Email Database Connection & CRUD
+- [ ] Connect inbox email list to emails.list query with real data
+- [ ] Implement folder-based filtering (Inbox, Sent, Drafts, Archive, Spam, Trash, Starred)
+- [ ] Connect Star action to emails.update mutation (isStarred)
+- [ ] Connect Pin action to emails.update mutation (isPinned)
+- [ ] Connect Archive action to emails.update mutation (folder='archive')
+- [ ] Connect Delete action to emails.update mutation (folder='trash')
+- [ ] Connect Spam action to emails.update mutation (folder='spam')
+- [ ] Implement email read/unread status updates
+- [ ] Load real email data from database instead of mock data
+
+### Email & Attachment Sharing
+- [ ] Add Share button/icon to email actions
+- [ ] Create share modal with email/link sharing options
+- [ ] Implement attachment sharing functionality
+- [ ] Add share permissions (view/edit)
+- [ ] Track shared emails in database
+
+### AI Panel Full Integration (Superhuman + Shortwave)
+- [ ] Integrate AIChatBox component into AI panel Chat tab with full functionality
+- [ ] Integrate SmartTriage component into AI panel Triage tab
+- [ ] Integrate QuickReply component into AI panel Quick Reply tab
+- [ ] Integrate SpeechToText component into AI panel Voice tab
+- [ ] Add AI email summarization feature
+- [ ] Add AI smart compose suggestions
+- [ ] Add AI-powered search capability
+- [ ] Add AI email categorization
+- [ ] Connect all AI features to backend APIs
+- [ ] Test all 13 AI agents in production
+
+### Calendar CRUD Operations
+- [ ] Add create event modal with all fields
+- [ ] Implement edit event functionality
+- [ ] Add delete event confirmation
+- [ ] Connect calendar to createEventMutation
+- [ ] Display calendar events from backend (calendarData)
+- [ ] Add month/week/day calendar views
+

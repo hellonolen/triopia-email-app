@@ -41,12 +41,17 @@ export default function ClaudeRefinedDemo() {
   const { data: contactsData = [], refetch: refetchContacts } = trpc.contacts.list.useQuery(undefined, { enabled: activeView === 'Contacts' });
   const { data: calendarData = [], refetch: refetchCalendar } = trpc.calendar.list.useQuery({}, { enabled: activeView === 'Calendar' });
   const createNoteMutation = trpc.notes.create.useMutation({ onSuccess: () => refetchNotes() });
+  const deleteNoteMutation = trpc.notes.delete.useMutation({ onSuccess: () => refetchNotes() });
   const createContactMutation = trpc.contacts.create.useMutation({ onSuccess: () => refetchContacts() });
   const createEventMutation = trpc.calendar.create.useMutation({ onSuccess: () => refetchCalendar() });
   const [showComposeModal, setShowComposeModal] = useState(false);
   const [showAIPanel, setShowAIPanel] = useState(false);
   const [activeAITab, setActiveAITab] = useState<'chat' | 'triage' | 'quick-reply' | 'voice'>('chat');
   const [showKeyboardHelp, setShowKeyboardHelp] = useState(false);
+  const [showCreateNoteModal, setShowCreateNoteModal] = useState(false);
+  const [newNoteTitle, setNewNoteTitle] = useState('');
+  const [newNoteContent, setNewNoteContent] = useState('');
+  const [editingNoteId, setEditingNoteId] = useState<number | null>(null);
   const [selectedEmailIndex, setSelectedEmailIndex] = useState(0);
 
   // Email action handlers
@@ -756,27 +761,57 @@ export default function ClaudeRefinedDemo() {
             {/* Notes View */}
             {activeView === 'Notes' && (
               <div style={{ padding: "20px" }}>
-                <div style={{ marginBottom: "16px" }}>
-                  <button
-                    onClick={() => {
-                      const title = prompt('Note title:');
-                      if (title) {
-                        console.log('Create note:', title);
-                      }
-                    }}
+                {/* Inline create note form */}
+                <div style={{ marginBottom: "20px", padding: "16px", background: "#FFFBF7", border: "1px solid #F0EBE6", borderRadius: "8px" }}>
+                  <input
+                    type="text"
+                    placeholder="Note title..."
+                    value={newNoteTitle}
+                    onChange={(e) => setNewNoteTitle(e.target.value)}
                     style={{
-                      padding: "8px 16px",
-                      background: "#D89880",
-                      color: "white",
-                      border: "none",
+                      width: "100%",
+                      padding: "8px",
+                      marginBottom: "8px",
+                      border: "1px solid #F0EBE6",
                       borderRadius: "4px",
-                      cursor: "pointer",
-                      fontSize: "12px",
-                      fontWeight: 400
+                      fontSize: "13px",
+                      background: "white"
                     }}
-                  >
-                    + New Note
-                  </button>
+                  />
+                  <textarea
+                    placeholder="Note content..."
+                    value={newNoteContent}
+                    onChange={(e) => setNewNoteContent(e.target.value)}
+                    style={{
+                      width: "100%",
+                      padding: "8px",
+                      marginBottom: "8px",
+                      border: "1px solid #F0EBE6",
+                      borderRadius: "4px",
+                      fontSize: "12px",
+                      minHeight: "80px",
+                      background: "white",
+                      resize: "vertical"
+                    }}
+                  />
+                  <div style={{ display: "flex", gap: "8px" }}>
+                    <Plus
+                      size={16}
+                      style={{ cursor: "pointer", color: "#D89880" }}
+                      onClick={() => {
+                        if (newNoteTitle || newNoteContent) {
+                          createNoteMutation.mutate({
+                            title: newNoteTitle,
+                            content: newNoteContent
+                          });
+                          setNewNoteTitle('');
+                          setNewNoteContent('');
+                        }
+                      }}
+                      onMouseEnter={(e) => setHoveredTooltip({ label: 'Add Note', x: e.clientX, y: e.clientY })}
+                      onMouseLeave={() => setHoveredTooltip(null)}
+                    />
+                  </div>
                 </div>
                 <div style={{ display: "grid", gap: "12px" }}>
                   {notesData.map(note => (
@@ -793,9 +828,22 @@ export default function ClaudeRefinedDemo() {
                       onMouseEnter={(e) => e.currentTarget.style.borderColor = "#D89880"}
                       onMouseLeave={(e) => e.currentTarget.style.borderColor = "#F0EBE6"}
                     >
-                      <div style={{ fontSize: "13px", fontWeight: 400, color: "#2A2A2A", marginBottom: "6px" }}>{note.title || 'Untitled Note'}</div>
-                      <div style={{ fontSize: "11px", color: "#666", marginBottom: "8px" }}>{note.content || 'No content'}</div>
-                      <div style={{ fontSize: "9px", color: "#999" }}>{new Date(note.updatedAt).toLocaleDateString()}</div>
+                      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "start" }}>
+                        <div style={{ flex: 1 }}>
+                          <div style={{ fontSize: "13px", fontWeight: 400, color: "#2A2A2A", marginBottom: "6px" }}>{note.title || 'Untitled Note'}</div>
+                          <div style={{ fontSize: "11px", color: "#666", marginBottom: "8px" }}>{note.content || 'No content'}</div>
+                          <div style={{ fontSize: "9px", color: "#999" }}>{new Date(note.updatedAt).toLocaleDateString()}</div>
+                        </div>
+                        <div style={{ display: "flex", gap: "8px", opacity: 0.6 }}>
+                          <Trash2
+                            size={14}
+                            style={{ cursor: "pointer", color: "#D89880" }}
+                            onClick={() => deleteNoteMutation.mutate({ noteId: note.id })}
+                            onMouseEnter={(e) => setHoveredTooltip({ label: 'Delete', x: e.clientX, y: e.clientY })}
+                            onMouseLeave={() => setHoveredTooltip(null)}
+                          />
+                        </div>
+                      </div>
                     </div>
                   ))}
                 </div>
