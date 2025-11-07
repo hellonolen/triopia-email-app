@@ -90,6 +90,7 @@ export default function ClaudeRefinedDemo() {
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [emailSignature, setEmailSignature] = useState('Best regards,\nYour Name\nYour Title\nYour Company');
   const [showSignatureSelector, setShowSignatureSelector] = useState(false);
+  const [signatureEnabled, setSignatureEnabled] = useState(true);
   const signatures = [
     { id: 0, name: 'No Signature', content: '' },
     { id: 1, name: 'Work', content: 'Best regards,\nYour Name\nYour Title\nYour Company' },
@@ -1130,8 +1131,175 @@ export default function ClaudeRefinedDemo() {
 
             {/* Settings View */}
             {activeView === 'Settings' && (
-              <div style={{ padding: "20px" }}>
-                <p style={{ fontSize: "13px", color: "#666" }}>User settings - Coming soon</p>
+              <div style={{ padding: "24px", maxWidth: "800px" }}>
+                <h2 style={{ fontSize: "20px", fontWeight: 300, color: "#2A2A2A", marginBottom: "24px" }}>Settings</h2>
+                
+                {/* Email Signatures Section */}
+                <div style={{ marginBottom: "32px", paddingBottom: "32px", borderBottom: "1px solid #F0EBE6" }}>
+                  <h3 style={{ fontSize: "16px", fontWeight: 400, color: "#2A2A2A", marginBottom: "16px" }}>Email Signatures</h3>
+                  
+                  {/* Signature Toggle */}
+                  <div style={{ marginBottom: "20px", display: "flex", alignItems: "center", gap: "12px" }}>
+                    <input
+                      type="checkbox"
+                      checked={signatureEnabled}
+                      onChange={(e) => setSignatureEnabled(e.target.checked)}
+                      style={{ width: "16px", height: "16px", cursor: "pointer" }}
+                    />
+                    <label style={{ fontSize: "13px", fontWeight: 300, color: "#2A2A2A" }}>
+                      Automatically add signature to replies and new emails
+                    </label>
+                  </div>
+                  
+                  {/* Signature List */}
+                  <div style={{ marginBottom: "16px" }}>
+                    {signatures.map(sig => (
+                      <div key={sig.id} style={{
+                        padding: "12px",
+                        marginBottom: "8px",
+                        background: "#FFFBF7",
+                        borderRadius: "4px",
+                        border: "1px solid #F0EBE6"
+                      }}>
+                        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "8px" }}>
+                          <span style={{ fontSize: "13px", fontWeight: 400, color: "#2A2A2A" }}>{sig.name}</span>
+                          <div style={{ display: "flex", gap: "12px" }}>
+                            <button
+                              style={{
+                                padding: 0,
+                                background: "none",
+                                border: "none",
+                                color: "#D89880",
+                                fontSize: "11px",
+                                fontWeight: 300,
+                                cursor: "pointer"
+                              }}
+                            >
+                              Edit
+                            </button>
+                            {sig.id !== 0 && (
+                              <button
+                                style={{
+                                  padding: 0,
+                                  background: "none",
+                                  border: "none",
+                                  color: "#999",
+                                  fontSize: "11px",
+                                  fontWeight: 300,
+                                  cursor: "pointer"
+                                }}
+                              >
+                                Delete
+                              </button>
+                            )}
+                          </div>
+                        </div>
+                        {sig.content && (
+                          <div style={{ fontSize: "11px", fontWeight: 300, color: "#666", whiteSpace: "pre-line" }}>
+                            {sig.content}
+                          </div>
+                        )}
+                      </div>
+                    ))}
+                  </div>
+                  
+                  <button
+                    style={{
+                      padding: "8px 16px",
+                      background: "none",
+                      border: "1px solid #D89880",
+                      borderRadius: "4px",
+                      color: "#D89880",
+                      fontSize: "12px",
+                      fontWeight: 300,
+                      cursor: "pointer",
+                      transition: "all 0.2s ease"
+                    }}
+                    onMouseEnter={(e) => {
+                      e.currentTarget.style.background = "#D89880";
+                      e.currentTarget.style.color = "white";
+                    }}
+                    onMouseLeave={(e) => {
+                      e.currentTarget.style.background = "none";
+                      e.currentTarget.style.color = "#D89880";
+                    }}
+                  >
+                    + Add New Signature
+                  </button>
+                </div>
+                
+                {/* Display Settings Section */}
+                <div style={{ marginBottom: "32px", paddingBottom: "32px", borderBottom: "1px solid #F0EBE6" }}>
+                  <h3 style={{ fontSize: "16px", fontWeight: 400, color: "#2A2A2A", marginBottom: "16px" }}>Display</h3>
+                  
+                  <div style={{ marginBottom: "16px" }}>
+                    <label style={{ fontSize: "13px", fontWeight: 300, color: "#2A2A2A", display: "block", marginBottom: "8px" }}>
+                      Email List Density
+                    </label>
+                    <select style={{
+                      padding: "8px 12px",
+                      fontSize: "12px",
+                      fontWeight: 300,
+                      border: "1px solid #F0EBE6",
+                      borderRadius: "4px",
+                      background: "white",
+                      color: "#2A2A2A",
+                      cursor: "pointer"
+                    }}>
+                      <option>Compact</option>
+                      <option selected>Default</option>
+                      <option>Comfortable</option>
+                    </select>
+                  </div>
+                  
+                  <div style={{ marginBottom: "16px" }}>
+                    <label style={{ fontSize: "13px", fontWeight: 300, color: "#2A2A2A", display: "block", marginBottom: "8px" }}>
+                      Theme
+                    </label>
+                    <select style={{
+                      padding: "8px 12px",
+                      fontSize: "12px",
+                      fontWeight: 300,
+                      border: "1px solid #F0EBE6",
+                      borderRadius: "4px",
+                      background: "white",
+                      color: "#2A2A2A",
+                      cursor: "pointer"
+                    }}>
+                      <option selected>Light</option>
+                      <option>Dark</option>
+                    </select>
+                  </div>
+                </div>
+                
+                {/* Notifications Section */}
+                <div style={{ marginBottom: "32px" }}>
+                  <h3 style={{ fontSize: "16px", fontWeight: 400, color: "#2A2A2A", marginBottom: "16px" }}>Notifications</h3>
+                  
+                  <div style={{ marginBottom: "12px", display: "flex", alignItems: "center", gap: "12px" }}>
+                    <input
+                      type="checkbox"
+                      checked={true}
+                      onChange={() => {}}
+                      style={{ width: "16px", height: "16px", cursor: "pointer" }}
+                    />
+                    <label style={{ fontSize: "13px", fontWeight: 300, color: "#2A2A2A" }}>
+                      Desktop notifications for new emails
+                    </label>
+                  </div>
+                  
+                  <div style={{ marginBottom: "12px", display: "flex", alignItems: "center", gap: "12px" }}>
+                    <input
+                      type="checkbox"
+                      checked={false}
+                      onChange={() => {}}
+                      style={{ width: "16px", height: "16px", cursor: "pointer" }}
+                    />
+                    <label style={{ fontSize: "13px", fontWeight: 300, color: "#2A2A2A" }}>
+                      Sound notifications
+                    </label>
+                  </div>
+                </div>
               </div>
             )}
 
@@ -1538,76 +1706,7 @@ export default function ClaudeRefinedDemo() {
                   />
                 </div>
                 
-                {/* Signature Preview */}
-                <div style={{
-                  padding: "12px 0",
-                  borderTop: "1px solid #F0EBE6",
-                  marginBottom: "16px"
-                }}>
-                  <div style={{ fontSize: "11px", fontWeight: 300, color: "#999", marginBottom: "8px" }}>Signature:</div>
-                  <div style={{ fontSize: "12px", fontWeight: 300, color: "#666", whiteSpace: "pre-line" }}>
-                    {emailSignature}
-                  </div>
-                  <button
-                    onClick={() => setShowSignatureSelector(!showSignatureSelector)}
-                    style={{
-                      marginTop: "8px",
-                      padding: 0,
-                      background: "none",
-                      border: "none",
-                      color: "#D89880",
-                      fontSize: "11px",
-                      fontWeight: 300,
-                      cursor: "pointer",
-                      transition: "color 0.2s ease"
-                    }}
-                    onMouseEnter={(e) => e.currentTarget.style.color = "#C88770"}
-                    onMouseLeave={(e) => e.currentTarget.style.color = "#D89880"}
-                  >
-                    Change Signature
-                  </button>
-                  
-                  {/* Signature Selector Dropdown */}
-                  {showSignatureSelector && (
-                    <div style={{
-                      marginTop: "8px",
-                      padding: "8px",
-                      background: "white",
-                      border: "1px solid #F0EBE6",
-                      borderRadius: "4px"
-                    }}>
-                      {signatures.map(sig => (
-                        <button
-                          key={sig.id}
-                          onClick={() => {
-                            setEmailSignature(sig.content);
-                            setShowSignatureSelector(false);
-                          }}
-                          style={{
-                            display: "block",
-                            width: "100%",
-                            padding: "8px",
-                            background: "none",
-                            border: "none",
-                            textAlign: "left",
-                            fontSize: "11px",
-                            fontWeight: 300,
-                            color: "#2A2A2A",
-                            cursor: "pointer",
-                            borderRadius: "4px",
-                            transition: "background 0.2s ease"
-                          }}
-                          onMouseEnter={(e) => e.currentTarget.style.background = "#FFFBF7"}
-                          onMouseLeave={(e) => e.currentTarget.style.background = "none"}
-                        >
-                          {sig.name}
-                        </button>
-                      ))}
-                    </div>
-                  )}
-                </div>
-                
-                <div style={{ display: "flex", gap: "16px", alignItems: "center" }}>
+                <div style={{ display: "flex", gap: "16px", alignItems: "center", marginTop: "16px" }}>
                   <button
                     style={{
                       padding: 0,

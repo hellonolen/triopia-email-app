@@ -284,3 +284,8 @@
 ## URGENT FIXES
 
 - [x] Redesign reply/reply all/forward UX - compose box should appear at TOP with email history below (not at bottom)
+
+- [x] Move signature management to Settings page (remove from reply interface)
+- [x] Add signature on/off toggle in Settings
+- [x] Create signature editor in Settings (create/edit/delete signatures)
+- [ ] Auto-append signature when sending (not visible during composition)
