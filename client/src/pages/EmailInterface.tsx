@@ -47,7 +47,11 @@ const sidebarModel: SidebarModel = {
   settings: ['Analytics', 'Appearance', 'Settings', 'Profile', 'Admin']
 };
 
-export default function ClaudeRefinedDemo() {
+type EmailInterfaceProps = {
+  view?: string;
+};
+
+export default function ClaudeRefinedDemo({ view = 'inbox' }: EmailInterfaceProps) {
   const [isLoading, setIsLoading] = useState(true);
   const [emails, setEmails] = useState(mockEmails);
   
@@ -126,7 +130,36 @@ export default function ClaudeRefinedDemo() {
   const [isResizing, setIsResizing] = useState(false);
   const [hoveredTooltip, setHoveredTooltip] = useState<{label: string, x: number, y: number} | null>(null);
   const [emailDetailWidth, setEmailDetailWidth] = useState(1000);
-  const [activeView, setActiveView] = useState('Inbox');
+  // Map view prop to display title
+  const viewTitleMap: Record<string, string> = {
+    'inbox': 'Inbox',
+    'fresh-start': 'Fresh Start',
+    'starred': 'Starred',
+    'new-connections': 'New Connections',
+    'paused': 'Paused',
+    'complete': 'Complete',
+    'sent': 'Sent',
+    'drafts': 'Drafts',
+    'archive': 'Archive',
+    'spam': 'Spam',
+    'trash': 'Trash',
+    'storage': 'Storage',
+    'notes': 'Notes',
+    'calendar': 'Calendar',
+    'contacts': 'Contacts',
+    'analytics': 'Analytics',
+    'appearance': 'Appearance',
+    'settings': 'Settings',
+    'profile': 'Profile',
+    'admin': 'Admin'
+  };
+  
+  const [activeView, setActiveView] = useState(viewTitleMap[view] || 'Inbox');
+  
+  // Update activeView when view prop changes
+  useEffect(() => {
+    setActiveView(viewTitleMap[view] || 'Inbox');
+  }, [view]);
   const [rightPanelMode, setRightPanelMode] = useState<'email' | 'compose' | 'ai' | 'notes'>('email');
   const [showStoragePanel, setShowStoragePanel] = useState(false);
   const [showPrintPanel, setShowPrintPanel] = useState(false);
@@ -738,7 +771,7 @@ export default function ClaudeRefinedDemo() {
                   <p style={{ 
                     fontSize: "10px", 
                     fontWeight: 300,
-                    color: "#999",
+                    color: "#000",
                     letterSpacing: "0.05em",
                     textTransform: "uppercase"
                   }}>
@@ -770,7 +803,7 @@ export default function ClaudeRefinedDemo() {
                     <option value="25">25 per page</option>
                     <option value="50">50 per page</option>
                   </select>
-                  <span style={{ fontSize: "11px", fontWeight: 300, color: "#999" }}>
+                  <span style={{ fontSize: "11px", fontWeight: 300, color: "#000" }}>
                     Page {currentPage}
                   </span>
                 </div>
@@ -817,7 +850,7 @@ export default function ClaudeRefinedDemo() {
                       transform: "translateY(-50%)",
                       width: "12px", 
                       height: "12px", 
-                      color: "#999", 
+                      color: "#000", 
                       strokeWidth: 1.5,
                       pointerEvents: "none"
                     }} />
@@ -832,7 +865,7 @@ export default function ClaudeRefinedDemo() {
                           padding: 0,
                           background: "none",
                           border: "none",
-                          color: "#999",
+                          color: "#000",
                           fontSize: "14px",
                           cursor: "pointer",
                           lineHeight: 1
@@ -970,13 +1003,13 @@ export default function ClaudeRefinedDemo() {
                     }}>
                       {email.from}
                       {email.attachments && email.attachments.length > 0 && (
-                        <Paperclip style={{ width: "10px", height: "10px", color: "#999", strokeWidth: 1.5 }} />
+                        <Paperclip style={{ width: "10px", height: "10px", color: "#000", strokeWidth: 1.5 }} />
                       )}
                     </div>
                     <div style={{ 
                       fontSize: "10px", 
                       fontWeight: 300,
-                      color: "#999"
+                      color: "#000"
                     }}>
                       {email.email}
                     </div>
@@ -1007,7 +1040,7 @@ export default function ClaudeRefinedDemo() {
                         transition: "all 0.2s ease"
                       }} />
                     </button>
-                    <span style={{ fontSize: "9px", color: "#999", fontWeight: 300 }}>
+                    <span style={{ fontSize: "9px", color: "#000", fontWeight: 300 }}>
                       {email.time}
                     </span>
                   </div>
@@ -1100,7 +1133,7 @@ export default function ClaudeRefinedDemo() {
                         setHoveredTooltip(null);
                       }}
                     >
-                      <action.icon style={{ width: "14px", height: "14px", color: "#999", strokeWidth: 1.5, transition: "color 0.2s ease" }} />
+                      <action.icon style={{ width: "14px", height: "14px", color: "#000", strokeWidth: 1.5, transition: "color 0.2s ease" }} />
                     </button>
                   ))}
                 </div>
@@ -1181,7 +1214,7 @@ export default function ClaudeRefinedDemo() {
                         <div style={{ flex: 1 }}>
                           <div style={{ fontSize: "13px", fontWeight: 400, color: "#2A2A2A", marginBottom: "6px" }}>{note.title || 'Untitled Note'}</div>
                           <div style={{ fontSize: "11px", color: "#666", marginBottom: "8px" }}>{note.content || 'No content'}</div>
-                          <div style={{ fontSize: "9px", color: "#999" }}>{new Date(note.updatedAt).toLocaleDateString()}</div>
+                          <div style={{ fontSize: "9px", color: "#000" }}>{new Date(note.updatedAt).toLocaleDateString()}</div>
                         </div>
                         <div style={{ display: "flex", gap: "8px", opacity: 0.6 }}>
                           <Trash2
@@ -1254,7 +1287,7 @@ export default function ClaudeRefinedDemo() {
                       <div style={{ flex: 1 }}>
                         <div style={{ fontSize: "13px", fontWeight: 400, color: "#2A2A2A" }}>{contact.name || 'No Name'}</div>
                         <div style={{ fontSize: "11px", color: "#666" }}>{contact.email}</div>
-                        <div style={{ fontSize: "10px", color: "#999" }}>{contact.company || 'No Company'}</div>
+                        <div style={{ fontSize: "10px", color: "#000" }}>{contact.company || 'No Company'}</div>
                       </div>
                     </div>
                   ))}
@@ -1360,7 +1393,7 @@ export default function ClaudeRefinedDemo() {
                                   padding: 0,
                                   background: "none",
                                   border: "none",
-                                  color: "#999",
+                                  color: "#000",
                                   fontSize: "11px",
                                   fontWeight: 300,
                                   cursor: "pointer"
@@ -1472,7 +1505,7 @@ export default function ClaudeRefinedDemo() {
                         color: "#2A2A2A"
                       }}
                     />
-                    <p style={{ fontSize: "11px", color: "#999", marginTop: "4px" }}>
+                    <p style={{ fontSize: "11px", color: "#000", marginTop: "4px" }}>
                       Used for AI features (email summaries, quick replies, chat assistant)
                     </p>
                   </div>
@@ -1496,7 +1529,7 @@ export default function ClaudeRefinedDemo() {
                         color: "#2A2A2A"
                       }}
                     />
-                    <p style={{ fontSize: "11px", color: "#999", marginTop: "4px" }}>
+                    <p style={{ fontSize: "11px", color: "#000", marginTop: "4px" }}>
                       Used for sending transactional emails (password resets, notifications)
                     </p>
                   </div>
@@ -1577,7 +1610,7 @@ export default function ClaudeRefinedDemo() {
               <div>
                 {emails.filter(e => e.folder === 'archive').length === 0 ? (
                   <div style={{ padding: "40px", textAlign: "center" }}>
-                    <p style={{ fontSize: "13px", color: "#999", fontWeight: 300 }}>No archived emails</p>
+                    <p style={{ fontSize: "13px", color: "#000", fontWeight: 300 }}>No archived emails</p>
                   </div>
                 ) : (
                   emails.filter(e => e.folder === 'archive').map((email) => (
@@ -1608,10 +1641,10 @@ export default function ClaudeRefinedDemo() {
                           }}>
                             {email.from}
                             {email.attachments && email.attachments.length > 0 && (
-                              <Paperclip style={{ width: "10px", height: "10px", color: "#999", strokeWidth: 1.5 }} />
+                              <Paperclip style={{ width: "10px", height: "10px", color: "#000", strokeWidth: 1.5 }} />
                             )}
                           </div>
-                          <div style={{ fontSize: "11px", color: "#999", marginTop: "2px" }}>
+                          <div style={{ fontSize: "11px", color: "#000", marginTop: "2px" }}>
                             {email.email}
                           </div>
                         </div>
@@ -1641,7 +1674,7 @@ export default function ClaudeRefinedDemo() {
                               transition: "all 0.2s ease"
                             }} />
                           </button>
-                          <span style={{ fontSize: "9px", color: "#999" }}>
+                          <span style={{ fontSize: "9px", color: "#000" }}>
                             {email.time}
                           </span>
                         </div>
@@ -1692,7 +1725,7 @@ export default function ClaudeRefinedDemo() {
               <div>
                 {emails.filter(e => e.folder === 'spam').length === 0 ? (
                   <div style={{ padding: "40px", textAlign: "center" }}>
-                    <p style={{ fontSize: "13px", color: "#999", fontWeight: 300 }}>No spam emails</p>
+                    <p style={{ fontSize: "13px", color: "#000", fontWeight: 300 }}>No spam emails</p>
                   </div>
                 ) : (
                   emails.filter(e => e.folder === 'spam').map((email) => (
@@ -1723,10 +1756,10 @@ export default function ClaudeRefinedDemo() {
                           }}>
                             {email.from}
                             {email.attachments && email.attachments.length > 0 && (
-                              <Paperclip style={{ width: "10px", height: "10px", color: "#999", strokeWidth: 1.5 }} />
+                              <Paperclip style={{ width: "10px", height: "10px", color: "#000", strokeWidth: 1.5 }} />
                             )}
                           </div>
-                          <div style={{ fontSize: "11px", color: "#999", marginTop: "2px" }}>
+                          <div style={{ fontSize: "11px", color: "#000", marginTop: "2px" }}>
                             {email.email}
                           </div>
                         </div>
@@ -1756,7 +1789,7 @@ export default function ClaudeRefinedDemo() {
                               transition: "all 0.2s ease"
                             }} />
                           </button>
-                          <div style={{ fontSize: "10px", color: "#999", fontWeight: 300 }}>
+                          <div style={{ fontSize: "10px", color: "#000", fontWeight: 300 }}>
                             {email.time}
                           </div>
                         </div>
@@ -2039,7 +2072,7 @@ export default function ClaudeRefinedDemo() {
                     setHoveredTooltip(null);
                   }}
                 >
-                  <action.icon style={{ width: "16px", height: "16px", color: "#999", strokeWidth: 1.5, transition: "color 0.2s ease" }} />
+                  <action.icon style={{ width: "16px", height: "16px", color: "#000", strokeWidth: 1.5, transition: "color 0.2s ease" }} />
                 </button>
               ))}
               </div>
@@ -2215,7 +2248,7 @@ export default function ClaudeRefinedDemo() {
                       {attachments.map((file, idx) => (
                         <div key={idx} style={{ display: "flex", alignItems: "center", justifyContent: "space-between", padding: "6px 8px", background: "white", borderRadius: "3px" }}>
                           <div style={{ display: "flex", alignItems: "center", gap: "6px" }}>
-                            <FileText style={{ width: "12px", height: "12px", color: "#999", strokeWidth: 1.5 }} />
+                            <FileText style={{ width: "12px", height: "12px", color: "#000", strokeWidth: 1.5 }} />
                             <span style={{ fontSize: "10px", fontWeight: 300, color: "#2A2A2A" }}>
                               {file.name} ({(file.size / 1024).toFixed(1)} KB)
                             </span>
@@ -2226,7 +2259,7 @@ export default function ClaudeRefinedDemo() {
                               padding: 0,
                               background: "none",
                               border: "none",
-                              color: "#999",
+                              color: "#000",
                               fontSize: "10px",
                               cursor: "pointer"
                             }}
@@ -2304,7 +2337,7 @@ export default function ClaudeRefinedDemo() {
                       padding: 0,
                       background: "none",
                       border: "none",
-                      color: "#999",
+                      color: "#000",
                       fontSize: "13px",
                       fontWeight: 300,
                       cursor: "pointer",
@@ -2324,7 +2357,7 @@ export default function ClaudeRefinedDemo() {
               <div style={{
                 fontSize: "11px",
                 fontWeight: 400,
-                color: "#999",
+                color: "#000",
                 marginBottom: "16px",
                 textTransform: "uppercase",
                 letterSpacing: "0.05em"
@@ -2352,7 +2385,7 @@ export default function ClaudeRefinedDemo() {
                 <div style={{ fontSize: "12px", fontWeight: 300, color: "#2A2A2A", letterSpacing: "0.01em" }}>
                   {selectedEmail.from}
                 </div>
-                <div style={{ fontSize: "10px", fontWeight: 300, color: "#999", marginTop: "1px" }}>
+                <div style={{ fontSize: "10px", fontWeight: 300, color: "#000", marginTop: "1px" }}>
                   {selectedEmail.email}
                 </div>
               </div>
@@ -2376,7 +2409,7 @@ export default function ClaudeRefinedDemo() {
                     if (icon) icon.style.color = "#999";
                   }}
                 >
-                  <HardDrive style={{ width: "16px", height: "16px", color: "#999", strokeWidth: 1.5, transition: "color 0.2s ease" }} />
+                  <HardDrive style={{ width: "16px", height: "16px", color: "#000", strokeWidth: 1.5, transition: "color 0.2s ease" }} />
                 </button>
                 
                 {/* Printer Icon */}
@@ -2398,11 +2431,11 @@ export default function ClaudeRefinedDemo() {
                     if (icon) icon.style.color = "#999";
                   }}
                 >
-                  <Printer style={{ width: "16px", height: "16px", color: "#999", strokeWidth: 1.5, transition: "color 0.2s ease" }} />
+                  <Printer style={{ width: "16px", height: "16px", color: "#000", strokeWidth: 1.5, transition: "color 0.2s ease" }} />
                 </button>
                 
                 {/* Date */}
-                <div style={{ fontSize: "10px", color: "#999", fontWeight: 300 }}>
+                <div style={{ fontSize: "10px", color: "#000", fontWeight: 300 }}>
                   {selectedEmail.time}
                 </div>
               </div>
@@ -2505,12 +2538,12 @@ export default function ClaudeRefinedDemo() {
                       border: "1px solid #F0EBE6"
                     }}>
                       <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
-                        <FileText style={{ width: "14px", height: "14px", color: "#999", strokeWidth: 1.5 }} />
+                        <FileText style={{ width: "14px", height: "14px", color: "#000", strokeWidth: 1.5 }} />
                         <div>
                           <div style={{ fontSize: "11px", fontWeight: 300, color: "#2A2A2A" }}>
                             {attachment.name}
                           </div>
-                          <div style={{ fontSize: "10px", color: "#999" }}>
+                          <div style={{ fontSize: "10px", color: "#000" }}>
                             {attachment.size}
                           </div>
                         </div>
@@ -2645,7 +2678,7 @@ export default function ClaudeRefinedDemo() {
                     setHoveredTooltip(null);
                   }}
                 >
-                  <action.icon style={{ width: "16px", height: "16px", color: "#999", strokeWidth: 1.5, transition: "color 0.2s ease" }} />
+                  <action.icon style={{ width: "16px", height: "16px", color: "#000", strokeWidth: 1.5, transition: "color 0.2s ease" }} />
                 </button>
               ))}
             </div>
@@ -2694,7 +2727,7 @@ export default function ClaudeRefinedDemo() {
                     border: "1px solid #F0EBE6",
                     borderRadius: "4px"
                   }}>
-                    <div style={{ fontSize: "11px", fontWeight: 300, color: "#999", marginBottom: "8px" }}>Select Template:</div>
+                    <div style={{ fontSize: "11px", fontWeight: 300, color: "#000", marginBottom: "8px" }}>Select Template:</div>
                     <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "8px" }}>
                       {emailTemplates.map(template => (
                         <button
@@ -2756,7 +2789,7 @@ export default function ClaudeRefinedDemo() {
                       padding: 0,
                       background: "none",
                       border: "none",
-                      color: "#999",
+                      color: "#000",
                       fontSize: "11px",
                       fontWeight: 300,
                       cursor: "pointer",
@@ -2851,7 +2884,7 @@ export default function ClaudeRefinedDemo() {
                       {attachments.map((file, idx) => (
                         <div key={idx} style={{ display: "flex", alignItems: "center", justifyContent: "space-between", padding: "6px 8px", background: "white", borderRadius: "3px" }}>
                           <div style={{ display: "flex", alignItems: "center", gap: "6px" }}>
-                            <FileText style={{ width: "12px", height: "12px", color: "#999", strokeWidth: 1.5 }} />
+                            <FileText style={{ width: "12px", height: "12px", color: "#000", strokeWidth: 1.5 }} />
                             <span style={{ fontSize: "10px", fontWeight: 300, color: "#2A2A2A" }}>
                               {file.name} ({(file.size / 1024).toFixed(1)} KB)
                             </span>
@@ -2862,7 +2895,7 @@ export default function ClaudeRefinedDemo() {
                               padding: 0,
                               background: "none",
                               border: "none",
-                              color: "#999",
+                              color: "#000",
                               fontSize: "10px",
                               cursor: "pointer"
                             }}
@@ -2942,7 +2975,7 @@ export default function ClaudeRefinedDemo() {
                       padding: 0,
                       background: "none",
                       border: "none",
-                      color: "#999",
+                      color: "#000",
                       fontSize: "13px",
                       fontWeight: 300,
                       cursor: "pointer",
@@ -3088,7 +3121,7 @@ export default function ClaudeRefinedDemo() {
                 border: "none",
                 cursor: "pointer",
                 fontSize: "20px",
-                color: "#999"
+                color: "#000"
               }}
             >
               ×
@@ -3163,7 +3196,7 @@ export default function ClaudeRefinedDemo() {
                 border: "none",
                 cursor: "pointer",
                 fontSize: "20px",
-                color: "#999"
+                color: "#000"
               }}
             >
               ×

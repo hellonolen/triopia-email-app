@@ -196,7 +196,7 @@ export function SidebarNav({ model, onAddSource }: SidebarNavProps) {
             padding: '4px 8px',
             fontSize: '11px',
             fontWeight: 300,
-            color: '#999',
+            color: '#000',
             cursor: 'pointer',
             borderRadius: '3px',
             transition: 'background 0.15s'
@@ -273,7 +273,7 @@ export function SidebarNav({ model, onAddSource }: SidebarNavProps) {
             fontSize: '9px',
             textTransform: 'uppercase',
             letterSpacing: '0.5px',
-            color: '#CCC',
+            color: '#000',
             fontWeight: 400
           }}>Core</span>
         </div>
@@ -300,15 +300,15 @@ export function SidebarNav({ model, onAddSource }: SidebarNavProps) {
           onClick={() => setInboxesCollapsed(!inboxesCollapsed)}
         >
           {inboxesCollapsed ? (
-            <ChevronRight style={{ width: '10px', height: '10px', color: '#CCC', strokeWidth: 1.5 }} />
+            <ChevronRight style={{ width: '10px', height: '10px', color: '#000', strokeWidth: 1.5 }} />
           ) : (
-            <ChevronDown style={{ width: '10px', height: '10px', color: '#CCC', strokeWidth: 1.5 }} />
+            <ChevronDown style={{ width: '10px', height: '10px', color: '#000', strokeWidth: 1.5 }} />
           )}
           <span style={{
             fontSize: '9px',
             textTransform: 'uppercase',
             letterSpacing: '0.5px',
-            color: '#CCC',
+            color: '#000',
             fontWeight: 400
           }}>Inboxes</span>
           {totalUnread > 0 && (
@@ -332,7 +332,7 @@ export function SidebarNav({ model, onAddSource }: SidebarNavProps) {
                 transform: 'translateY(-50%)',
                 width: '11px',
                 height: '11px',
-                color: '#CCC',
+                color: '#000',
                 strokeWidth: 1.5
               }} />
               <input
@@ -386,7 +386,7 @@ export function SidebarNav({ model, onAddSource }: SidebarNavProps) {
               padding: '4px 8px',
               fontSize: '11px',
               fontWeight: 300,
-              color: '#999',
+              color: '#000',
               background: 'transparent',
               border: 'none',
               borderRadius: '3px',
@@ -418,15 +418,15 @@ export function SidebarNav({ model, onAddSource }: SidebarNavProps) {
           onClick={() => setToolsCollapsed(!toolsCollapsed)}
         >
           {toolsCollapsed ? (
-            <ChevronRight style={{ width: '10px', height: '10px', color: '#CCC', strokeWidth: 1.5 }} />
+            <ChevronRight style={{ width: '10px', height: '10px', color: '#000', strokeWidth: 1.5 }} />
           ) : (
-            <ChevronDown style={{ width: '10px', height: '10px', color: '#CCC', strokeWidth: 1.5 }} />
+            <ChevronDown style={{ width: '10px', height: '10px', color: '#000', strokeWidth: 1.5 }} />
           )}
           <span style={{
             fontSize: '9px',
             textTransform: 'uppercase',
             letterSpacing: '0.5px',
-            color: '#CCC',
+            color: '#000',
             fontWeight: 400
           }}>Tools</span>
         </div>
@@ -455,15 +455,15 @@ export function SidebarNav({ model, onAddSource }: SidebarNavProps) {
           onClick={() => setSettingsCollapsed(!settingsCollapsed)}
         >
           {settingsCollapsed ? (
-            <ChevronRight style={{ width: '10px', height: '10px', color: '#CCC', strokeWidth: 1.5 }} />
+            <ChevronRight style={{ width: '10px', height: '10px', color: '#000', strokeWidth: 1.5 }} />
           ) : (
-            <ChevronDown style={{ width: '10px', height: '10px', color: '#CCC', strokeWidth: 1.5 }} />
+            <ChevronDown style={{ width: '10px', height: '10px', color: '#000', strokeWidth: 1.5 }} />
           )}
           <span style={{
             fontSize: '9px',
             textTransform: 'uppercase',
             letterSpacing: '0.5px',
-            color: '#CCC',
+            color: '#000',
             fontWeight: 400
           }}>Settings</span>
         </div>

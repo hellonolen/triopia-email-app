@@ -411,3 +411,31 @@
 - [x] Make SETTINGS section collapsible with chevron icon
 - [x] Add unread count badge to INBOXES header (e.g., "INBOXES (12)")
 - [x] Test all collapse/expand interactions
+
+## PRODUCTION BLOCKERS (CRITICAL)
+
+### Fix 404 Errors
+- [x] Audit all sidebar links (CORE, INBOXES, TOOLS, SETTINGS)
+- [x] Fix broken routes in App.tsx
+- [x] Test every single link to ensure no 404s
+
+### Build Admin Section
+- [ ] Create Admin page component
+- [ ] Add API key management (OpenAI, SendGrid)
+- [ ] Add admin role assignment interface
+- [ ] Add system settings panel
+- [ ] Wire admin route to sidebar
+
+### Production Readiness
+- [ ] Verify all routes work
+- [ ] Verify admin section accessible
+- [ ] Test API key save/load functionality
+- [ ] Final smoke test before publish
+
+## URGENT: REPLACE ALL GRAY TEXT WITH BLACK
+
+- [x] Find all gray text colors (#999, #CCC, gray, etc.)
+- [x] Replace sidebar group headers (CORE, INBOXES, TOOLS, SETTINGS) with black
+- [x] Replace email list category headers with black
+- [x] Replace any other gray text elements with black
+- [x] Test readability of all text

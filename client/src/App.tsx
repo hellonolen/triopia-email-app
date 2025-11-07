@@ -22,19 +22,51 @@ function Router() {
   // make sure to consider if you need authentication for certain routes
   return (
     <Switch>
-      <Route path="/" component={EmailInterface} />
-      <Route path={"/premium-demo"} component={PremiumDemo} />
+      {/* Main app route */}
+      <Route path="/" component={() => <EmailInterface view="inbox" />} />
       
+      {/* CORE routes */}
+      <Route path="/fresh-start" component={() => <EmailInterface view="fresh-start" />} />
+      <Route path="/inbox" component={() => <EmailInterface view="inbox" />} />
+      <Route path="/starred" component={() => <EmailInterface view="starred" />} />
+      <Route path="/new-connections" component={() => <EmailInterface view="new-connections" />} />
+      <Route path="/paused" component={() => <EmailInterface view="paused" />} />
+      <Route path="/complete" component={() => <EmailInterface view="complete" />} />
+      <Route path="/sent" component={() => <EmailInterface view="sent" />} />
+      <Route path="/drafts" component={() => <EmailInterface view="drafts" />} />
+      <Route path="/archive" component={() => <EmailInterface view="archive" />} />
+      <Route path="/spam" component={() => <EmailInterface view="spam" />} />
+      <Route path="/trash" component={() => <EmailInterface view="trash" />} />
+      <Route path="/storage" component={() => <EmailInterface view="storage" />} />
+      
+      {/* TOOLS routes */}
+      <Route path="/notes" component={() => <EmailInterface view="notes" />} />
+      <Route path="/calendar" component={() => <EmailInterface view="calendar" />} />
+      <Route path="/contacts" component={() => <EmailInterface view="contacts" />} />
+      
+      {/* SETTINGS routes */}
+      <Route path="/analytics" component={() => <EmailInterface view="analytics" />} />
+      <Route path="/appearance" component={() => <EmailInterface view="appearance" />} />
+      <Route path="/settings" component={() => <EmailInterface view="settings" />} />
+      <Route path="/profile" component={() => <EmailInterface view="profile" />} />
+      <Route path="/admin" component={() => <EmailInterface view="admin" />} />
+      
+      {/* Legacy demo routes */}
+      <Route path={"/premium-demo"} component={PremiumDemo} />
       <Route path={"/dior-demo"} component={DiorRefinedDemo} />
       <Route path={"/superhuman-demo"} component={SuperhumanDemo} />
       <Route path={"/editorial-demo"} component={EditorialDemo} />
-      <Route path={"/inbox"} component={UnifiedInbox} />
-      <Route path={"/calendar"} component={Calendar} />
+      
+      {/* Auth callbacks */}
+      <Route path={"/auth/gmail/callback"} component={AuthCallback} />
+      <Route path={"/auth/outlook/callback"} component={AuthCallback} />
+      
+      {/* Legal pages */}
       <Route path={"/privacy"} component={Privacy} />
       <Route path={"/terms"} component={Terms} />
       <Route path={"/contact"} component={Contact} />
-      <Route path={"/auth/gmail/callback"} component={AuthCallback} />
-      <Route path={"/auth/outlook/callback"} component={AuthCallback} />
+      
+      {/* 404 */}
       <Route path={"/404"} component={NotFound} />
       {/* Final fallback route */}
       <Route component={NotFound} />
