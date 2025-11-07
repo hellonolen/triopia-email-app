@@ -26,6 +26,7 @@ const mockAccounts = [
 ];
 
 export default function ClaudeRefinedDemo() {
+  const [emails, setEmails] = useState(mockEmails);
   const [selectedEmail, setSelectedEmail] = useState(mockEmails[0]);
   const [hoveredItem, setHoveredItem] = useState<string | null>(null);
   const [inboxesExpanded, setInboxesExpanded] = useState(false);
@@ -41,8 +42,25 @@ export default function ClaudeRefinedDemo() {
   const [viewDensity, setViewDensity] = useState<'compact' | 'default' | 'comfortable'>('default');
   
   // Calculate email counts
-  const totalEmails = mockEmails.length;
-  const unreadEmails = mockEmails.filter(e => e.unread).length;
+  const totalEmails = emails.length;
+  const unreadEmails = emails.filter(e => e.unread).length;
+  
+  // Mark email as read/unread
+  const toggleReadStatus = (emailId: number) => {
+    setEmails(prev => prev.map(email => 
+      email.id === emailId ? { ...email, unread: !email.unread } : email
+    ));
+  };
+  
+  // Bulk select emails
+  const [selectedEmailIds, setSelectedEmailIds] = useState<number[]>([]);
+  const toggleEmailSelection = (emailId: number) => {
+    setSelectedEmailIds(prev => 
+      prev.includes(emailId) ? prev.filter(id => id !== emailId) : [...prev, emailId]
+    );
+  };
+  const selectAllEmails = () => setSelectedEmailIds(emails.map(e => e.id));
+  const deselectAllEmails = () => setSelectedEmailIds([]);
 
   // Backend data hooks
   const { data: notesData = [], refetch: refetchNotes } = trpc.notes.list.useQuery(undefined, { enabled: activeView === 'Notes' });
@@ -96,24 +114,32 @@ export default function ClaudeRefinedDemo() {
 
   // Email action handlers
   const [isReplying, setIsReplying] = useState(false);
+  const [isReplyingAll, setIsReplyingAll] = useState(false);
   const replyBoxRef = useRef<HTMLDivElement>(null);
+  
+  // Quick reply suggestions - dynamic and configurable
+  const quickReplies = [
+    "Thanks for reaching out! I'd be happy to schedule a call. What times work best for you?",
+    "I appreciate the warm welcome! Looking forward to working together.",
+    "This sounds exciting! Let's set up a time to discuss the details."
+  ];
   
   // Reset reply state when email changes
   useEffect(() => {
     setIsReplying(false);
   }, [selectedEmail.id]);
-  
-  const handleReply = (emailId: number) => {
+    const handleReply = (emailId: number) => {
     console.log('Reply to email:', emailId, 'Current isReplying:', isReplying);
     setIsReplying(true);
+    setIsReplyingAll(false);
     setRightPanelMode('email'); // Stay in email mode to show thread
-    console.log('Set isReplying to true');
-    
-    // Scroll to reply box after state update
-    setTimeout(() => {
-      console.log('Scrolling to reply box, ref:', replyBoxRef.current);
-      replyBoxRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' });
-    }, 100);
+  };
+  
+  const handleReplyAll = (emailId: number) => {
+    console.log('Reply All to email:', emailId);
+    setIsReplying(true);
+    setIsReplyingAll(true);
+    setRightPanelMode('email');
   };
 
   const handleForward = (emailId: number) => {
@@ -693,7 +719,7 @@ export default function ClaudeRefinedDemo() {
 
           <div>
             {/* Inbox View */}
-            {activeView === 'Inbox' && mockEmails.map((email) => (
+            {activeView === 'Inbox' && emails.map((email) => (
               <div
                 key={email.id}
                 onClick={() => {
@@ -807,6 +833,7 @@ export default function ClaudeRefinedDemo() {
                       onClick={(e) => { 
                         e.stopPropagation(); 
                         if (action.label === 'Reply') handleReply(email.id);
+                        else if (action.label === 'Reply All') handleReplyAll(email.id);
                         else if (action.label === 'Forward') handleForward(email.id);
                         else if (action.label === 'Archive') handleArchive(email.id);
                         else if (action.label === 'Spam') handleSpam(email.id);
@@ -1221,6 +1248,7 @@ export default function ClaudeRefinedDemo() {
               <div className="flex items-center gap-3">
               {[
                 { icon: Reply, label: "Reply", alwaysShow: true },
+                { icon: Reply, label: "Reply All", alwaysShow: true },
                 { icon: Forward, label: "Forward", alwaysShow: true },
                 { icon: Archive, label: "Archive", alwaysShow: false },
                 { icon: AlertCircle, label: "Spam", alwaysShow: false },
@@ -1232,6 +1260,7 @@ export default function ClaudeRefinedDemo() {
                   key={action.label}
                   onClick={() => {
                     if (action.label === 'Reply') handleReply(selectedEmail.id);
+                    else if (action.label === 'Reply All') handleReplyAll(selectedEmail.id);
                     else if (action.label === 'Forward') handleForward(selectedEmail.id);
                     else if (action.label === 'Archive') handleArchive(selectedEmail.id);
                     else if (action.label === 'Spam') handleSpam(selectedEmail.id);
@@ -1349,7 +1378,7 @@ export default function ClaudeRefinedDemo() {
             }}>
               <div style={{ display: "flex", alignItems: "center", gap: "8px", marginBottom: "12px" }}>
                 <Bot style={{ width: "16px", height: "16px", color: "#D89880", strokeWidth: 1.5 }} />
-                <span style={{ fontSize: "12px", fontWeight: 400, color: "#2A2A2A" }}>AI Summary</span>
+                <span style={{ fontSize: "12px", fontWeight: 400, color: "#2A2A2A" }}>Email Summary</span>
               </div>
               <div style={{ fontSize: "12px", fontWeight: 300, color: "#666", lineHeight: "1.6" }}>
                 <strong>Key Points:</strong>
@@ -1474,7 +1503,7 @@ export default function ClaudeRefinedDemo() {
             }}>
               <div style={{ display: "flex", alignItems: "center", gap: "12px", marginBottom: "12px" }}>
                 <Bot style={{ width: "16px", height: "16px", color: "#D89880", strokeWidth: 1.5 }} />
-                <span style={{ fontSize: "12px", fontWeight: 400, color: "#2A2A2A" }}>AI Detected Contact</span>
+                <span style={{ fontSize: "12px", fontWeight: 400, color: "#2A2A2A" }}>Contact Information</span>
               </div>
               <div style={{ fontSize: "11px", fontWeight: 300, color: "#666", marginBottom: "8px" }}>
                 <div><strong>{selectedEmail.from}</strong></div>
@@ -1519,14 +1548,10 @@ export default function ClaudeRefinedDemo() {
             }}>
               <div style={{ display: "flex", alignItems: "center", gap: "8px", marginBottom: "12px" }}>
                 <Zap style={{ width: "16px", height: "16px", color: "#D89880", strokeWidth: 1.5 }} />
-                <span style={{ fontSize: "12px", fontWeight: 400, color: "#2A2A2A" }}>Smart Reply</span>
+                <span style={{ fontSize: "12px", fontWeight: 400, color: "#2A2A2A" }}>Quick Replies</span>
               </div>
               <div style={{ display: "flex", flexDirection: "column", gap: "8px" }}>
-                {[
-                  "Thanks for reaching out! I'd be happy to schedule a call. What times work best for you?",
-                  "I appreciate the warm welcome! Looking forward to working together.",
-                  "This sounds exciting! Let's set up a time to discuss the details."
-                ].map((suggestion, idx) => (
+                {quickReplies.map((suggestion, idx) => (
                   <button
                     key={idx}
                     onClick={() => {
@@ -1582,6 +1607,7 @@ export default function ClaudeRefinedDemo() {
                   key={action.label}
                   onClick={() => {
                     if (action.label === 'Reply') handleReply(selectedEmail.id);
+                    else if (action.label === 'Reply All') handleReplyAll(selectedEmail.id);
                     else if (action.label === 'Forward') handleForward(selectedEmail.id);
                     else if (action.label === 'Archive') handleArchive(selectedEmail.id);
                     else if (action.label === 'Spam') handleSpam(selectedEmail.id);

@@ -529,3 +529,28 @@
 - [ ] Apply/remove tags manually on emails
 - [ ] Tag management UI in Settings or as modal
 - [ ] Tag library showing all available tags
+
+
+## IMMEDIATE FIXES (Production Priority)
+
+### Remove AI Branding
+- [ ] Change "AI Summary" to "Email Summary"
+- [ ] Change "AI Detected Contact" to "Contact Information"
+- [ ] Change "Smart Reply" to "Quick Replies"
+- [ ] Remove all mentions of "AI" from user-facing text
+
+### Core Email Functionality
+- [ ] Reply All functionality
+- [ ] Forward with attachments
+- [ ] Actual file attachment upload/download
+- [ ] Rich text editor for compose (bold, italic, underline, lists)
+- [ ] Email search with filters
+- [ ] Mark as read/unread functionality
+- [ ] Bulk email actions (select multiple, delete all)
+- [ ] Email drafts auto-save
+- [ ] Schedule send feature
+- [ ] Undo send (5-second window)
+- [ ] Snooze emails feature
+- [ ] Email filters and rules
+- [ ] Archive functionality (make it work)
+- [ ] Spam detection and reporting (make it work)
