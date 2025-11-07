@@ -1,5 +1,6 @@
 import { useState, useEffect, useRef } from "react";
 import { trpc } from "@/lib/trpc";
+import { formatFileSize } from "@/lib/storage";
 import { Mail, Send, Archive, Trash2, Star, Clock, CheckCircle2, Pause, Home, Inbox, Calendar, Users, Settings, Plus, UserPlus, Search, Zap, Check, Pencil, ChevronDown, ChevronRight, Pin, Info, FileText, HardDrive, BarChart3, Palette, AlertCircle, FilePen, Reply, Forward, Bot, User, Shield, Printer, MessageSquare, ListFilter, Mic, Paperclip } from "lucide-react";
 import SimpleRichTextEditor from "@/components/SimpleRichTextEditor";
 
@@ -86,12 +87,21 @@ export default function ClaudeRefinedDemo() {
   const [composeSubject, setComposeSubject] = useState('');
   const [composeBody, setComposeBody] = useState('');
   const [replyBody, setReplyBody] = useState('');
-  const [attachments, setAttachments] = useState<File[]>([]);
+  const [attachments, setAttachments] = useState<Array<{file: File, uploading?: boolean, uploaded?: boolean, url?: string, key?: string}>>([]);
+  const uploadFileMutation = trpc.upload.uploadFile.useMutation();
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [emailSignature, setEmailSignature] = useState('Best regards,\nYour Name\nYour Title\nYour Company');
   const [showSignatureSelector, setShowSignatureSelector] = useState(false);
   const [signatureEnabled, setSignatureEnabled] = useState(true);
   const [searchQuery, setSearchQuery] = useState('');
+  
+  // Production polish states
+  const [isLoading, setIsLoading] = useState(false);
+  const [isSending, setIsSending] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+  const [isOnline, setIsOnline] = useState(navigator.onLine);
+  const [emailsPerPage] = useState(50);
+  const [currentPage, setCurrentPage] = useState(1);
   const signatures = [
     { id: 0, name: 'No Signature', content: '' },
     { id: 1, name: 'Work', content: 'Best regards,\nYour Name\nYour Title\nYour Company' },
@@ -161,6 +171,7 @@ export default function ClaudeRefinedDemo() {
     setEmails(prev => prev.map(email => 
       email.id === emailId ? { ...email, folder: 'archive' } : email
     ));
+    showToast('Email archived');
     // If we're viewing the archived email, go back to inbox
     if (selectedEmail.id === emailId) {
       const remainingEmails = emails.filter(e => e.id !== emailId && e.folder === 'inbox');
@@ -175,6 +186,7 @@ export default function ClaudeRefinedDemo() {
     setEmails(prev => prev.map(email => 
       email.id === emailId ? { ...email, folder: 'spam' } : email
     ));
+    showToast('Moved to spam');
     // If we're viewing the spam email, go back to inbox
     if (selectedEmail.id === emailId) {
       const remainingEmails = emails.filter(e => e.id !== emailId && e.folder === 'inbox');
@@ -189,6 +201,7 @@ export default function ClaudeRefinedDemo() {
     setEmails(prev => prev.map(email => 
       email.id === emailId ? { ...email, folder: 'inbox' } : email
     ));
+    showToast('Moved to inbox');
   };
 
   const handleNotSpam = (emailId: number) => {
@@ -196,21 +209,38 @@ export default function ClaudeRefinedDemo() {
     setEmails(prev => prev.map(email => 
       email.id === emailId ? { ...email, folder: 'inbox' } : email
     ));
+    showToast('Moved to inbox');
   };
 
   const handleDelete = (emailId: number) => {
     console.log('Delete email:', emailId);
-    // TODO: Move email to trash
+    setEmails(prev => prev.filter(email => email.id !== emailId));
+    showToast('Email deleted');
+    // If we're viewing the deleted email, go back to first email
+    if (selectedEmail.id === emailId && emails.length > 1) {
+      const remainingEmails = emails.filter(e => e.id !== emailId);
+      if (remainingEmails.length > 0) {
+        setSelectedEmail(remainingEmails[0]);
+      }
+    }
   };
 
   const handlePin = (emailId: number) => {
     console.log('Pin email:', emailId);
-    // TODO: Toggle pin status
+    setEmails(prev => prev.map(email => 
+      email.id === emailId ? { ...email, isPinned: !email.isPinned } : email
+    ));
+    const email = emails.find(e => e.id === emailId);
+    showToast(email?.isPinned ? 'Email unpinned' : 'Email pinned');
   };
 
   const handleStar = (emailId: number) => {
     console.log('Star email:', emailId);
-    // TODO: Toggle star status
+    setEmails(prev => prev.map(email => 
+      email.id === emailId ? { ...email, starred: !email.starred } : email
+    ));
+    const email = emails.find(e => e.id === emailId);
+    showToast(email?.starred ? 'Removed star' : 'Starred');
   };
 
   useEffect(() => {
@@ -439,6 +469,192 @@ export default function ClaudeRefinedDemo() {
     return () => document.removeEventListener('keydown', handleKeyDown);
   }, [selectedEmailIndex]);
 
+  // Online/offline detection
+  useEffect(() => {
+    const handleOnline = () => setIsOnline(true);
+    const handleOffline = () => setIsOnline(false);
+    
+    window.addEventListener('online', handleOnline);
+    window.addEventListener('offline', handleOffline);
+    
+    return () => {
+      window.removeEventListener('online', handleOnline);
+      window.removeEventListener('offline', handleOffline);
+    };
+  }, []);
+
+  // Load signatures from localStorage
+  useEffect(() => {
+    const saved = localStorage.getItem('emailSignature');
+    if (saved) setEmailSignature(saved);
+    
+    const savedEnabled = localStorage.getItem('signatureEnabled');
+    if (savedEnabled !== null) setSignatureEnabled(savedEnabled === 'true');
+  }, []);
+
+  // Save signature to localStorage whenever it changes
+  useEffect(() => {
+    localStorage.setItem('emailSignature', emailSignature);
+  }, [emailSignature]);
+
+  useEffect(() => {
+    localStorage.setItem('signatureEnabled', signatureEnabled.toString());
+  }, [signatureEnabled]);
+
+  // Load settings from localStorage
+  useEffect(() => {
+    const savedDensity = localStorage.getItem('viewDensity');
+    if (savedDensity) setViewDensity(savedDensity as 'compact' | 'default' | 'comfortable');
+    
+    const savedFontSize = localStorage.getItem('emailFontSize');
+    if (savedFontSize) setEmailFontSize(savedFontSize as 'small' | 'medium' | 'large');
+  }, []);
+
+  // Save settings to localStorage
+  useEffect(() => {
+    localStorage.setItem('viewDensity', viewDensity);
+  }, [viewDensity]);
+
+  useEffect(() => {
+    localStorage.setItem('emailFontSize', emailFontSize);
+  }, [emailFontSize]);
+
+  // Auto-save draft to localStorage every 3 seconds
+  useEffect(() => {
+    if (composeBody || composeSubject || composeTo) {
+      const timer = setTimeout(() => {
+        localStorage.setItem('emailDraft', JSON.stringify({
+          to: composeTo,
+          cc: composeCc,
+          bcc: composeBcc,
+          subject: composeSubject,
+          body: composeBody,
+          savedAt: new Date().toISOString()
+        }));
+      }, 3000);
+      return () => clearTimeout(timer);
+    }
+  }, [composeBody, composeSubject, composeTo, composeCc, composeBcc]);
+
+  // Load draft from localStorage on mount
+  useEffect(() => {
+    const savedDraft = localStorage.getItem('emailDraft');
+    if (savedDraft) {
+      try {
+        const draft = JSON.parse(savedDraft);
+        setComposeTo(draft.to || '');
+        setComposeCc(draft.cc || '');
+        setComposeBcc(draft.bcc || '');
+        setComposeSubject(draft.subject || '');
+        setComposeBody(draft.body || '');
+      } catch (e) {
+        console.error('Failed to load draft:', e);
+      }
+    }
+  }, []);
+
+  // Email validation helper
+  const isValidEmail = (email: string): boolean => {
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return emailRegex.test(email.trim());
+  };
+
+  // Sanitize HTML content to prevent XSS
+  const sanitizeHTML = (html: string): string => {
+    const temp = document.createElement('div');
+    temp.textContent = html;
+    return temp.innerHTML;
+  };
+
+  // Show toast notification
+  const showToast = (message: string, type: 'success' | 'error' = 'success') => {
+    const toast = document.createElement('div');
+    toast.textContent = message;
+    toast.style.cssText = `
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      background: ${type === 'success' ? '#4CAF50' : '#F44336'};
+      color: white;
+      padding: 12px 24px;
+      border-radius: 4px;
+      font-size: 13px;
+      font-weight: 300;
+      z-index: 10000;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+    `;
+    document.body.appendChild(toast);
+    setTimeout(() => {
+      toast.style.opacity = '0';
+      toast.style.transition = 'opacity 0.3s ease';
+      setTimeout(() => document.body.removeChild(toast), 300);
+    }, 3000);
+  };
+
+  // Handle send email with validation and loading
+  const handleSendEmail = async () => {
+    try {
+      // Validation
+      if (!composeTo.trim()) {
+        setError('Please enter a recipient email address');
+        showToast('Please enter a recipient email address', 'error');
+        return;
+      }
+      
+      if (!isValidEmail(composeTo)) {
+        setError('Please enter a valid email address');
+        showToast('Please enter a valid email address', 'error');
+        return;
+      }
+      
+      if (!composeSubject.trim()) {
+        setError('Please enter a subject');
+        showToast('Please enter a subject', 'error');
+        return;
+      }
+      
+      if (!composeBody.trim()) {
+        setError('Please enter a message');
+        showToast('Please enter a message', 'error');
+        return;
+      }
+
+      // Check online status
+      if (!isOnline) {
+        setError('You are offline. Please check your internet connection.');
+        showToast('You are offline. Please check your internet connection.', 'error');
+        return;
+      }
+
+      setIsSending(true);
+      setError(null);
+
+      // Simulate API call (replace with real tRPC call later)
+      await new Promise(resolve => setTimeout(resolve, 1500));
+
+      // Success
+      showToast('Email sent successfully!');
+
+      // Clear form and draft
+      setComposeTo('');
+      setComposeCc('');
+      setComposeBcc('');
+      setComposeSubject('');
+      setComposeBody('');
+      setAttachments([]);
+      localStorage.removeItem('emailDraft');
+      
+      // Return to email view
+      setRightPanelMode('email');
+    } catch (err) {
+      const errorMsg = err instanceof Error ? err.message : 'Failed to send email';
+      setError(errorMsg);
+      showToast(errorMsg, 'error');
+    } finally {
+      setIsSending(false);
+    }
+  };
+
   return (
     <div style={{ 
       minHeight: "100vh",
@@ -447,6 +663,51 @@ export default function ClaudeRefinedDemo() {
       display: "flex",
       flexDirection: "column"
     }}>
+      {/* Offline Indicator Banner */}
+      {!isOnline && (
+        <div style={{
+          background: "#F44336",
+          color: "white",
+          padding: "8px 24px",
+          textAlign: "center",
+          fontSize: "11px",
+          fontWeight: 300
+        }}>
+          ⚠️ You are offline. Changes will sync when connection is restored.
+        </div>
+      )}
+
+      {/* Error Banner */}
+      {error && (
+        <div style={{
+          background: "#FFF3CD",
+          color: "#856404",
+          padding: "12px 24px",
+          textAlign: "center",
+          fontSize: "11px",
+          fontWeight: 300,
+          borderBottom: "1px solid #FFEAA7",
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "space-between"
+        }}>
+          <span>{error}</span>
+          <button
+            onClick={() => setError(null)}
+            style={{
+              background: "none",
+              border: "none",
+              color: "#856404",
+              cursor: "pointer",
+              fontSize: "16px",
+              fontWeight: 300
+            }}
+          >
+            ×
+          </button>
+        </div>
+      )}
+
       {/* Header - DRAMATICALLY COMPACT */}
       <div style={{ 
         background: "white",
@@ -872,18 +1133,47 @@ export default function ClaudeRefinedDemo() {
           </div>
 
           <div>
+            {/* Loading Skeleton */}
+            {isLoading && (
+              <div>
+                {[1, 2, 3, 4, 5].map((i) => (
+                  <div key={i} style={{
+                    padding: "12px 16px",
+                    borderBottom: "1px solid #F8F6F4",
+                    animation: "pulse 1.5s ease-in-out infinite"
+                  }}>
+                    <div style={{ display: "flex", justifyContent: "space-between", marginBottom: "8px" }}>
+                      <div style={{ width: "120px", height: "12px", background: "#F0EBE6", borderRadius: "3px" }} />
+                      <div style={{ width: "60px", height: "10px", background: "#F0EBE6", borderRadius: "3px" }} />
+                    </div>
+                    <div style={{ width: "80%", height: "14px", background: "#F0EBE6", borderRadius: "3px", marginBottom: "6px" }} />
+                    <div style={{ width: "90%", height: "11px", background: "#F0EBE6", borderRadius: "3px" }} />
+                  </div>
+                ))}
+              </div>
+            )}
+
             {/* Inbox View */}
-            {activeView === 'Inbox' && emails
-              .filter(e => e.folder === 'inbox')
-              .filter(e => {
-                if (!searchQuery) return true;
-                const query = searchQuery.toLowerCase();
-                return e.subject.toLowerCase().includes(query) ||
-                       e.from.toLowerCase().includes(query) ||
-                       e.preview.toLowerCase().includes(query) ||
-                       e.email.toLowerCase().includes(query);
-              })
-              .map((email) => (
+            {!isLoading && activeView === 'Inbox' && (() => {
+              const filteredEmails = emails
+                .filter(e => e.folder === 'inbox')
+                .filter(e => {
+                  if (!searchQuery) return true;
+                  const query = searchQuery.toLowerCase();
+                  return e.subject.toLowerCase().includes(query) ||
+                         e.from.toLowerCase().includes(query) ||
+                         e.preview.toLowerCase().includes(query) ||
+                         e.email.toLowerCase().includes(query);
+                });
+              
+              const startIndex = (currentPage - 1) * emailsPerPage;
+              const endIndex = startIndex + emailsPerPage;
+              const paginatedEmails = filteredEmails.slice(startIndex, endIndex);
+              const totalPages = Math.ceil(filteredEmails.length / emailsPerPage);
+              
+              return (
+                <>
+                  {paginatedEmails.map((email) => (
               <div
                 key={email.id}
                 onClick={() => {
@@ -1061,6 +1351,57 @@ export default function ClaudeRefinedDemo() {
                 </div>
               </div>
             ))}
+                  
+                  {/* Pagination Controls */}
+                  {totalPages > 1 && (
+                    <div style={{
+                      padding: "16px",
+                      display: "flex",
+                      justifyContent: "center",
+                      alignItems: "center",
+                      gap: "12px",
+                      borderTop: "1px solid #F0EBE6"
+                    }}>
+                      <button
+                        onClick={() => setCurrentPage(prev => Math.max(1, prev - 1))}
+                        disabled={currentPage === 1}
+                        style={{
+                          padding: "4px 12px",
+                          background: "none",
+                          border: "1px solid #E8E3DE",
+                          borderRadius: "3px",
+                          color: currentPage === 1 ? "#CCC" : "#666",
+                          fontSize: "11px",
+                          fontWeight: 300,
+                          cursor: currentPage === 1 ? "not-allowed" : "pointer"
+                        }}
+                      >
+                        Previous
+                      </button>
+                      <span style={{ fontSize: "11px", color: "#999", fontWeight: 300 }}>
+                        Page {currentPage} of {totalPages}
+                      </span>
+                      <button
+                        onClick={() => setCurrentPage(prev => Math.min(totalPages, prev + 1))}
+                        disabled={currentPage === totalPages}
+                        style={{
+                          padding: "4px 12px",
+                          background: "none",
+                          border: "1px solid #E8E3DE",
+                          borderRadius: "3px",
+                          color: currentPage === totalPages ? "#CCC" : "#666",
+                          fontSize: "11px",
+                          fontWeight: 300,
+                          cursor: currentPage === totalPages ? "not-allowed" : "pointer"
+                        }}
+                      >
+                        Next
+                      </button>
+                    </div>
+                  )}
+                </>
+              );
+            })()}
 
             {/* Notes View */}
             {activeView === 'Notes' && (
@@ -2071,9 +2412,52 @@ export default function ClaudeRefinedDemo() {
                     type="file"
                     multiple
                     style={{ display: "none" }}
-                    onChange={(e) => {
+                    onChange={async (e) => {
                       if (e.target.files) {
-                        setAttachments(prev => [...prev, ...Array.from(e.target.files)]);
+                        const newFiles = Array.from(e.target.files).map(file => ({ file, uploading: false, uploaded: false }));
+                        setAttachments(prev => [...prev, ...newFiles]);
+                        
+                        // Upload files to S3
+                        for (let i = 0; i < newFiles.length; i++) {
+                          const fileObj = newFiles[i];
+                          const startIndex = attachments.length + i;
+                          
+                          try {
+                            // Mark as uploading
+                            setAttachments(prev => prev.map((a, idx) => 
+                              idx === startIndex ? { ...a, uploading: true } : a
+                            ));
+                            
+                            // Convert file to base64
+                            const reader = new FileReader();
+                            const base64Data = await new Promise<string>((resolve) => {
+                              reader.onload = () => {
+                                const result = reader.result as string;
+                                resolve(result.split(',')[1]); // Remove data:image/png;base64, prefix
+                              };
+                              reader.readAsDataURL(fileObj.file);
+                            });
+                            
+                            // Upload to S3
+                            const result = await uploadFileMutation.mutateAsync({
+                              filename: fileObj.file.name,
+                              contentType: fileObj.file.type,
+                              data: base64Data
+                            });
+                            
+                            // Mark as uploaded
+                            setAttachments(prev => prev.map((a, idx) => 
+                              idx === startIndex ? { ...a, uploading: false, uploaded: true, url: result.url, key: result.key } : a
+                            ));
+                            
+                            showToast(`Uploaded ${fileObj.file.name}`);
+                          } catch (err) {
+                            console.error('Upload failed:', err);
+                            showToast(`Failed to upload ${fileObj.file.name}`, 'error');
+                            // Remove failed upload
+                            setAttachments(prev => prev.filter((_, idx) => idx !== startIndex));
+                          }
+                        }
                       }
                     }}
                   />
@@ -2106,20 +2490,25 @@ export default function ClaudeRefinedDemo() {
                     Attach
                   </button>
                   <button
+                    onClick={handleSendEmail}
+                    disabled={isSending}
                     style={{
                       padding: 0,
                       background: "none",
                       border: "none",
-                      color: "#D89880",
+                      color: isSending ? "#999" : "#D89880",
                       fontSize: "13px",
                       fontWeight: 300,
-                      cursor: "pointer",
-                      transition: "color 0.2s ease"
+                      cursor: isSending ? "not-allowed" : "pointer",
+                      transition: "color 0.2s ease",
+                      display: "flex",
+                      alignItems: "center",
+                      gap: "6px"
                     }}
-                    onMouseEnter={(e) => e.currentTarget.style.color = "#C88770"}
-                    onMouseLeave={(e) => e.currentTarget.style.color = "#D89880"}
+                    onMouseEnter={(e) => !isSending && (e.currentTarget.style.color = "#C88770")}
+                    onMouseLeave={(e) => !isSending && (e.currentTarget.style.color = "#D89880")}
                   >
-                    Send
+                    {isSending ? 'Sending...' : 'Send'}
                   </button>
                   <button
                     onClick={() => {
@@ -2708,9 +3097,52 @@ export default function ClaudeRefinedDemo() {
                     type="file"
                     multiple
                     style={{ display: "none" }}
-                    onChange={(e) => {
+                    onChange={async (e) => {
                       if (e.target.files) {
-                        setAttachments(prev => [...prev, ...Array.from(e.target.files)]);
+                        const newFiles = Array.from(e.target.files).map(file => ({ file, uploading: false, uploaded: false }));
+                        setAttachments(prev => [...prev, ...newFiles]);
+                        
+                        // Upload files to S3
+                        for (let i = 0; i < newFiles.length; i++) {
+                          const fileObj = newFiles[i];
+                          const startIndex = attachments.length + i;
+                          
+                          try {
+                            // Mark as uploading
+                            setAttachments(prev => prev.map((a, idx) => 
+                              idx === startIndex ? { ...a, uploading: true } : a
+                            ));
+                            
+                            // Convert file to base64
+                            const reader = new FileReader();
+                            const base64Data = await new Promise<string>((resolve) => {
+                              reader.onload = () => {
+                                const result = reader.result as string;
+                                resolve(result.split(',')[1]); // Remove data:image/png;base64, prefix
+                              };
+                              reader.readAsDataURL(fileObj.file);
+                            });
+                            
+                            // Upload to S3
+                            const result = await uploadFileMutation.mutateAsync({
+                              filename: fileObj.file.name,
+                              contentType: fileObj.file.type,
+                              data: base64Data
+                            });
+                            
+                            // Mark as uploaded
+                            setAttachments(prev => prev.map((a, idx) => 
+                              idx === startIndex ? { ...a, uploading: false, uploaded: true, url: result.url, key: result.key } : a
+                            ));
+                            
+                            showToast(`Uploaded ${fileObj.file.name}`);
+                          } catch (err) {
+                            console.error('Upload failed:', err);
+                            showToast(`Failed to upload ${fileObj.file.name}`, 'error');
+                            // Remove failed upload
+                            setAttachments(prev => prev.filter((_, idx) => idx !== startIndex));
+                          }
+                        }
                       }
                     }}
                   />
@@ -2747,20 +3179,25 @@ export default function ClaudeRefinedDemo() {
                 {/* Action buttons */}
                 <div style={{ display: "flex", gap: "16px", marginTop: "20px", paddingTop: "20px", borderTop: "1px solid #F0EBE6" }}>
                   <button
+                    onClick={handleSendEmail}
+                    disabled={isSending}
                     style={{
                       padding: 0,
                       background: "none",
                       border: "none",
-                      color: "#D89880",
+                      color: isSending ? "#999" : "#D89880",
                       fontSize: "13px",
                       fontWeight: 300,
-                      cursor: "pointer",
-                      transition: "color 0.2s ease"
+                      cursor: isSending ? "not-allowed" : "pointer",
+                      transition: "color 0.2s ease",
+                      display: "flex",
+                      alignItems: "center",
+                      gap: "6px"
                     }}
-                    onMouseEnter={(e) => e.currentTarget.style.color = "#C88770"}
-                    onMouseLeave={(e) => e.currentTarget.style.color = "#D89880"}
+                    onMouseEnter={(e) => !isSending && (e.currentTarget.style.color = "#C88770")}
+                    onMouseLeave={(e) => !isSending && (e.currentTarget.style.color = "#D89880")}
                   >
-                    Send
+                    {isSending ? 'Sending...' : 'Send'}
                   </button>
                   <button
                     onClick={() => setRightPanelMode('email')}

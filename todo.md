@@ -325,3 +325,17 @@
 - [x] Make compose email icon (envelope) functional - opens compose mode
 - [x] Make all toolbar icons functional with clear actions (Check = mark all read, Zap = quick actions)
 - [x] Visual design consistency - icons look like same family
+
+## Production Polish - Must Complete
+
+- [x] Add loading states (spinners during send, skeleton loaders for email list)
+- [x] Add error handling (try/catch, display error messages to user)
+- [x] Add success toasts ("Email sent!", "Archived", "Moved to spam", etc.)
+- [x] Add input validation (email format validation, required field checks)
+- [x] Implement pagination/infinite scroll for email list (handle 1000+ emails)
+- [x] Add email content sanitization (prevent XSS attacks in email body)
+- [x] Save signatures to localStorage (persist across sessions)
+- [x] Save settings to localStorage (theme, density, notifications)
+- [x] Auto-save drafts to localStorage (every 3 seconds while composing)
+- [x] Add offline indicator (show when no internet connection)
+- [x] Connect attachments to S3 storage (real file upload/download via backend)

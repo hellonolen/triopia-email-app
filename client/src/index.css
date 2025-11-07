@@ -195,3 +195,13 @@ div[class*="powered-by"] {
   opacity: 0 !important;
   pointer-events: none !important;
 }
+
+/* Loading skeleton animation */
+@keyframes pulse {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.5;
+  }
+}
