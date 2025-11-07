@@ -33,22 +33,14 @@ export default function ClaudeRefinedDemo() {
         padding: "12px 24px"
       }}>
         <div className="flex items-center justify-between">
-          <div className="flex items-center gap-3">
-            <div style={{
-              width: "24px",
-              height: "24px",
-              background: "#D89880",
-              borderRadius: "50%"
-            }} />
-            <h1 style={{ 
-              fontSize: "14px", 
-              fontWeight: 300,
-              color: "#2A2A2A",
-              letterSpacing: "0.05em"
-            }}>
-              TRIOPIA
-            </h1>
-          </div>
+          <h1 style={{ 
+            fontSize: "14px", 
+            fontWeight: 300,
+            color: "#2A2A2A",
+            letterSpacing: "0.05em"
+          }}>
+            TRIOPIA
+          </h1>
           <div style={{
             fontSize: "9px",
             fontWeight: 300,
@@ -72,9 +64,9 @@ export default function ClaudeRefinedDemo() {
           <div style={{ padding: "0 16px", marginBottom: "16px" }}>
             <button style={{
               width: "100%",
-              background: "#D89880",
-              border: "none",
-              color: "white",
+              background: "transparent",
+              border: "1px solid #D89880",
+              color: "#D89880",
               padding: "10px",
               borderRadius: "4px",
               fontSize: "10px",
@@ -85,10 +77,12 @@ export default function ClaudeRefinedDemo() {
               transition: "all 0.3s ease"
             }}
             onMouseEnter={(e) => {
-              e.currentTarget.style.background = "#C88870";
+              e.currentTarget.style.background = "#D89880";
+              e.currentTarget.style.color = "white";
             }}
             onMouseLeave={(e) => {
-              e.currentTarget.style.background = "#D89880";
+              e.currentTarget.style.background = "transparent";
+              e.currentTarget.style.color = "#D89880";
             }}>
               <Plus className="inline" style={{ width: "12px", height: "12px", marginRight: "6px" }} />
               Compose
@@ -309,62 +303,59 @@ export default function ClaudeRefinedDemo() {
           padding: "28px 36px"
         }}>
           <div style={{ maxWidth: "680px", margin: "0 auto" }}>
-            <div className="flex items-center justify-between mb-8">
-              <div className="flex items-center gap-2">
-                {[
-                  { icon: Archive, label: "Archive" },
-                  { icon: Trash2, label: "Delete" },
-                ].map((action) => (
-                  <button
-                    key={action.label}
+            <div className="flex items-center gap-3 mb-10">
+              {[
+                { icon: Archive, label: "Archive" },
+                { icon: Trash2, label: "Delete" },
+                { icon: Send, label: "Reply" },
+              ].map((action) => (
+                <button
+                  key={action.label}
+                  style={{
+                    padding: "0",
+                    background: "transparent",
+                    border: "none",
+                    color: "#999",
+                    fontSize: "10px",
+                    fontWeight: 300,
+                    letterSpacing: "0.05em",
+                    textTransform: "uppercase",
+                    cursor: "pointer",
+                    transition: "all 0.3s ease",
+                    display: "flex",
+                    alignItems: "center",
+                    gap: "6px",
+                    position: "relative"
+                  }}
+                  onMouseEnter={(e) => {
+                    e.currentTarget.style.color = "#D89880";
+                    const underline = e.currentTarget.querySelector(".underline") as HTMLElement;
+                    if (underline) underline.style.transform = "scaleX(1)";
+                  }}
+                  onMouseLeave={(e) => {
+                    e.currentTarget.style.color = "#999";
+                    const underline = e.currentTarget.querySelector(".underline") as HTMLElement;
+                    if (underline) underline.style.transform = "scaleX(0)";
+                  }}
+                >
+                  <action.icon style={{ width: "14px", height: "14px", strokeWidth: 1.5 }} />
+                  <span>{action.label}</span>
+                  <div 
+                    className="underline"
                     style={{
-                      padding: "8px 16px",
-                      background: "white",
-                      border: "1px solid #F0EBE6",
-                      color: "#666",
-                      borderRadius: "4px",
-                      fontSize: "10px",
-                      fontWeight: 300,
-                      letterSpacing: "0.05em",
-                      textTransform: "uppercase",
-                      cursor: "pointer",
-                      transition: "all 0.3s ease"
+                      position: "absolute",
+                      bottom: "-4px",
+                      left: 0,
+                      right: 0,
+                      height: "1px",
+                      background: "#D89880",
+                      transform: "scaleX(0)",
+                      transformOrigin: "left",
+                      transition: "transform 0.4s cubic-bezier(0.4, 0, 0.2, 1)"
                     }}
-                    onMouseEnter={(e) => {
-                      e.currentTarget.style.borderColor = "#D89880";
-                      e.currentTarget.style.color = "#D89880";
-                    }}
-                    onMouseLeave={(e) => {
-                      e.currentTarget.style.borderColor = "#F0EBE6";
-                      e.currentTarget.style.color = "#666";
-                    }}
-                  >
-                    <action.icon className="inline" style={{ width: "12px", height: "12px", marginRight: "6px", strokeWidth: 1.5 }} />
-                    {action.label}
-                  </button>
-                ))}
-              </div>
-              <button style={{
-                padding: "8px 20px",
-                background: "#D89880",
-                border: "none",
-                borderRadius: "4px",
-                color: "white",
-                fontSize: "10px",
-                fontWeight: 300,
-                letterSpacing: "0.05em",
-                textTransform: "uppercase",
-                cursor: "pointer",
-                transition: "all 0.3s ease"
-              }}
-              onMouseEnter={(e) => {
-                e.currentTarget.style.background = "#C88870";
-              }}
-              onMouseLeave={(e) => {
-                e.currentTarget.style.background = "#D89880";
-              }}>
-                Reply
-              </button>
+                  />
+                </button>
+              ))}
             </div>
 
             <h1 style={{ 

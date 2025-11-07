@@ -255,3 +255,9 @@
 - [ ] Font sizes reduced by 30-40%
 - [ ] Line heights 1.7 → 1.4
 - [ ] Avatar sizes 44px → 32px
+
+### Claude Demo Premium Enhancements
+- [x] Remove shaded background from Compose button (make outlined/subtle)
+- [x] Remove circle logo next to Triopia in header
+- [x] Redesign Archive/Delete/Reply button layout with animated underlines
+- [x] All features already present in Claude demo
