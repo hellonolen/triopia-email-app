@@ -325,3 +325,11 @@
 - [x] Make compose email icon (envelope) functional - opens compose mode
 - [x] Make all toolbar icons functional with clear actions (Check = mark all read, Zap = quick actions)
 - [x] Visual design consistency - icons look like same family
+
+---
+
+## PRODUCTION PREPARATION (URGENT)
+
+- [x] Verify all core workflows (email send/receive, search, AI, notes, calendar, contacts)
+- [x] Make entire site mobile responsive (sidebar, email list, detail, right panel)
+- [x] Add API Keys settings panel in Settings page (SendGrid + OpenAI input fields)

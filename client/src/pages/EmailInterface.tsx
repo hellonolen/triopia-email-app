@@ -117,6 +117,22 @@ export default function ClaudeRefinedDemo() {
   const [showSignatureSelector, setShowSignatureSelector] = useState(false);
   const [signatureEnabled, setSignatureEnabled] = useState(true);
   const [searchQuery, setSearchQuery] = useState('');
+  
+  // Mobile responsive state
+  const [isMobile, setIsMobile] = useState(false);
+  const [showMobileSidebar, setShowMobileSidebar] = useState(false);
+  const [showMobileEmailDetail, setShowMobileEmailDetail] = useState(false);
+  const [showMobileRightPanel, setShowMobileRightPanel] = useState(false);
+  
+  // Detect mobile screen size
+  useEffect(() => {
+    const checkMobile = () => {
+      setIsMobile(window.innerWidth < 768);
+    };
+    checkMobile();
+    window.addEventListener('resize', checkMobile);
+    return () => window.removeEventListener('resize', checkMobile);
+  }, []);
   const signatures = [
     { id: 0, name: 'No Signature', content: '' },
     { id: 1, name: 'Work', content: 'Best regards,\nYour Name\nYour Title\nYour Company' },
@@ -479,6 +495,24 @@ export default function ClaudeRefinedDemo() {
         padding: "12px 24px"
       }}>
         <div className="flex items-center justify-between">
+          {isMobile && (
+            <button
+              onClick={() => setShowMobileSidebar(!showMobileSidebar)}
+              style={{
+                background: "none",
+                border: "none",
+                cursor: "pointer",
+                padding: "4px",
+                marginRight: "12px"
+              }}
+            >
+              <svg width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="#2A2A2A" strokeWidth="1.5">
+                <line x1="3" y1="6" x2="17" y2="6" />
+                <line x1="3" y1="10" x2="17" y2="10" />
+                <line x1="3" y1="14" x2="17" y2="14" />
+              </svg>
+            </button>
+          )}
           <h1 style={{ 
             fontSize: "14px", 
             fontWeight: 300,
@@ -494,8 +528,10 @@ export default function ClaudeRefinedDemo() {
       <div className="flex" style={{ flex: 1, overflow: "hidden" }}>
         {/* Sidebar - TRIOPIA Design */}
         <div className="bg-surface border-r border-[var(--border)]" style={{ 
-          width: "220px",
-          padding: "var(--space-3) 0"
+          width: isMobile ? "0" : "220px",
+          padding: isMobile ? "0" : "var(--space-3) 0",
+          overflow: "hidden",
+          transition: "width 0.3s ease"
         }}>
 
 
@@ -506,15 +542,56 @@ export default function ClaudeRefinedDemo() {
             />
           </div>
         </div>
+        
+        {/* Mobile Sidebar Overlay */}
+        {isMobile && showMobileSidebar && (
+          <>
+            <div 
+              onClick={() => setShowMobileSidebar(false)}
+              style={{
+                position: "fixed",
+                top: 0,
+                left: 0,
+                right: 0,
+                bottom: 0,
+                background: "rgba(0,0,0,0.5)",
+                zIndex: 998
+              }}
+            />
+            <div style={{
+              position: "fixed",
+              top: 0,
+              left: 0,
+              bottom: 0,
+              width: "280px",
+              background: "white",
+              zIndex: 999,
+              overflowY: "auto",
+              padding: "var(--space-3) 0",
+              boxShadow: "2px 0 8px rgba(0,0,0,0.1)"
+            }}>
+              <div style={{ padding: "0 var(--space-3)" }}>
+                <SidebarNav
+                  model={sidebarModel}
+                  onAddSource={() => {
+                    setActiveView('Settings');
+                    setShowMobileSidebar(false);
+                  }}
+                />
+              </div>
+            </div>
+          </>
+        )}
 
         {/* Email List - DRAMATICALLY COMPACT */}
         <div style={{ 
-          width: `${emailListWidth}px`,
+          width: isMobile ? "100%" : `${emailListWidth}px`,
           background: "white",
           borderRight: "1px solid #F0EBE6",
           position: "relative",
-          minWidth: "300px",
-          maxWidth: "600px"
+          minWidth: isMobile ? "100%" : "300px",
+          maxWidth: isMobile ? "100%" : "600px",
+          display: isMobile && showMobileEmailDetail ? "none" : "block"
         }}>
           {/* Resize Handle */}
           <div
@@ -697,6 +774,9 @@ export default function ClaudeRefinedDemo() {
                 onClick={() => {
                   setSelectedEmail(email);
                   setRightPanelMode('email');
+                  if (isMobile) {
+                    setShowMobileEmailDetail(true);
+                  }
                 }}
                 style={{
                   padding: "12px 16px",
@@ -1212,6 +1292,77 @@ export default function ClaudeRefinedDemo() {
                   </div>
                 </div>
                 
+                {/* API Keys Section */}
+                <div style={{ marginBottom: "32px", paddingBottom: "32px", borderBottom: "1px solid #F0EBE6" }}>
+                  <h3 style={{ fontSize: "16px", fontWeight: 400, color: "#2A2A2A", marginBottom: "16px" }}>API Keys</h3>
+                  
+                  <div style={{ marginBottom: "20px" }}>
+                    <label style={{ fontSize: "13px", fontWeight: 300, color: "#2A2A2A", display: "block", marginBottom: "8px" }}>
+                      OpenAI API Key
+                    </label>
+                    <input
+                      type="password"
+                      placeholder="sk-..."
+                      style={{
+                        width: "100%",
+                        maxWidth: "500px",
+                        padding: "8px 12px",
+                        fontSize: "12px",
+                        fontWeight: 300,
+                        border: "1px solid #F0EBE6",
+                        borderRadius: "4px",
+                        background: "white",
+                        color: "#2A2A2A"
+                      }}
+                    />
+                    <p style={{ fontSize: "11px", color: "#999", marginTop: "4px" }}>
+                      Used for AI features (email summaries, quick replies, chat assistant)
+                    </p>
+                  </div>
+                  
+                  <div style={{ marginBottom: "20px" }}>
+                    <label style={{ fontSize: "13px", fontWeight: 300, color: "#2A2A2A", display: "block", marginBottom: "8px" }}>
+                      SendGrid API Key
+                    </label>
+                    <input
+                      type="password"
+                      placeholder="SG..."
+                      style={{
+                        width: "100%",
+                        maxWidth: "500px",
+                        padding: "8px 12px",
+                        fontSize: "12px",
+                        fontWeight: 300,
+                        border: "1px solid #F0EBE6",
+                        borderRadius: "4px",
+                        background: "white",
+                        color: "#2A2A2A"
+                      }}
+                    />
+                    <p style={{ fontSize: "11px", color: "#999", marginTop: "4px" }}>
+                      Used for sending transactional emails (password resets, notifications)
+                    </p>
+                  </div>
+                  
+                  <button
+                    style={{
+                      padding: "8px 16px",
+                      background: "#D89880",
+                      border: "none",
+                      borderRadius: "4px",
+                      color: "white",
+                      fontSize: "12px",
+                      fontWeight: 300,
+                      cursor: "pointer",
+                      transition: "all 0.2s ease"
+                    }}
+                    onMouseEnter={(e) => e.currentTarget.style.background = "#C88770"}
+                    onMouseLeave={(e) => e.currentTarget.style.background = "#D89880"}
+                  >
+                    Save API Keys
+                  </button>
+                </div>
+                
                 {/* Notifications Section */}
                 <div style={{ marginBottom: "32px" }}>
                   <h3 style={{ fontSize: "16px", fontWeight: 400, color: "#2A2A2A", marginBottom: "16px" }}>Notifications</h3>
@@ -1528,13 +1679,48 @@ export default function ClaudeRefinedDemo() {
         <div ref={emailDetailRef} style={{ 
           flex: 1,
           background: "#FFFBF7",
-          display: "flex",
-          flexDirection: "column"
+          display: isMobile && !showMobileEmailDetail ? "none" : "flex",
+          flexDirection: "column",
+          position: isMobile ? "fixed" : "relative",
+          top: isMobile ? "0" : "auto",
+          left: isMobile ? "0" : "auto",
+          right: isMobile ? "0" : "auto",
+          bottom: isMobile ? "0" : "auto",
+          zIndex: isMobile ? 900 : "auto"
         }}>
+          {/* Mobile Back Button */}
+          {isMobile && (
+            <div style={{
+              padding: "12px 16px",
+              borderBottom: "1px solid #F0EBE6",
+              background: "white"
+            }}>
+              <button
+                onClick={() => setShowMobileEmailDetail(false)}
+                style={{
+                  background: "none",
+                  border: "none",
+                  cursor: "pointer",
+                  display: "flex",
+                  alignItems: "center",
+                  gap: "8px",
+                  fontSize: "13px",
+                  fontWeight: 300,
+                  color: "#2A2A2A"
+                }}
+              >
+                <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" strokeWidth="1.5">
+                  <path d="M10 12L6 8L10 4" />
+                </svg>
+                Back to Inbox
+              </button>
+            </div>
+          )}
+          
           {/* Icon Tab Bar - Always Visible */}
           <div style={{
             borderBottom: "1px solid #F0EBE6",
-            padding: "16px 36px",
+            padding: isMobile ? "12px 16px" : "16px 36px",
             display: "flex",
             alignItems: "center",
             justifyContent: "flex-end",
