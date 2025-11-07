@@ -19,7 +19,7 @@ export default function Landing() {
           marginBottom: "16px",
           letterSpacing: "-0.02em"
         }}>
-          {APP_TITLE}
+          TRIOPIA
         </h1>
         <p style={{ 
           fontSize: "18px", 
