@@ -83,13 +83,13 @@ export default function ClaudeRefinedDemo() {
     { id: 4, name: 'Thank You', subject: 'Thank You', body: 'Hi,\n\nThank you for taking the time to...\n\nI appreciate your help.' }
   ];
   const [tags, setTags] = useState([
-    { id: 1, name: 'Urgent', color: '#FF4444' },
-    { id: 2, name: 'Meeting', color: '#4A90E2' },
-    { id: 3, name: 'Receipt', color: '#50C878' },
-    { id: 4, name: 'Invoice', color: '#FFA500' },
-    { id: 5, name: 'Newsletter', color: '#9B59B6' },
-    { id: 6, name: 'Personal', color: '#E91E63' },
-    { id: 7, name: 'Work', color: '#607D8B' }
+    { id: 1, name: 'Urgent', color: '#D89880' }, // Primary peach
+    { id: 2, name: 'Meeting', color: '#C17A63' }, // Darker peach
+    { id: 3, name: 'Receipt', color: '#E8B4A0' }, // Lighter peach
+    { id: 4, name: 'Invoice', color: '#B8826D' }, // Brown-peach
+    { id: 5, name: 'Newsletter', color: '#D4A894' }, // Muted peach
+    { id: 6, name: 'Personal', color: '#A67C6D' }, // Taupe-brown
+    { id: 7, name: 'Work', color: '#8B7355' } // Warm brown
   ]);
   const [showTagManager, setShowTagManager] = useState(false);
   const [editingTag, setEditingTag] = useState<{id: number, name: string, color: string} | null>(null);
