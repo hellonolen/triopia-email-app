@@ -170,7 +170,7 @@ export default function ClaudeRefinedDemo() {
                     </span>
                   )}
                 </div>
-                {/* Animated underline */}
+                {/* Animated underline - shows on active */}
                 <div style={{
                   position: "absolute",
                   bottom: 0,
@@ -178,7 +178,7 @@ export default function ClaudeRefinedDemo() {
                   right: "16px",
                   height: "1px",
                   background: "#D89880",
-                  transform: hoveredItem === item.label ? "scaleX(1)" : "scaleX(0)",
+                  transform: item.label === activeView ? "scaleX(1)" : "scaleX(0)",
                   transformOrigin: "left",
                   transition: "transform 0.4s cubic-bezier(0.4, 0, 0.2, 1)"
                 }} />
@@ -285,7 +285,8 @@ export default function ClaudeRefinedDemo() {
                 className="flex items-center gap-3"
                 style={{
                   padding: "8px 0",
-                  cursor: "pointer"
+                  cursor: "pointer",
+                  position: "relative"
                 }}
                 onMouseEnter={(e) => {
                   const span = e.currentTarget.querySelector("span");
@@ -306,6 +307,18 @@ export default function ClaudeRefinedDemo() {
                 }}>
                   {item.label}
                 </span>
+                {/* Animated underline - shows on active */}
+                <div style={{
+                  position: "absolute",
+                  bottom: 0,
+                  left: 0,
+                  right: 0,
+                  height: "1px",
+                  background: "#D89880",
+                  transform: item.label === activeView ? "scaleX(1)" : "scaleX(0)",
+                  transformOrigin: "left",
+                  transition: "transform 0.4s cubic-bezier(0.4, 0, 0.2, 1)"
+                }} />
               </div>
             ))}
           </div>
