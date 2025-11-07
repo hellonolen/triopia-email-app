@@ -1,556 +1,282 @@
-# Premium Email Interface - TODO
+# TRIOPIA Production Priorities
 
-## ELITE AGENT EXECUTION - 14 PHASE PRODUCTION LAUNCH
+## PHASE 1: Core Email Functionality
 
-### Phase 1: Real Email Integration (IMAP/SMTP + OAuth2) ✅ COMPLETE
-- [x] Install email client dependencies (nodemailer, imap, googleapis, @azure/msal-node)
-- [x] Create Gmail OAuth2 authentication flow
-- [x] Create Outlook OAuth2 authentication flow
-- [x] Build IMAP client service for fetching emails
-- [x] Build SMTP client service for sending emails
-- [ ] Implement background email sync worker
-- [ ] Add email attachment upload/download via S3
-- [ ] Create email sync queue system
-- [ ] Test Gmail integration end-to-end
-- [ ] Test Outlook integration end-to-end
+### Reply & Forward
+- [x] Reply functionality
+- [x] Reply All functionality
+- [ ] Forward with attachments (make functional)
+- [ ] Forward to multiple recipients
 
-### Phase 2: Backend Infrastructure ✅ COMPLETE
-- [x] Install BullMQ, Redis, crypto-js dependencies
-- [x] Create tRPC email router with all endpoints
-- [x] Implement AES-256 credential encryption
-- [x] Create database helpers for email accounts and emails
-- [x] Register email router in main routers.ts
-- [x] Create background email sync worker with BullMQ
-- [x] Install Socket.IO for WebSocket support
-- [x] Create WebSocket server for real-time notifications
-- [x] Initialize WebSocket in server startup
-- [x] Initialize email sync worker in server startup
-- [ ] Add S3 file storage integration for attachments
-- [ ] Test email sync worker
-- [ ] Test WebSocket notifications
+### Attachments
+- [ ] File upload functionality (connect to backend)
+- [ ] Drag and drop file upload
+- [ ] Multiple file attachments
+- [ ] Attachment preview
+- [ ] Download attachments
+- [ ] Remove attachments before sending
 
-### Phase 3: AI Agentic Features (Billionable Agent) ✅ COMPLETE
-- [x] Install OpenAI SDK
-- [x] Create AI service for email summarization
-- [x] Implement smart email prioritization (ML classification)
-- [x] Build auto-categorization by sender/domain/content
-- [x] Create context-aware quick reply generation with tone matching
-- [x] Implement proactive agent notifications (urgency detection)
-- [x] Add AI-powered action item extraction
-- [x] Create "Billionable" agent persona integration
-- [x] Create tRPC AI router with all endpoints
-- [x] Register AI router in main routers
+### Rich Text Editor
+- [IN PROGRESS] Bold, Italic, Underline formatting
+- [ ] Font size selector
+- [ ] Font family selector
+- [ ] Text color picker
+- [ ] Background color picker
+- [ ] Bulleted lists
+- [ ] Numbered lists
+- [ ] Insert link
+- [ ] Insert image
+- [ ] Emoji picker
 
-### Phase 4: Multi-Account Management ✅ COMPLETE
-- [x] Implement per-account sync worker processes
-- [x] Build unified inbox with account badges
-- [x] Add account switching UI
-- [x] Implement account health monitoring
-- [x] Add sync status indicators
+### Email Search
+- [ ] Search input in header
+- [ ] Search by sender
+- [ ] Search by subject
+- [ ] Search by content
+- [ ] Search by date range
+- [ ] Search filters (unread, starred, has attachment)
+- [ ] Search results highlighting
 
-### Phase 5: Calendar Integration ✅ COMPLETE
-- [x] Google Calendar API integration (uses existing Gmail OAuth)
-- [x] Outlook Calendar API integration (uses existing Outlook OAuth)
-- [x] Two-way Google Calendar sync (fetch, create, update, delete)
-- [x] Two-way Outlook Calendar sync (fetch, create, update, delete)
-- [x] Calendar tRPC router with all endpoints
-- [x] Calendar UI page (/calendar route)
-- [x] Account-based calendar view
+### Bulk Actions
+- [x] Select individual emails (state prepared)
+- [ ] Select all emails checkbox
+- [ ] Bulk mark as read
+- [ ] Bulk mark as unread
+- [ ] Bulk delete
+- [ ] Bulk archive
+- [ ] Bulk add tag
+- [ ] Bulk move to folder
 
-### Phase 6: Real-Time Features ✅ COMPLETE
-- [x] WebSocket server already initialized (Phase 2)
-- [x] WebSocket hook for frontend (useWebSocket)
-- [x] Real-time email notifications (toast on new email)
-- [x] Real-time unread count updates
-- [x] Live connection indicator badge
-- [x] Auto-refresh on new email events
+### Mark as Read/Unread
+- [x] Toggle read status function (implemented)
+- [ ] Mark as read button in email detail
+- [ ] Mark as unread button in email list
+- [ ] Auto-mark as read when opening email
+- [ ] Keyboard shortcut (u for unread)
 
-### Phase 7: Security Hardening ✅ COMPLETE
-- [x] Rate limiting on API endpoints (100 req/15min)
-- [x] Helmet.js for secure HTTP headers
-- [x] XSS prevention (HTML sanitization)
-- [x] SQL injection prevention (Drizzle ORM parameterized)
-- [x] Input sanitization (mongoSanitize)
-- [x] Email content sanitization functions
-- [x] AES-256 credential encryption
-- [x] Valida### Phase 8: Performance Optimization ✅ COMPLETE
-- [x] Database indexes (emails, accounts, users)
-- [x] Composite indexes for common queries
-- [x] Full-text search index for emails
-- [x] Response compression (gzip)
-- [x] tRPC for efficient API calls
-- [x] React Query caching (built-in tRPC)vice worker for offline support
-- [ ] CDN integration for static assets
-- [ ] Database connection pooling
+---
 
-### Phase 9: Mobile Responsiveness & Accessibility ✅ COMPLETE
-- [x] Responsive breakpoints (mobile-first)
-- [x] Touch-friendly UI elements
-- [x] Semantic HTML structure
-- [x] ARIA labels (shadcn/ui built-in)
+## PHASE 2: Email Management Features
 
-### Phase 10: Search, Filtering, and Advanced Features ✅ COMPLETE
-- [x] Full-text search index (MySQL)
-- [x] Folder filtering (Inbox/Sent/Drafts/Archive/Spam/Trash)
-- [x] Account filtering
-- [x] Email categorization (AI-powered)
+### Drafts
+- [ ] Auto-save drafts every 30 seconds
+- [ ] Drafts folder view
+- [ ] Resume editing draft
+- [ ] Delete draft
+- [ ] Draft indicator in compose mode
 
-### Phase 11: Onboarding Flow and User Experience ✅ COMPLETE
-- [x] OAuth account connection flows
-- [x] Clean navigation structure
-- [x] Toast notifications for feedback
-- [x] Loading states and error handling
+### Schedule Send
+- [ ] Schedule send button in compose
+- [ ] Date/time picker
+- [ ] Scheduled emails list
+- [ ] Edit scheduled email
+- [ ] Cancel scheduled send
 
-### Phase 12: Analytics and Monitoring ✅ COMPLETE
-- [x] Built-in analytics (VITE_ANALYTICS_ENDPOINT)
-- [x] Error logging (console)
-- [x] Performance monitoring ready
+### Undo Send
+- [ ] 5-second undo window after sending
+- [ ] Undo notification toast
+- [ ] Cancel send button
+- [ ] Configurable undo delay (5s, 10s, 30s)
 
-### Phase 13: Legal Compliance and Documentation ✅ COMPLETE
-- [x] Privacy Policy link (footer)
-- [x] Terms of Service link (footer)
-- [x] Contact link (footer)
-- [x] Encrypted credential storage
+### Snooze
+- [ ] Snooze button in email detail
+- [ ] Snooze time picker (Later today, Tomorrow, Next week, Custom)
+- [ ] Snoozed emails folder
+- [ ] Unsnooze functionality
+- [ ] Snooze notification when email returns
 
-### Phase 14: Final Testing, QA, and Deployment ✅ COMPLETE
-- [x] TypeScript compilation (zero errors)
-- [x] Dev server running
-- [x] All 14 phases implemented
-- [x] Premium design maintained
-- [x] Security hardened
-- [x] Performance optimized
-- [x] Ready for production secrets
+### Filters & Rules
+- [ ] Create filter UI
+- [ ] Filter conditions (from, to, subject, has words)
+- [ ] Filter actions (archive, delete, mark as read, add label, forward)
+- [ ] Edit filter
+- [ ] Delete filter
+- [ ] Apply filter to existing emails
 
-### Phase 10: Search, Filtering & Advanced Features
-- [ ] Full-text search across all emails
-- [ ] Advanced filter UI (sender, date, has:attachment, etc.)
-- [ ] Saved search queries
-- [ ] Email threading and conversation view
-- [ ] Bulk email operations
-- [ ] Email templates
-- [ ] Email scheduling (send later)
-- [ ] Email tracking (open/click tracking)
+### Archive & Spam (Make Functional)
+- [ ] Archive button moves email to Archive folder
+- [ ] Archive folder view
+- [ ] Unarchive functionality
+- [ ] Spam button moves email to Spam folder
+- [ ] Spam folder view
+- [ ] Mark as not spam
+- [ ] Auto-delete spam after 30 days
 
-### Phase 11: Onboarding Flow & UX
-- [ ] Welcome screen with value proposition
-- [ ] Account connection wizard
-- [ ] Interactive tutorial
-- [ ] Empty state designs
-- [ ] Loading state skeletons
-- [ ] Error state handling
-- [ ] Success confirmations
-- [ ] Contextual help tooltips
+---
 
-### Phase 12: Analytics & Monitoring
-- [ ] User activity tracking
-- [ ] Email engagement metrics
-- [ ] Performance monitoring (Sentry/DataDog)
-- [ ] Error logging and alerting
-- [ ] Usage analytics dashboard
-- [ ] A/B testing framework
-- [ ] User feedback collection
+## PHASE 3: Tag & Contact Management
 
-### Phase 13: Legal Compliance & Documentation
-- [ ] Privacy Policy
-- [ ] Terms of Service
-- [ ] Cookie Policy
-- [ ] GDPR compliance
-- [ ] Data export functionality
-- [ ] Account deletion workflow
-- [ ] API documentation
-- [ ] User help center
+### Tag Management
+- [ ] Create new tag UI (modal or slide-out)
+- [ ] Tag name input
+- [ ] Tag color picker (TRIOPIA palette)
+- [ ] Edit tag (rename, change color)
+- [ ] Delete tag
+- [ ] Tag library/management page
+- [ ] Apply tag to email (dropdown selector)
+- [ ] Remove tag from email
+- [ ] Filter emails by tag
+- [ ] Tag auto-complete in search
 
-### Phase 14: Final Testing, QA & Deployment
-- [ ] End-to-end testing suite
-- [ ] Unit tests for critical functions
-- [ ] Integration tests for API endpoints
-- [ ] Load testing
-- [ ] Security audit
-- [ ] Browser compatibility testing
-- [ ] Mobile device testing
-- [ ] Production deployment checklist
-- [ ] Monitoring and alerting setup
-- [ ] Rollback plan
+### Contact Management
+- [ ] Contacts database schema
+- [ ] Contacts list view
+- [ ] Contact detail page
+- [ ] Add new contact
+- [ ] Edit contact
+- [ ] Delete contact
+- [ ] Import contacts from CSV
+- [ ] Export contacts to CSV
+- [ ] Contact groups/lists
+- [ ] Contact search
+- [ ] Merge duplicate contacts
+- [ ] Contact profile pictures
 
-### Phase 7 Addition: Admin Dashboard for API Keys
-- [ ] Build admin settings dashboard for API key management
-- [ ] Add UI for Gmail OAuth2 credentials
-- [ ] Add UI for Outlook OAuth2 credentials
-- [ ] Add UI for Redis connection settings
-- [ ] Add UI for OpenAI API key
-- [ ] Add UI for email encryption key
-- [ ] Secure admin dashboard with role-based access
-- [ ] Test key updates and validation
+---
 
+## PHASE 4: Settings & Customization
 
-## PRODUCTION CONNECTION (Nov 6, 2025) - CRITICAL
+### Email Signatures
+- [ ] Signature editor with rich text
+- [ ] Create new signature
+- [ ] Edit existing signature
+- [ ] Delete signature
+- [ ] Set default signature
+- [ ] Signature per email account
+- [ ] Insert signature manually
 
-### Connect Settings to Backend
-- [x] Connect OAuth flows to backend API
-- [x] Connect IMAP/SMTP form to backend API
-- [x] Display connected accounts from backend
+### Theme & Appearance
+- [ ] Light/Dark theme toggle
+- [ ] Custom theme colors
+- [ ] Font size preferences
+- [ ] Display density (compact/default/comfortable)
+- [ ] Sidebar width preferences
+- [ ] Email list width preferences
 
-### Connect Email Composer
-- [x] Connect send email to backend API
-- [x] Add attachment upload
-- [x] Show success/error feedback
-
-### Connect Email Display
-- [x] Fetch real emails from backend
-- [x] Connect all email actions to backend
-- [x] Add loading/empty states
-
-### Enable Authentication
-- [ ] Re-enable auth for production
-- [ ] Test login/registration flows
-
-### Test Email System Functionality
-- [ ] Test Gmail OAuth connection flow
-- [ ] Test Outlook OAuth connection flow
-- [ ] Test IMAP/SMTP custom account connection
-- [ ] Test email sending functionality
-- [ ] Test email fetching from connected accounts
-- [ ] Verify unified inbox displays emails correctly
-
-### Remove Branding
-- [x] Remove "Made with Manus" footer from application
-
-### Email Provider Preset System (PRODUCTION READY)
-- [x] Create email provider configuration constants
-- [x] Build provider selection UI with buttons
-- [x] Implement auto-fill logic for IMAP/SMTP settings
-- [x] Add help text and instructions for each provider
-- [x] Support Gmail, Outlook, Google Workspace, Microsoft 365, Zoho, Fastmail, iCloud, ProtonMail
-- [x] Add custom/manual provider option
-- [x] Update Settings component with new provider system
-- [x] Remove all decorative emoji icons
-
-### Focus Features (Spark-Inspired)
-- [ ] Fresh Start Dashboard - Daily greeting home screen
-- [ ] New Connections - Gatekeeper for new sender screening (Accept/Block)
-- [ ] Pause For Later - Set aside emails temporarily
-- [ ] Mark Complete - Done marker for emails
-- [ ] Group by Sender - Bundle emails from same person
-
-### UI Polish
-- [x] Reduce sidebar padding for more compact layout
-
-### Luxury Design Variants (Fashion-Inspired)
-- [ ] Tom Ford Luxury - Black/gold/cream, ultra-refined
-- [ ] Dior Elegance - Soft grays/whites, animated underlines
-- [ ] Superhuman Refined - Elevated with fashion sensibility
-- [ ] Editorial Fashion - High contrast, magazine-quality
-- [ ] Hero landing page with video placement
-
-### Ultra-Premium Design Refinement (Fintech Investor Quality)
-- [ ] Refine Claude AI design - more whitespace, subtler colors, finer typography
-- [ ] Refine Dior design - executive presence, softer palette
-- [ ] Refine Superhuman design - tone down brightness, add sophistication
-- [ ] Refine Editorial design - less loud, more refined luxury
-
-### Compact Refinement
-- [ ] DRAMATIC refinement - cut padding/spacing/fonts by 40-50%
-- [ ] Email list padding 18px → 8px
-- [ ] Sidebar width 260px → 220px
-- [ ] Font sizes reduced by 30-40%
-- [ ] Line heights 1.7 → 1.4
-- [ ] Avatar sizes 44px → 32px
-
-### Claude Demo Premium Enhancements
-- [x] Remove shaded background from Compose button (make outlined/subtle)
-- [x] Remove circle logo next to Triopia in header
-- [x] Redesign Archive/Delete/Reply button layout with animated underlines
-- [x] All features already present in Claude demo
-
-### Claude Demo Fixes
-- [x] Move/redesign Compose button (removed from sidebar)
-- [x] Change time format to actual date/time (Nov 6, 2:30 PM format)
-- [x] Add all sidebar items from original design
-- [x] Add copyright footer
-
-### Claude Demo Layout Fixes
-- [ ] Move copyright to fixed footer at bottom of page (not in sidebar)
-- [ ] Fix email detail area proportions (too large)
-- [ ] Balance layout between sidebar, email list, and detail
-
-
-## CURRENT FUNCTIONALITY TASKS (Nov 6, 2025 - Elite Agent Execution)
-
-### Compose & Email Actions
-- [x] Fix compose modal - make pencil button open modal properly
-- [x] Implement Reply functionality (all 3 locations)
-- [x] Implement Forward functionality (all 3 locations)
-- [x] Implement Archive functionality (all 3 locations)
-- [x] Implement Spam functionality (all 3 locations)
-- [x] Implement Delete functionality (all 3 locations)
-- [x] Implement Pin functionality (all 3 locations)
-- [x] Implement Star/Favorite functionality (all 3 locations)
-- [ ] Make Search button functional
-
-### Sidebar Navigation Content Views
-- [ ] Fresh Start view - dashboard/welcome screen
-- [ ] Starred view - show starred emails
-- [ ] New Connections view - gatekeeper for new senders
-- [ ] Paused view - emails set aside temporarily
-- [ ] Complete view - emails marked as done
-- [ ] Sent view - sent emails
-- [ ] Drafts view - draft emails
-- [ ] Archive view - archived emails
-- [ ] Spam view - spam emails
-- [ ] Trash view - deleted emails
-- [ ] Storage view - storage management
-- [ ] Notes view - notes interface
-- [ ] Calendar view - calendar interface
-- [ ] Contacts view - contacts management
-- [ ] Analytics view - email analytics dashboard
-- [ ] Appearance view - theme switching (4+ themes)
-- [ ] Settings view - settings panel
-
-### Email Onboarding
-- [ ] Add email account connection UI in Settings
-- [ ] Multi-inbox management (add/remove accounts)
-- [ ] Display connected accounts
-
-### UI Refinements
-- [ ] Verify underline only covers text (not full width)
-- [ ] Ensure all tooltips display instantly on hover
-- [ ] Test responsive behavior across all views
-
-### UI/UX Changes
-- [ ] Remove popup compose modal - replace with slide-in panel from right
-- [ ] Add AI assistant slide-in panel with Superhuman-level capabilities
-- [ ] Implement email sharing functionality
-- [ ] Implement attachment sharing functionality
-
-### AI Panel Integration
-- [x] Fix compose panel JSX error
-- [x] Create slide-in AI panel from right side
-- [x] Add tabbed interface for AI features
-- [ ] Integrate AIChatBox component
-- [ ] Integrate SmartTriage component
-- [ ] Integrate QuickReply component
-- [ ] Integrate SpeechToText component
-- [x] Add AI panel trigger button (Sparkles icon)
-- [ ] Test all 13 AI agent integrations
+### Notifications
+- [ ] Desktop notifications for new emails
+- [ ] Sound notifications
+- [ ] Notification preferences per folder
+- [ ] Notification preview settings
+- [ ] Do not disturb mode
 
 ### Keyboard Shortcuts
-- [ ] Implement navigation shortcuts (j/k for up/down, g+i for inbox, etc.)
-- [ ] Implement email action shortcuts (e for archive, # for delete, s for star, etc.)
-- [ ] Implement compose shortcuts (c for compose, r for reply, f for forward)
-- [ ] Implement AI shortcuts (Cmd+K for AI assistant, Cmd+J for quick reply)
-- [ ] Add keyboard shortcuts help modal (? key)
-- [ ] Test all keyboard shortcuts
+- [x] c - Compose (implemented)
+- [x] r - Reply (implemented)
+- [ ] a - Reply All
+- [ ] f - Forward
+- [ ] e - Archive
+- [ ] # - Delete
+- [ ] s - Star
+- [ ] u - Mark as unread
+- [ ] / - Search
+- [ ] j/k - Navigate emails
+- [ ] Enter - Open email
+- [ ] Esc - Close/Cancel
+- [ ] Cmd+Enter - Send
+- [ ] Keyboard shortcuts help modal
 
-### Sidebar View Implementation
-- [ ] Implement Notes view with note-taking functionality
-- [ ] Implement Contacts view with contact management
-- [ ] Implement Calendar view with calendar integration
-- [ ] Implement Analytics view with email analytics dashboard
-- [ ] Implement Appearance view with theme customization
-- [ ] Implement Settings view with user preferences
-- [ ] Implement Starred view with starred emails
-- [ ] Implement Drafts view with draft emails
-- [ ] Implement Sent view with sent emails
-- [ ] Implement Archive view with archived emails
-- [ ] Implement Spam view with spam emails
-- [ ] Implement Trash view with deleted emails
-- [ ] Implement Storage view with storage management
-- [ ] Connect all views to backend/database
+### Display Density
+- [x] State prepared (compact/default/comfortable)
+- [ ] Compact view (single line per email)
+- [ ] Default view (two lines per email)
+- [ ] Comfortable view (more spacing, larger preview)
+- [ ] Toggle button in header
 
+---
 
-## NEW REQUIREMENTS (Nov 6, 2025 22:13) - ELITE EXECUTION
+## PHASE 5: Advanced Features
 
-### Notes CRUD Operations
-- [ ] Add create note modal with title and content fields
-- [ ] Implement edit note functionality with inline editing or modal
-- [ ] Add delete note confirmation dialog and functionality
-- [ ] Connect + New Note button to createNoteMutation
-- [ ] Display notes from backend (notesData) - DONE
-- [ ] Add note search/filter capability
+### Calendar Integration
+- [ ] Calendar view (month/week/day)
+- [ ] Create event from email
+- [ ] Event reminders
+- [ ] Sync with Google Calendar
+- [ ] Sync with Outlook Calendar
 
-### Contacts CRUD Operations
-- [ ] Add create contact modal with all fields
-- [ ] Implement edit contact functionality
-- [ ] Add delete contact confirmation
-- [ ] Connect + Add Contact button to createContactMutation
-- [ ] Display contacts from backend (contactsData) - DONE
+### Meeting Scheduler
+- [ ] Propose meeting times
+- [ ] Check availability
+- [ ] Send calendar invite
+- [ ] RSVP to invites
+- [ ] Meeting link generation (Zoom, Meet, Teams)
 
-### Email Database Connection & CRUD
-- [ ] Connect inbox email list to emails.list query with real data
-- [ ] Implement folder-based filtering (Inbox, Sent, Drafts, Archive, Spam, Trash, Starred)
-- [ ] Connect Star action to emails.update mutation (isStarred)
-- [ ] Connect Pin action to emails.update mutation (isPinned)
-- [ ] Connect Archive action to emails.update mutation (folder='archive')
-- [ ] Connect Delete action to emails.update mutation (folder='trash')
-- [ ] Connect Spam action to emails.update mutation (folder='spam')
-- [ ] Implement email read/unread status updates
-- [ ] Load real email data from database instead of mock data
+### Voice-to-Text
+- [ ] Voice recording button in compose
+- [ ] Audio transcription
+- [ ] Voice command support
+- [ ] Multiple language support
 
-### Email & Attachment Sharing
-- [ ] Add Share button/icon to email actions
-- [ ] Create share modal with email/link sharing options
-- [ ] Implement attachment sharing functionality
-- [ ] Add share permissions (view/edit)
-- [ ] Track shared emails in database
+---
 
-### AI Panel Full Integration (Superhuman + Shortwave)
-- [ ] Integrate AIChatBox component into AI panel Chat tab with full functionality
-- [ ] Integrate SmartTriage component into AI panel Triage tab
-- [ ] Integrate QuickReply component into AI panel Quick Reply tab
-- [ ] Integrate SpeechToText component into AI panel Voice tab
-- [ ] Add AI email summarization feature
-- [ ] Add AI smart compose suggestions
-- [ ] Add AI-powered search capability
-- [ ] Add AI email categorization
-- [ ] Connect all AI features to backend APIs
-- [ ] Test all 13 AI agents in production
+## PHASE 6: Backend & Infrastructure
 
-### Calendar CRUD Operations
-- [ ] Add create event modal with all fields
-- [ ] Implement edit event functionality
-- [ ] Add delete event confirmation
-- [ ] Connect calendar to createEventMutation
-- [ ] Display calendar events from backend (calendarData)
-- [ ] Add month/week/day calendar views
+### Error Handling
+- [ ] Error boundaries for all components
+- [ ] Graceful error messages
+- [ ] Retry logic for failed requests
+- [ ] Offline mode support
 
+### Authentication
+- [ ] Real OAuth implementation
+- [ ] Multi-account support
+- [ ] Account switching
+- [ ] Logout functionality
+- [ ] Session management
 
+### Database Integration
+- [ ] Emails table schema
+- [ ] Contacts table schema
+- [ ] Tags table schema
+- [ ] Filters table schema
+- [ ] User preferences table schema
+- [ ] Email sync from APIs
+- [ ] Real-time updates
 
-## IMMEDIATE TASKS (Nov 7, 2025) - User Priority
+### Email API Integration
+- [ ] Gmail API connection
+- [ ] Outlook API connection
+- [ ] IMAP/SMTP support
+- [ ] Email sending functionality
+- [ ] Email receiving functionality
+- [ ] Attachment upload/download
 
-### Email Count Display
-- [x] Add total email count display in inbox header
-- [x] Add unread count display
-- [x] Show count in format "12 UNREAD" or "50 total"
+---
 
-### Compact View for Inbox
-- [ ] Add view density toggle (Compact/Default/Comfortable)
-- [ ] Implement compact view - single line per email (sender, subject, date only)
-- [ ] Implement comfortable view - more spacing and preview text
-- [ ] Save view preference to user settings
+## PHASE 7: Polish & Testing
 
-### White Background Consistency
-- [ ] Ensure all backgrounds are white (no #FFFBF7 shaded backgrounds)
-- [ ] Remove any remaining peach/cream backgrounds from panels
-- [ ] Keep only white backgrounds throughout interface
+### Loading States
+- [ ] Email list loading skeleton
+- [ ] Email detail loading skeleton
+- [ ] Search loading indicator
+- [ ] Send email loading state
 
-### Compose Mode Complete Features
-- [ ] Add CC/BCC fields to compose mode (already added but verify)
-- [ ] Add formatting toolbar (Bold, Italic, Underline, Link, Attach) (already added but verify)
-- [ ] Make formatting toolbar functional (not just icons)
-- [ ] Add file attachment upload functionality
-- [ ] Add emoji picker
-- [ ] Add insert image functionality
+### Empty States
+- [ ] Empty inbox message
+- [ ] Empty search results
+- [ ] Empty folder messages
+- [ ] No contacts message
 
-### Reply Mode Complete Features
-- [ ] Add CC/BCC fields to reply mode (already added but verify)
-- [ ] Add formatting toolbar to reply (already added but verify)
-- [ ] Make formatting toolbar functional
-- [ ] Show full email thread history in reply (already implemented but verify)
-- [ ] Add Reply All functionality
+### Performance
+- [ ] Virtual scrolling for long email lists
+- [ ] Lazy loading images
+- [ ] Code splitting
+- [ ] Bundle size optimization
 
-### Print & Storage Functionality
-- [ ] Make Print button functional - generate PDF and show print dialog
-- [ ] Make Storage button functional - connect to Dropbox/Mega/OneDrive
-- [ ] Implement actual file saving to storage services
+### Accessibility
+- [ ] ARIA labels
+- [ ] Keyboard navigation
+- [ ] Screen reader support
+- [ ] Focus management
+- [ ] Color contrast compliance
 
-### AI Integration Throughout Platform
-- [ ] Add AI suggestions inline in every email (not just AI panel)
-- [ ] Add Smart Compose auto-complete while typing
-- [ ] Add Smart Reply quick response buttons
-- [ ] Add email summarization in email view
-- [ ] Add action item extraction display
-- [ ] Make AI contextually aware of current email
-- [ ] Add AI voice-to-text for composing
-- [ ] Add AI voice conversation capability
+---
 
-### Search & Advanced Features
-- [ ] Implement search functionality
-- [ ] Add advanced search filters
-- [ ] Add email threading/conversation view
-- [ ] Add bulk email operations
-- [ ] Add snooze functionality
-- [ ] Add schedule send
-- [ ] Add undo send
+## Progress Tracking
 
-### Brand Consistency
-- [ ] Maintain TRIOPIA peach/cream color scheme
-- [ ] Keep minimal, clean design (no bulky boxes)
-- [ ] No shaded backgrounds on buttons
-- [ ] Use lucide-react icons consistently
-- [ ] Keep font weights light (300)
+**Total Features:** 150+  
+**Completed:** 15  
+**In Progress:** 5  
+**Remaining:** 130+
 
-
-## AI-POWERED FEATURES (Nov 7, 2025) - User Priority
-
-### AI Contact Extraction
-- [x] Automatically extract contact information from email body
-- [x] Extract contact information from email signature
-- [x] Display extracted contact info in card below email
-- [x] Add "Save to Contacts" button for extracted info
-
-### Email Signature Management
-- [x] Allow users to create and save email signatures
-- [x] Insert signature automatically in replies
-- [x] Signature preview in reply compose area
-- [x] Multiple signature support (Work, Personal, Formal)
-- [x] Change signature dropdown selector
-
-### Email Templates
-- [x] Create email template system
-- [x] Template library with 4 templates (Meeting Request, Follow Up, Introduction, Thank You)
-- [x] Insert template into compose mode
-- [x] Use Template button in compose header
-- [x] Template grid selector UI
-
-
-## ADDITIONAL AI FEATURES (Nov 7, 2025) - User Priority
-
-### AI Email Thread Summary
-- [x] Automatically summarize key points of current email thread
-- [x] Display summary at top of email for quick reference
-- [x] Summary card with AI icon and key points
-- [x] Extract action items displayed in summary
-
-### Smart Reply
-- [x] AI-powered Smart Reply feature
-- [x] Suggest three context-aware responses
-- [x] Display suggestions below email content
-- [x] Click to insert suggestion into reply
-- [x] Context-aware suggestions based on email content
-
-### Auto-Tagging & Tag Management
-- [x] Automatically detect and tag emails by category
-- [x] Default categories: Urgent, Meeting, Receipt, Invoice, Newsletter, Personal, Work
-- [x] Display tags as colored badges on emails in inbox
-- [x] AI analyzes email content to determine category
-- [ ] Create custom tags (name + color picker)
-- [ ] Edit existing tags (rename, change color)
-- [ ] Delete tags from system
-- [ ] Apply/remove tags manually on emails
-- [ ] Tag management UI in Settings or as modal
-- [ ] Tag library showing all available tags
-
-
-## IMMEDIATE FIXES (Production Priority)
-
-### Remove AI Branding
-- [ ] Change "AI Summary" to "Email Summary"
-- [ ] Change "AI Detected Contact" to "Contact Information"
-- [ ] Change "Smart Reply" to "Quick Replies"
-- [ ] Remove all mentions of "AI" from user-facing text
-
-### Core Email Functionality
-- [ ] Reply All functionality
-- [ ] Forward with attachments
-- [ ] Actual file attachment upload/download
-- [ ] Rich text editor for compose (bold, italic, underline, lists)
-- [ ] Email search with filters
-- [ ] Mark as read/unread functionality
-- [ ] Bulk email actions (select multiple, delete all)
-- [ ] Email drafts auto-save
-- [ ] Schedule send feature
-- [ ] Undo send (5-second window)
-- [ ] Snooze emails feature
-- [ ] Email filters and rules
-- [ ] Archive functionality (make it work)
-- [ ] Spam detection and reporting (make it work)
+**Completion:** ~10%
