@@ -704,13 +704,13 @@ export default function ClaudeRefinedDemo() {
               </p>
             </div>
 
-            {/* Bottom Email Actions */}
+            {/* Bottom Email Actions - Icon Only */}
             <div style={{
-              marginTop: "40px",
-              paddingTop: "24px",
+              marginTop: "32px",
+              paddingTop: "20px",
               borderTop: "1px solid #F0EBE6",
               display: "flex",
-              gap: "16px"
+              gap: "12px"
             }}>
               {[
                 { icon: Send, label: "Reply" },
@@ -721,32 +721,24 @@ export default function ClaudeRefinedDemo() {
               ].map((action) => (
                 <button
                   key={action.label}
+                  title={action.label}
                   style={{
-                    padding: "8px 16px",
-                    background: "transparent",
-                    border: "1px solid #F0EBE6",
-                    borderRadius: "6px",
-                    color: "#666",
-                    fontSize: "11px",
-                    fontWeight: 300,
-                    letterSpacing: "0.02em",
+                    padding: 0,
+                    background: "none",
+                    border: "none",
                     cursor: "pointer",
-                    transition: "all 0.2s ease",
-                    display: "flex",
-                    alignItems: "center",
-                    gap: "6px"
+                    transition: "all 0.2s ease"
                   }}
                   onMouseEnter={(e) => {
-                    e.currentTarget.style.borderColor = "#D89880";
-                    e.currentTarget.style.color = "#D89880";
+                    const icon = e.currentTarget.querySelector('svg') as any;
+                    if (icon) icon.style.color = "#D89880";
                   }}
                   onMouseLeave={(e) => {
-                    e.currentTarget.style.borderColor = "#F0EBE6";
-                    e.currentTarget.style.color = "#666";
+                    const icon = e.currentTarget.querySelector('svg') as any;
+                    if (icon) icon.style.color = "#999";
                   }}
                 >
-                  <action.icon style={{ width: "14px", height: "14px", strokeWidth: 1.5 }} />
-                  {action.label}
+                  <action.icon style={{ width: "16px", height: "16px", color: "#999", strokeWidth: 1.5, transition: "color 0.2s ease" }} />
                 </button>
               ))}
             </div>
