@@ -726,7 +726,7 @@ export default function ClaudeRefinedDemo({ view = 'inbox' }: EmailInterfaceProp
           position: "relative",
           minWidth: isMobile ? "100%" : "300px",
           maxWidth: isMobile ? "100%" : "600px",
-          display: isMobile && showMobileEmailDetail ? "none" : "block"
+          display: (isMobile && showMobileEmailDetail) || ['Admin', 'Notes', 'Calendar', 'Contacts', 'Settings', 'Analytics', 'Appearance', 'Profile'].includes(activeView) ? "none" : "block"
         }}>
           {/* Resize Handle */}
           <div
@@ -1584,6 +1584,285 @@ export default function ClaudeRefinedDemo({ view = 'inbox' }: EmailInterfaceProp
               </div>
             )}
 
+            {/* Admin Dashboard */}
+            {activeView === 'Admin' && (
+              <div style={{ padding: "24px", maxWidth: "1200px" }}>
+                <h2 style={{ fontSize: "20px", fontWeight: 300, color: "#2A2A2A", marginBottom: "24px" }}>Admin Dashboard</h2>
+                
+                {/* System Overview Cards */}
+                <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(240px, 1fr))", gap: "16px", marginBottom: "32px" }}>
+                  <div style={{ padding: "20px", background: "#FFFBF7", border: "1px solid #F0EBE6", borderRadius: "8px" }}>
+                    <div style={{ fontSize: "11px", fontWeight: 600, color: "#000", textTransform: "uppercase", letterSpacing: "0.5px", marginBottom: "8px" }}>Total Users</div>
+                    <div style={{ fontSize: "28px", fontWeight: 300, color: "#D89880", marginBottom: "4px" }}>1,247</div>
+                    <div style={{ fontSize: "10px", color: "#000" }}>+23 this week</div>
+                  </div>
+                  
+                  <div style={{ padding: "20px", background: "#FFFBF7", border: "1px solid #F0EBE6", borderRadius: "8px" }}>
+                    <div style={{ fontSize: "11px", fontWeight: 600, color: "#000", textTransform: "uppercase", letterSpacing: "0.5px", marginBottom: "8px" }}>Email Accounts</div>
+                    <div style={{ fontSize: "28px", fontWeight: 300, color: "#D89880", marginBottom: "4px" }}>3,891</div>
+                    <div style={{ fontSize: "10px", color: "#000" }}>Across all users</div>
+                  </div>
+                  
+                  <div style={{ padding: "20px", background: "#FFFBF7", border: "1px solid #F0EBE6", borderRadius: "8px" }}>
+                    <div style={{ fontSize: "11px", fontWeight: 600, color: "#000", textTransform: "uppercase", letterSpacing: "0.5px", marginBottom: "8px" }}>Emails Today</div>
+                    <div style={{ fontSize: "28px", fontWeight: 300, color: "#D89880", marginBottom: "4px" }}>12,458</div>
+                    <div style={{ fontSize: "10px", color: "#000" }}>Sent + Received</div>
+                  </div>
+                  
+                  <div style={{ padding: "20px", background: "#FFFBF7", border: "1px solid #F0EBE6", borderRadius: "8px" }}>
+                    <div style={{ fontSize: "11px", fontWeight: 600, color: "#000", textTransform: "uppercase", letterSpacing: "0.5px", marginBottom: "8px" }}>Storage Used</div>
+                    <div style={{ fontSize: "28px", fontWeight: 300, color: "#D89880", marginBottom: "4px" }}>847 GB</div>
+                    <div style={{ fontSize: "10px", color: "#000" }}>of 2 TB total</div>
+                  </div>
+                </div>
+                
+                {/* User Management Section */}
+                <div style={{ marginBottom: "32px", paddingBottom: "32px", borderBottom: "1px solid #F0EBE6" }}>
+                  <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "16px" }}>
+                    <h3 style={{ fontSize: "16px", fontWeight: 600, color: "#000" }}>User Management</h3>
+                    <button style={{
+                      padding: "6px 12px",
+                      background: "#D89880",
+                      border: "none",
+                      borderRadius: "4px",
+                      color: "white",
+                      fontSize: "11px",
+                      fontWeight: 300,
+                      cursor: "pointer"
+                    }}>Add User</button>
+                  </div>
+                  
+                  <div style={{ background: "white", border: "1px solid #F0EBE6", borderRadius: "8px", overflow: "hidden" }}>
+                    <table style={{ width: "100%", borderCollapse: "collapse" }}>
+                      <thead>
+                        <tr style={{ background: "#FFFBF7", borderBottom: "1px solid #F0EBE6" }}>
+                          <th style={{ padding: "12px 16px", textAlign: "left", fontSize: "11px", fontWeight: 600, color: "#000", textTransform: "uppercase", letterSpacing: "0.5px" }}>User</th>
+                          <th style={{ padding: "12px 16px", textAlign: "left", fontSize: "11px", fontWeight: 600, color: "#000", textTransform: "uppercase", letterSpacing: "0.5px" }}>Email</th>
+                          <th style={{ padding: "12px 16px", textAlign: "left", fontSize: "11px", fontWeight: 600, color: "#000", textTransform: "uppercase", letterSpacing: "0.5px" }}>Role</th>
+                          <th style={{ padding: "12px 16px", textAlign: "left", fontSize: "11px", fontWeight: 600, color: "#000", textTransform: "uppercase", letterSpacing: "0.5px" }}>Joined</th>
+                          <th style={{ padding: "12px 16px", textAlign: "left", fontSize: "11px", fontWeight: 600, color: "#000", textTransform: "uppercase", letterSpacing: "0.5px" }}>Last Active</th>
+                          <th style={{ padding: "12px 16px", textAlign: "left", fontSize: "11px", fontWeight: 600, color: "#000", textTransform: "uppercase", letterSpacing: "0.5px" }}>Actions</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {[
+                          { name: 'Sarah Johnson', email: 'sarah@startup.com', role: 'Owner', joined: '2024-01-15', lastActive: '2 min ago', status: 'active' },
+                          { name: 'Michael Chen', email: 'michael@venture.io', role: 'Admin', joined: '2024-02-20', lastActive: '1 hour ago', status: 'active' },
+                          { name: 'Emily Rodriguez', email: 'emily@company.com', role: 'User', joined: '2024-03-10', lastActive: '3 hours ago', status: 'active' },
+                          { name: 'David Kim', email: 'david@agency.co', role: 'User', joined: '2024-04-05', lastActive: 'Yesterday', status: 'active' },
+                          { name: 'Jessica Taylor', email: 'jessica@gmail.com', role: 'User', joined: '2024-05-12', lastActive: '2 days ago', status: 'inactive' }
+                        ].map((user, idx) => (
+                          <tr key={idx} style={{ borderBottom: idx < 4 ? "1px solid #F0EBE6" : "none" }}>
+                            <td style={{ padding: "12px 16px", fontSize: "12px", fontWeight: 300, color: "#2A2A2A" }}>{user.name}</td>
+                            <td style={{ padding: "12px 16px", fontSize: "12px", fontWeight: 300, color: "#000" }}>{user.email}</td>
+                            <td style={{ padding: "12px 16px" }}>
+                              <span style={{
+                                padding: "3px 8px",
+                                background: user.role === 'Owner' ? '#D89880' : user.role === 'Admin' ? '#E8B4A0' : '#F0EBE6',
+                                color: user.role === 'Owner' || user.role === 'Admin' ? 'white' : '#2A2A2A',
+                                fontSize: "10px",
+                                fontWeight: 500,
+                                borderRadius: "3px",
+                                textTransform: "uppercase",
+                                letterSpacing: "0.3px"
+                              }}>{user.role}</span>
+                            </td>
+                            <td style={{ padding: "12px 16px", fontSize: "12px", fontWeight: 300, color: "#000" }}>{user.joined}</td>
+                            <td style={{ padding: "12px 16px", fontSize: "12px", fontWeight: 300, color: "#000" }}>{user.lastActive}</td>
+                            <td style={{ padding: "12px 16px" }}>
+                              <div style={{ display: "flex", gap: "8px" }}>
+                                <button style={{
+                                  padding: "4px 8px",
+                                  background: "transparent",
+                                  border: "1px solid #D89880",
+                                  borderRadius: "3px",
+                                  color: "#D89880",
+                                  fontSize: "10px",
+                                  fontWeight: 300,
+                                  cursor: "pointer"
+                                }}>Edit</button>
+                                {user.role !== 'Owner' && (
+                                  <button style={{
+                                    padding: "4px 8px",
+                                    background: "transparent",
+                                    border: "1px solid #F0EBE6",
+                                    borderRadius: "3px",
+                                    color: "#000",
+                                    fontSize: "10px",
+                                    fontWeight: 300,
+                                    cursor: "pointer"
+                                  }}>Remove</button>
+                                )}
+                              </div>
+                            </td>
+                          </tr>
+                        ))}
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+                
+                {/* API Keys Management */}
+                <div style={{ marginBottom: "32px", paddingBottom: "32px", borderBottom: "1px solid #F0EBE6" }}>
+                  <h3 style={{ fontSize: "16px", fontWeight: 600, color: "#000", marginBottom: "16px" }}>API Keys & Integrations</h3>
+                  
+                  <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(300px, 1fr))", gap: "16px" }}>
+                    <div style={{ padding: "16px", background: "#FFFBF7", border: "1px solid #F0EBE6", borderRadius: "8px" }}>
+                      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "start", marginBottom: "12px" }}>
+                        <div>
+                          <div style={{ fontSize: "13px", fontWeight: 600, color: "#000", marginBottom: "4px" }}>OpenAI API</div>
+                          <div style={{ fontSize: "10px", color: "#000" }}>For AI features</div>
+                        </div>
+                        <span style={{
+                          padding: "3px 8px",
+                          background: "#D89880",
+                          color: "white",
+                          fontSize: "9px",
+                          fontWeight: 500,
+                          borderRadius: "3px",
+                          textTransform: "uppercase"
+                        }}>Connected</span>
+                      </div>
+                      <input
+                        type="password"
+                        placeholder="sk-..."
+                        defaultValue="sk-proj-xxxxxxxxxxxxx"
+                        style={{
+                          width: "100%",
+                          padding: "8px 12px",
+                          fontSize: "11px",
+                          fontWeight: 300,
+                          border: "1px solid #F0EBE6",
+                          borderRadius: "4px",
+                          background: "white",
+                          color: "#2A2A2A",
+                          marginBottom: "8px"
+                        }}
+                      />
+                      <button style={{
+                        padding: "6px 12px",
+                        background: "#D89880",
+                        border: "none",
+                        borderRadius: "4px",
+                        color: "white",
+                        fontSize: "10px",
+                        fontWeight: 300,
+                        cursor: "pointer",
+                        width: "100%"
+                      }}>Test Connection</button>
+                    </div>
+                    
+                    <div style={{ padding: "16px", background: "#FFFBF7", border: "1px solid #F0EBE6", borderRadius: "8px" }}>
+                      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "start", marginBottom: "12px" }}>
+                        <div>
+                          <div style={{ fontSize: "13px", fontWeight: 600, color: "#000", marginBottom: "4px" }}>SendGrid API</div>
+                          <div style={{ fontSize: "10px", color: "#000" }}>For transactional emails</div>
+                        </div>
+                        <span style={{
+                          padding: "3px 8px",
+                          background: "#E8B4A0",
+                          color: "white",
+                          fontSize: "9px",
+                          fontWeight: 500,
+                          borderRadius: "3px",
+                          textTransform: "uppercase"
+                        }}>Not Set</span>
+                      </div>
+                      <input
+                        type="password"
+                        placeholder="SG..."
+                        style={{
+                          width: "100%",
+                          padding: "8px 12px",
+                          fontSize: "11px",
+                          fontWeight: 300,
+                          border: "1px solid #F0EBE6",
+                          borderRadius: "4px",
+                          background: "white",
+                          color: "#2A2A2A",
+                          marginBottom: "8px"
+                        }}
+                      />
+                      <button style={{
+                        padding: "6px 12px",
+                        background: "#D89880",
+                        border: "none",
+                        borderRadius: "4px",
+                        color: "white",
+                        fontSize: "10px",
+                        fontWeight: 300,
+                        cursor: "pointer",
+                        width: "100%"
+                      }}>Save & Test</button>
+                    </div>
+                  </div>
+                </div>
+                
+                {/* System Health & Monitoring */}
+                <div style={{ marginBottom: "32px", paddingBottom: "32px", borderBottom: "1px solid #F0EBE6" }}>
+                  <h3 style={{ fontSize: "16px", fontWeight: 600, color: "#000", marginBottom: "16px" }}>System Health</h3>
+                  
+                  <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(200px, 1fr))", gap: "12px" }}>
+                    {[
+                      { service: 'Database', status: 'Healthy', latency: '12ms', color: '#D89880' },
+                      { service: 'Email Sync', status: 'Running', latency: '45ms', color: '#D89880' },
+                      { service: 'API Server', status: 'Healthy', latency: '8ms', color: '#D89880' },
+                      { service: 'Storage', status: 'Healthy', latency: '23ms', color: '#D89880' }
+                    ].map((service, idx) => (
+                      <div key={idx} style={{ padding: "12px", background: "white", border: "1px solid #F0EBE6", borderRadius: "6px" }}>
+                        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "6px" }}>
+                          <div style={{ fontSize: "12px", fontWeight: 600, color: "#000" }}>{service.service}</div>
+                          <div style={{ width: "8px", height: "8px", borderRadius: "50%", background: service.color }}></div>
+                        </div>
+                        <div style={{ fontSize: "10px", color: "#000", marginBottom: "2px" }}>{service.status}</div>
+                        <div style={{ fontSize: "9px", color: "#000" }}>Latency: {service.latency}</div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+                
+                {/* Recent Activity Logs */}
+                <div>
+                  <h3 style={{ fontSize: "16px", fontWeight: 600, color: "#000", marginBottom: "16px" }}>Recent Activity</h3>
+                  
+                  <div style={{ background: "white", border: "1px solid #F0EBE6", borderRadius: "8px", maxHeight: "400px", overflowY: "auto" }}>
+                    {[
+                      { time: '2 min ago', user: 'Sarah Johnson', action: 'Connected Gmail account', type: 'success' },
+                      { time: '15 min ago', user: 'Michael Chen', action: 'Sent 23 emails via bulk send', type: 'info' },
+                      { time: '1 hour ago', user: 'System', action: 'Completed email sync for 1,247 accounts', type: 'info' },
+                      { time: '2 hours ago', user: 'Emily Rodriguez', action: 'Updated email signature', type: 'info' },
+                      { time: '3 hours ago', user: 'David Kim', action: 'Failed IMAP connection to outlook.com', type: 'error' },
+                      { time: '4 hours ago', user: 'Jessica Taylor', action: 'Archived 145 emails', type: 'info' },
+                      { time: '5 hours ago', user: 'System', action: 'Database backup completed', type: 'success' },
+                      { time: '6 hours ago', user: 'Admin', action: 'Updated rate limit settings', type: 'warning' }
+                    ].map((log, idx) => (
+                      <div key={idx} style={{
+                        padding: "12px 16px",
+                        borderBottom: idx < 7 ? "1px solid #F0EBE6" : "none",
+                        display: "flex",
+                        alignItems: "center",
+                        gap: "12px"
+                      }}>
+                        <div style={{
+                          width: "6px",
+                          height: "6px",
+                          borderRadius: "50%",
+                          background: log.type === 'success' ? '#D89880' : log.type === 'error' ? '#E07A5F' : log.type === 'warning' ? '#F2CC8F' : '#C9ADA7',
+                          flexShrink: 0
+                        }}></div>
+                        <div style={{ flex: 1 }}>
+                          <div style={{ fontSize: "12px", fontWeight: 300, color: "#2A2A2A", marginBottom: "2px" }}>
+                            <span style={{ fontWeight: 600, color: "#000" }}>{log.user}</span> {log.action}
+                          </div>
+                          <div style={{ fontSize: "10px", color: "#000" }}>{log.time}</div>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              </div>
+            )}
+
             {/* Starred View */}
             {activeView === 'Starred' && (
               <div style={{ padding: "20px" }}>
@@ -1869,7 +2148,7 @@ export default function ClaudeRefinedDemo({ view = 'inbox' }: EmailInterfaceProp
         <div ref={emailDetailRef} style={{ 
           flex: 1,
           background: "#FFFBF7",
-          display: isMobile && !showMobileEmailDetail ? "none" : "flex",
+          display: (isMobile && !showMobileEmailDetail) || ['Admin', 'Notes', 'Calendar', 'Contacts', 'Settings', 'Analytics', 'Appearance', 'Profile'].includes(activeView) ? "none" : "flex",
           flexDirection: "column",
           position: isMobile ? "fixed" : "relative",
           top: isMobile ? "0" : "auto",

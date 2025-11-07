@@ -445,3 +445,55 @@
 - [x] Make category headers bold (fontWeight: 600)
 - [x] Increase category header size slightly (9px → 10px)
 - [x] Apply to CORE, INBOXES, TOOLS, SETTINGS headers
+
+## ADMIN DASHBOARD (COMPREHENSIVE)
+
+### System Overview
+- [ ] Total users count
+- [ ] Total email accounts connected
+- [ ] Total emails processed today/week/month
+- [ ] Storage usage (GB used / GB total)
+- [ ] System health indicators (API status, database, email sync)
+
+### User Management
+- [ ] User list table (name, email, role, joined date, last active)
+- [ ] Assign/revoke admin roles
+- [ ] View user activity logs
+- [ ] Suspend/activate users
+
+### API Keys Management
+- [ ] OpenAI API key input and save
+- [ ] SendGrid API key input and save
+- [ ] Test API connection buttons
+- [ ] Show API usage stats
+
+### Email Accounts Overview
+- [ ] List all connected email accounts across all users
+- [ ] Show connection status (active/error)
+- [ ] Show last sync time
+- [ ] Force re-sync button
+
+### Analytics Dashboard
+- [ ] Email volume chart (sent/received over time)
+- [ ] User engagement metrics
+- [ ] Most active users
+- [ ] Email response times
+
+### System Settings
+- [ ] Feature flags (enable/disable features)
+- [ ] Rate limits configuration
+- [ ] Email sync intervals
+- [ ] Storage limits per user
+
+### Logs & Monitoring
+- [ ] Recent activity feed
+- [ ] Error logs with timestamps
+- [ ] Email sync status
+- [ ] API call logs
+
+## ADMIN DASHBOARD FULL-PAGE LAYOUT
+
+- [x] Hide email list panel when activeView === 'Admin'
+- [x] Hide right panel when activeView === 'Admin'
+- [x] Make Admin dashboard take full width (no email panels visible)
+- [x] Apply same logic to Notes, Calendar, Contacts, Settings views
