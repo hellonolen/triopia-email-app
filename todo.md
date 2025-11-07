@@ -351,3 +351,48 @@
 - [x] Add offline banner and disable actions when offline
 - [x] Update /__debug/features to use detectors (computed, not static)
 - [x] Test all features and create proof bundle
+
+## INVESTOR DEMO PREP (URGENT - Tomorrow)
+
+### Phase 2: Polish & Test
+- [x] Verify sidebar navigation (groups, roll-ups, search, 100 accounts)
+- [x] Verify email actions (archive, star, delete, toasts)
+- [x] Verify pagination (10/25/50, URL sync, localStorage)
+- [x] Verify offline detection (banner, disabled actions)
+- [x] Verify mobile responsiveness (hamburger, sliding panels)
+- [x] Verify AI panel (chat, triage, quick replies)
+- [x] Verify Notes CRUD operations
+- [x] Verify Calendar integration
+- [x] Verify Contacts management
+- [x] Verify Settings (API keys, appearance, font size)
+- [x] Create comprehensive test report
+
+### Phase 3: Publish Prep
+- [x] Create production-ready checkpoint
+- [x] Document publish instructions (domain, secrets, publish button)
+- [x] Verify all secrets are configured
+- [x] Test preview URL before publishing
+
+### Phase 1: Authentication (After Publish)
+- [ ] Add user authentication system (webdev_add_feature)
+- [ ] Add admin role assignment
+- [ ] Add multi-tenant support for email connections
+- [ ] Test login/signup flow
+
+### Phase 4: Email Integration
+- [ ] Create email connection UI (Gmail/Outlook/IMAP buttons)
+- [ ] Wire backend routes to frontend
+- [ ] Test with real email account
+- [ ] Add connection status indicators
+
+### Phase 5: Onboarding
+- [ ] Create welcome screen for new users
+- [ ] Add email connection wizard
+- [ ] Add feature tour/tooltips
+- [ ] Test complete user journey
+
+### Phase 6: Final Verification
+- [ ] End-to-end test all flows
+- [ ] Check mobile experience
+- [ ] Verify performance with real data
+- [ ] Create demo script for investors
