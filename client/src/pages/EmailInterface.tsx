@@ -58,11 +58,24 @@ export default function ClaudeRefinedDemo() {
 
   // Email action handlers
   const [isReplying, setIsReplying] = useState(false);
+  const replyBoxRef = useRef<HTMLDivElement>(null);
+  
+  // Reset reply state when email changes
+  useEffect(() => {
+    setIsReplying(false);
+  }, [selectedEmail.id]);
   
   const handleReply = (emailId: number) => {
-    console.log('Reply to email:', emailId);
+    console.log('Reply to email:', emailId, 'Current isReplying:', isReplying);
     setIsReplying(true);
     setRightPanelMode('email'); // Stay in email mode to show thread
+    console.log('Set isReplying to true');
+    
+    // Scroll to reply box after state update
+    setTimeout(() => {
+      console.log('Scrolling to reply box, ref:', replyBoxRef.current);
+      replyBoxRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }, 100);
   };
 
   const handleForward = (emailId: number) => {
@@ -1419,7 +1432,7 @@ export default function ClaudeRefinedDemo() {
             
             {/* Inline Reply Compose Area */}
             {isReplying && (
-              <div style={{
+              <div ref={replyBoxRef} style={{
                 marginTop: "32px",
                 paddingTop: "24px",
                 borderTop: "2px solid #F0EBE6"
@@ -1450,18 +1463,19 @@ export default function ClaudeRefinedDemo() {
                   placeholder="Type your reply..."
                   style={{
                     width: "100%",
-                    minHeight: "120px",
-                    padding: "12px",
-                    fontSize: "13px",
+                    minHeight: "240px",
+                    padding: "16px 0",
+                    fontSize: "14px",
                     fontWeight: 300,
-                    border: "1px solid #F0EBE6",
-                    borderRadius: "4px",
+                    border: "none",
+                    borderBottom: "1px solid #F0EBE6",
                     outline: "none",
-                    background: "white",
+                    background: "transparent",
                     color: "#2A2A2A",
                     resize: "vertical",
                     fontFamily: "inherit",
-                    marginBottom: "12px"
+                    marginBottom: "16px",
+                    lineHeight: "1.6"
                   }}
                 />
                 
