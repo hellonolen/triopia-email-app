@@ -2,6 +2,10 @@ import { useState, useEffect, useRef } from "react";
 import { trpc } from "@/lib/trpc";
 import { EmailListSkeleton, EmailDetailSkeleton } from "@/components/Skeleton";
 import { Mail, Send, Archive, Trash2, Star, Clock, CheckCircle2, Pause, Home, Inbox, Calendar, Users, Settings, Plus, UserPlus, Search, Zap, Check, Pencil, ChevronDown, ChevronRight, Pin, Info, FileText, HardDrive, BarChart3, Palette, AlertCircle, FilePen, Reply, Forward, Bot, User, Shield, Printer, MessageSquare, ListFilter, Mic, Paperclip } from "lucide-react";
+import { LegacySidebarSection } from "@/components/legacy/LegacySidebarSection";
+import { LegacyEmailListItem } from "@/components/legacy/LegacyEmailListItem";
+import { LegacyDetailHeader } from "@/components/legacy/LegacyDetailHeader";
+import { LegacyDetailActions } from "@/components/legacy/LegacyDetailActions";
 import SimpleRichTextEditor from "@/components/SimpleRichTextEditor";
 
 /**
@@ -475,224 +479,15 @@ export default function ClaudeRefinedDemo() {
       </div>
 
       <div className="flex" style={{ flex: 1, overflow: "hidden" }}>
-        {/* Sidebar - DRAMATICALLY NARROW */}
-        <div style={{ 
-          width: "198px",
-          background: "white",
-          borderRight: "1px solid #F0EBE6",
-          padding: "16px 0"
+        {/* Sidebar - TRIOPIA Design */}
+        <div className="bg-surface border-r border-[var(--border)]" style={{ 
+          width: "220px",
+          padding: "var(--space-3) 0"
         }}>
 
 
-          <div>
-            {[
-              { icon: Home, label: "Fresh Start", count: null },
-              { icon: Inbox, label: "Inbox", count: 12 },
-              { icon: Star, label: "Starred", count: 3 },
-              { icon: UserPlus, label: "New Connections", count: 5 },
-              { icon: Pause, label: "Paused", count: 2 },
-              { icon: CheckCircle2, label: "Complete", count: 8 },
-              { icon: Send, label: "Sent", count: null },
-              { icon: FilePen, label: "Drafts", count: 2 },
-              { icon: Archive, label: "Archive", count: null },
-              { icon: AlertCircle, label: "Spam", count: null },
-              { icon: Trash2, label: "Trash", count: null },
-              { icon: HardDrive, label: "Storage", count: null },
-            ].map((item) => (
-              <div
-                key={item.label}
-                onClick={() => setActiveView(item.label)}
-                onMouseEnter={() => setHoveredItem(item.label)}
-                onMouseLeave={() => setHoveredItem(null)}
-                style={{
-                  padding: "8px 16px",
-                  cursor: "pointer",
-                  position: "relative",
-                  transition: "all 0.3s ease",
-                  background: item.label === activeView ? "#FFFBF7" : "transparent"
-                }}
-              >
-                <div className="flex items-center justify-between">
-                  <div className="flex items-center gap-3">
-                    <item.icon style={{ 
-                      width: "14px", 
-                      height: "14px",
-                      color: item.label === activeView ? "#D89880" : "#999",
-                      strokeWidth: 1.5
-                    }} />
-                    <span style={{
-                      fontSize: "11px",
-                      fontWeight: 300,
-                      color: item.label === "Inbox" ? "#2A2A2A" : "#666",
-                      letterSpacing: "0.02em"
-                    }}>
-                      {item.label}
-                    </span>
-                  </div>
-                  {item.count && (
-                    <span style={{
-                      fontSize: "9px",
-                      fontWeight: 300,
-                      color: "#999"
-                    }}>
-                      {item.count}
-                    </span>
-                  )}
-                </div>
-                {/* Animated underline - shows on active */}
-                <div style={{
-                  position: "absolute",
-                  bottom: 0,
-                  left: "16px",
-                  width: "auto",
-                  right: item.count ? "50px" : "16px",
-                  height: "1px",
-                  background: "#D89880",
-                  transform: item.label === activeView ? "scaleX(1)" : "scaleX(0)",
-                  transformOrigin: "left",
-                  transition: "transform 0.4s cubic-bezier(0.4, 0, 0.2, 1)"
-                }} />
-              </div>
-            ))}
-          </div>
-
-          {/* Multi-Inbox Section */}
-          <div style={{ marginTop: "16px", paddingTop: "16px", borderTop: "1px solid #F0EBE6" }}>
-            <div
-              onClick={() => setInboxesExpanded(!inboxesExpanded)}
-              className="flex items-center justify-between"
-              style={{
-                padding: "8px 16px",
-                cursor: "pointer"
-              }}
-            >
-              <div className="flex items-center gap-2">
-                {inboxesExpanded ? (
-                  <ChevronDown style={{ width: "12px", height: "12px", color: "#999", strokeWidth: 1.5 }} />
-                ) : (
-                  <ChevronRight style={{ width: "12px", height: "12px", color: "#999", strokeWidth: 1.5 }} />
-                )}
-                <span style={{
-                  fontSize: "10px",
-                  fontWeight: 300,
-                  color: "#666",
-                  letterSpacing: "0.05em",
-                  textTransform: "uppercase"
-                }}>
-                  Inboxes
-                </span>
-              </div>
-              <span style={{
-                fontSize: "9px",
-                fontWeight: 300,
-                color: "#999"
-              }}>
-                {inboxesExpanded ? mockAccounts.length : mockAccounts.reduce((sum, acc) => sum + acc.unread, 0)}
-              </span>
-            </div>
-            
-            {inboxesExpanded && (
-              <div style={{ marginTop: "4px" }}>
-                {mockAccounts.map((account) => (
-                  <div
-                    key={account.id}
-                    className="flex items-center justify-between"
-                    style={{
-                      padding: "6px 16px 6px 32px",
-                      cursor: "pointer",
-                      transition: "background 0.2s ease"
-                    }}
-                    onMouseEnter={(e) => {
-                      e.currentTarget.style.background = "#FFFBF7";
-                    }}
-                    onMouseLeave={(e) => {
-                      e.currentTarget.style.background = "transparent";
-                    }}
-                  >
-                    <div className="flex items-center gap-2">
-                      <div style={{
-                        width: "6px",
-                        height: "6px",
-                        borderRadius: "50%",
-                        background: account.color
-                      }} />
-                      <span style={{
-                        fontSize: "10px",
-                        fontWeight: 300,
-                        color: "#666",
-                        letterSpacing: "0.01em"
-                      }}>
-                        {account.email}
-                      </span>
-                    </div>
-                    {account.unread > 0 && (
-                      <span style={{
-                        fontSize: "9px",
-                        fontWeight: 300,
-                        color: "#999"
-                      }}>
-                        {account.unread}
-                      </span>
-                    )}
-                  </div>
-                ))}
-              </div>
-            )}
-          </div>
-
-          <div style={{ marginTop: "auto", padding: "16px", borderTop: "1px solid #F0EBE6" }}>
-            {[
-              { icon: FileText, label: "Notes" },
-              { icon: Calendar, label: "Calendar" },
-              { icon: Users, label: "Contacts" },
-              { icon: BarChart3, label: "Analytics" },
-              { icon: Palette, label: "Appearance" },
-              { icon: Settings, label: "Settings" },
-              { icon: User, label: "Profile" },
-              { icon: Shield, label: "Admin Dashboard" },
-            ].map((item) => (
-              <div
-                key={item.label}
-                onClick={() => setActiveView(item.label)}
-                className="flex items-center gap-3"
-                style={{
-                  padding: "8px 0",
-                  cursor: "pointer",
-                  position: "relative"
-                }}
-                onMouseEnter={(e) => {
-                  const span = e.currentTarget.querySelector("span");
-                  if (span) span.style.color = "#2A2A2A";
-                }}
-                onMouseLeave={(e) => {
-                  const span = e.currentTarget.querySelector("span");
-                  if (span && item.label !== activeView) span.style.color = "#666";
-                }}
-              >
-                <item.icon style={{ width: "14px", height: "14px", color: item.label === activeView ? "#D89880" : "#999", strokeWidth: 1.5 }} />
-                <span style={{
-                  fontSize: "11px",
-                  fontWeight: 300,
-                  color: item.label === activeView ? "#D89880" : "#666",
-                  letterSpacing: "0.02em",
-                  transition: "color 0.3s ease"
-                }}>
-                  {item.label}
-                </span>
-                {/* Animated underline - shows on active */}
-                <div style={{
-                  position: "absolute",
-                  bottom: 0,
-                  left: 0,
-                  right: 0,
-                  height: "1px",
-                  background: "#D89880",
-                  transform: item.label === activeView ? "scaleX(1)" : "scaleX(0)",
-                  transformOrigin: "left",
-                  transition: "transform 0.4s cubic-bezier(0.4, 0, 0.2, 1)"
-                }} />
-              </div>
-            ))}
+          <div style={{ padding: "0 var(--space-3)" }}>
+            <LegacySidebarSection />
           </div>
         </div>
 

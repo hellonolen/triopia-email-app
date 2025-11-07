@@ -1,8 +1,22 @@
 :root {
-  --triopia-peach:#D89880;
-  --triopia-cream:#FFFBF7;
-  --triopia-dark:#2A2A2A;
-  --triopia-font-sm:0.9375rem; /* A- */
-  --triopia-font-md:1rem;       /* A  */
-  --triopia-font-lg:1.0625rem;  /* A+ */
+  --triopia-peach: #D89880;
+  --triopia-cream: #FFFBF7;
+  --triopia-dark: #2A2A2A;
+  --surface: #FFFFFF;
+  --border: #EDEDED;
+  --muted: #8A8A8A;
+  --shadow: 0 1px 2px rgba(0,0,0,.06), 0 8px 24px rgba(0,0,0,.06);
+  --radius: 16px;
+  --radius-sm: 10px;
+  --space-1: 8px;
+  --space-2: 12px;
+  --space-3: 16px;
+  --space-4: 24px;
+  --space-5: 32px;
+  --fs-sm: 0.9375rem;
+  --fs-md: 1rem;
+  --fs-lg: 1.0625rem;
+  --fs-xl: 1.25rem;
+  --fs-2xl: 1.5rem;
+  --content-font-size: var(--fs-md); /* Default A */
 }
