@@ -91,6 +91,7 @@ export default function ClaudeRefinedDemo() {
   const [emailSignature, setEmailSignature] = useState('Best regards,\nYour Name\nYour Title\nYour Company');
   const [showSignatureSelector, setShowSignatureSelector] = useState(false);
   const signatures = [
+    { id: 0, name: 'No Signature', content: '' },
     { id: 1, name: 'Work', content: 'Best regards,\nYour Name\nYour Title\nYour Company' },
     { id: 2, name: 'Personal', content: 'Cheers,\nYour Name' },
     { id: 3, name: 'Formal', content: 'Sincerely,\nYour Full Name\nYour Title\nCompany Name\nPhone | Email' }
