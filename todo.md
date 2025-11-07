@@ -497,3 +497,11 @@
 - [x] Hide right panel when activeView === 'Admin'
 - [x] Make Admin dashboard take full width (no email panels visible)
 - [x] Apply same logic to Notes, Calendar, Contacts, Settings views
+
+## ADMIN PANEL NOT DISPLAYING (URGENT)
+
+- [ ] Check browser console for JavaScript errors
+- [ ] Verify activeView is set to 'Admin' when navigating to /admin
+- [ ] Check if Admin view content is being rendered
+- [ ] Fix any conditional logic preventing display
+- [ ] Test /admin route shows full dashboard
