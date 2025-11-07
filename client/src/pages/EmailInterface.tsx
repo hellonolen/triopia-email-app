@@ -1154,8 +1154,7 @@ export default function ClaudeRefinedDemo() {
           padding: "28px 36px"
         }}>
           <div style={{ maxWidth: "680px", margin: "0 auto" }}>
-            <div className="flex items-center gap-6 mb-10">
-              <>
+            <div className="flex items-center justify-between mb-10" style={{ flexWrap: "wrap", gap: "12px" }}>
               <div className="flex items-center gap-3">
               {[
                 { icon: Reply, label: "Reply", alwaysShow: true },
@@ -1204,7 +1203,7 @@ export default function ClaudeRefinedDemo() {
               
               {/* Font Size Controls */}
               {emailDetailWidth >= 700 && (
-              <div className="flex items-center gap-2">
+              <div className="flex items-center gap-2" style={{ marginLeft: "auto" }}>
                 <button
                   onClick={() => setEmailFontSize('small')}
                   style={{
@@ -1264,7 +1263,6 @@ export default function ClaudeRefinedDemo() {
                 </button>
               </div>
               )}
-              </>
             </div>
 
             <h1 style={{ 
