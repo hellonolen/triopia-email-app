@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Mail, Send, Archive, Trash2, Star, Clock, CheckCircle2, Pause, Home, Inbox, Calendar, Users, Settings, Plus, UserPlus, Search, Zap, Check, Pencil, ChevronDown, ChevronRight, Pin, Info, FileText } from "lucide-react";
+import { Mail, Send, Archive, Trash2, Star, Clock, CheckCircle2, Pause, Home, Inbox, Calendar, Users, Settings, Plus, UserPlus, Search, Zap, Check, Pencil, ChevronDown, ChevronRight, Pin, Info, FileText, HardDrive, BarChart3, Palette, AlertCircle, FilePen } from "lucide-react";
 
 /**
  * Claude AI - DRAMATICALLY Refined
@@ -84,7 +84,11 @@ export default function ClaudeRefinedDemo() {
               { icon: Pause, label: "Paused", count: 2 },
               { icon: CheckCircle2, label: "Complete", count: 8 },
               { icon: Send, label: "Sent", count: null },
+              { icon: FilePen, label: "Drafts", count: 2 },
               { icon: Archive, label: "Archive", count: null },
+              { icon: AlertCircle, label: "Spam", count: null },
+              { icon: Trash2, label: "Trash", count: null },
+              { icon: HardDrive, label: "Storage", count: null },
             ].map((item) => (
               <div
                 key={item.label}
@@ -230,6 +234,8 @@ export default function ClaudeRefinedDemo() {
               { icon: FileText, label: "Notes" },
               { icon: Calendar, label: "Calendar" },
               { icon: Users, label: "Contacts" },
+              { icon: BarChart3, label: "Analytics" },
+              { icon: Palette, label: "Appearance" },
               { icon: Settings, label: "Settings" },
             ].map((item) => (
               <div
