@@ -51,6 +51,15 @@ export default function ClaudeRefinedDemo() {
   const [isLoading, setIsLoading] = useState(true);
   const [emails, setEmails] = useState(mockEmails);
   
+  // Production polish state (must be declared before useEffect hooks that reference them)
+  const [loadError, setLoadError] = useState<string | null>(null);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [pageSize, setPageSize] = useState(() => {
+    const stored = localStorage.getItem('triopia:pager:size');
+    return stored ? parseInt(stored, 10) : 25;
+  });
+  const [isOffline, setIsOffline] = useState(!navigator.onLine);
+  
   // Initialize feature flags
   useEffect(() => {
     initFeatureFlags();
@@ -173,15 +182,6 @@ export default function ClaudeRefinedDemo() {
   const [showSignatureSelector, setShowSignatureSelector] = useState(false);
   const [signatureEnabled, setSignatureEnabled] = useState(true);
   const [searchQuery, setSearchQuery] = useState('');
-  
-  // Production polish state
-  const [loadError, setLoadError] = useState<string | null>(null);
-  const [currentPage, setCurrentPage] = useState(1);
-  const [pageSize, setPageSize] = useState(() => {
-    const stored = localStorage.getItem('triopia:pager:size');
-    return stored ? parseInt(stored, 10) : 25;
-  });
-  const [isOffline, setIsOffline] = useState(!navigator.onLine);
   
   // Mobile responsive state
   const [isMobile, setIsMobile] = useState(false);
