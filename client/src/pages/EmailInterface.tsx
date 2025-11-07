@@ -1,5 +1,6 @@
 import { useState, useEffect, useRef } from "react";
 import { trpc } from "@/lib/trpc";
+import { EmailListSkeleton, EmailDetailSkeleton } from "@/components/Skeleton";
 import { Mail, Send, Archive, Trash2, Star, Clock, CheckCircle2, Pause, Home, Inbox, Calendar, Users, Settings, Plus, UserPlus, Search, Zap, Check, Pencil, ChevronDown, ChevronRight, Pin, Info, FileText, HardDrive, BarChart3, Palette, AlertCircle, FilePen, Reply, Forward, Bot, User, Shield, Printer, MessageSquare, ListFilter, Mic, Paperclip } from "lucide-react";
 import SimpleRichTextEditor from "@/components/SimpleRichTextEditor";
 
@@ -27,7 +28,14 @@ const mockAccounts = [
 ];
 
 export default function ClaudeRefinedDemo() {
+  const [isLoading, setIsLoading] = useState(true);
   const [emails, setEmails] = useState(mockEmails);
+  
+  // Simulate initial data load
+  useEffect(() => {
+    const timer = setTimeout(() => setIsLoading(false), 800);
+    return () => clearTimeout(timer);
+  }, []);
   const [selectedEmail, setSelectedEmail] = useState(mockEmails[0]);
   const [hoveredItem, setHoveredItem] = useState<string | null>(null);
   const [inboxesExpanded, setInboxesExpanded] = useState(false);
@@ -873,7 +881,9 @@ export default function ClaudeRefinedDemo() {
 
           <div>
             {/* Inbox View */}
-            {activeView === 'Inbox' && emails
+            {isLoading ? (
+              <EmailListSkeleton />
+            ) : activeView === 'Inbox' && emails
               .filter(e => e.folder === 'inbox')
               .filter(e => {
                 if (!searchQuery) return true;
