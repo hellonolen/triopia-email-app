@@ -439,3 +439,9 @@
 - [x] Replace email list category headers with black
 - [x] Replace any other gray text elements with black
 - [x] Test readability of all text
+
+## CATEGORY HEADERS STYLING
+
+- [x] Make category headers bold (fontWeight: 600)
+- [x] Increase category header size slightly (9px → 10px)
+- [x] Apply to CORE, INBOXES, TOOLS, SETTINGS headers

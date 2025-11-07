@@ -270,11 +270,11 @@ export function SidebarNav({ model, onAddSource }: SidebarNavProps) {
       <div style={{ marginBottom: '12px' }} data-testid="sidebar-group-core">
         <div style={{ padding: '0 8px', marginBottom: '4px' }}>
           <span style={{
-            fontSize: '9px',
+            fontSize: '10px',
             textTransform: 'uppercase',
             letterSpacing: '0.5px',
             color: '#000',
-            fontWeight: 400
+            fontWeight: 600
           }}>Core</span>
         </div>
         <div style={{ display: 'flex', flexDirection: 'column', gap: '1px' }}>
@@ -305,11 +305,11 @@ export function SidebarNav({ model, onAddSource }: SidebarNavProps) {
             <ChevronDown style={{ width: '10px', height: '10px', color: '#000', strokeWidth: 1.5 }} />
           )}
           <span style={{
-            fontSize: '9px',
+            fontSize: '10px',
             textTransform: 'uppercase',
             letterSpacing: '0.5px',
             color: '#000',
-            fontWeight: 400
+            fontWeight: 600
           }}>Inboxes</span>
           {totalUnread > 0 && (
             <span style={{
@@ -423,11 +423,11 @@ export function SidebarNav({ model, onAddSource }: SidebarNavProps) {
             <ChevronDown style={{ width: '10px', height: '10px', color: '#000', strokeWidth: 1.5 }} />
           )}
           <span style={{
-            fontSize: '9px',
+            fontSize: '10px',
             textTransform: 'uppercase',
             letterSpacing: '0.5px',
             color: '#000',
-            fontWeight: 400
+            fontWeight: 600
           }}>Tools</span>
         </div>
         {!toolsCollapsed && (
@@ -460,11 +460,11 @@ export function SidebarNav({ model, onAddSource }: SidebarNavProps) {
             <ChevronDown style={{ width: '10px', height: '10px', color: '#000', strokeWidth: 1.5 }} />
           )}
           <span style={{
-            fontSize: '9px',
+            fontSize: '10px',
             textTransform: 'uppercase',
             letterSpacing: '0.5px',
             color: '#000',
-            fontWeight: 400
+            fontWeight: 600
           }}>Settings</span>
         </div>
         {!settingsCollapsed && (
