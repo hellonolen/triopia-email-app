@@ -396,3 +396,10 @@
 - [ ] Check mobile experience
 - [ ] Verify performance with real data
 - [ ] Create demo script for investors
+
+## INBOXES UI FIXES (Pre-Demo)
+
+- [x] Change INBOXES scrollbar color from gray to peach (#D89880)
+- [x] Make INBOXES section collapsible (rolled up by default)
+- [x] Add expand/collapse chevron icon for INBOXES group
+- [x] Test collapse/expand interaction

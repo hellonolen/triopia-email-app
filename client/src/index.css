@@ -185,6 +185,30 @@
     }
   }
 }
+/* Peach scrollbar for INBOXES section */
+.inboxes-scrollbar::-webkit-scrollbar {
+  width: 6px;
+}
+
+.inboxes-scrollbar::-webkit-scrollbar-track {
+  background: white;
+}
+
+.inboxes-scrollbar::-webkit-scrollbar-thumb {
+  background: #D89880; /* Peach */
+  border-radius: 3px;
+}
+
+.inboxes-scrollbar::-webkit-scrollbar-thumb:hover {
+  background: #C88870; /* Darker peach on hover */
+}
+
+/* Firefox scrollbar */
+.inboxes-scrollbar {
+  scrollbar-width: thin;
+  scrollbar-color: #D89880 white;
+}
+
 /* Hide Manus branding badge */
 [class*="manus-badge"],
 [class*="made-with"],

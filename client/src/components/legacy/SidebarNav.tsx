@@ -65,6 +65,7 @@ export function SidebarNav({ model, onAddSource }: SidebarNavProps) {
   const [location] = useLocation();
   const [expanded, setExpanded] = useState<Record<string, boolean>>({});
   const [searchQuery, setSearchQuery] = useState('');
+  const [inboxesCollapsed, setInboxesCollapsed] = useState(true); // Collapsed by default
   const inboxesRef = useRef<HTMLDivElement>(null);
 
   // Load expanded state from localStorage
@@ -257,7 +258,22 @@ export function SidebarNav({ model, onAddSource }: SidebarNavProps) {
 
       {/* INBOXES Group */}
       <div style={{ flex: 1, overflow: 'hidden', marginBottom: '12px' }} data-testid="sidebar-group-inboxes">
-        <div style={{ padding: '0 8px', marginBottom: '4px' }}>
+        <div 
+          style={{ 
+            padding: '0 8px', 
+            marginBottom: '4px',
+            display: 'flex',
+            alignItems: 'center',
+            gap: '4px',
+            cursor: 'pointer'
+          }}
+          onClick={() => setInboxesCollapsed(!inboxesCollapsed)}
+        >
+          {inboxesCollapsed ? (
+            <ChevronRight style={{ width: '10px', height: '10px', color: '#CCC', strokeWidth: 1.5 }} />
+          ) : (
+            <ChevronDown style={{ width: '10px', height: '10px', color: '#CCC', strokeWidth: 1.5 }} />
+          )}
           <span style={{
             fontSize: '9px',
             textTransform: 'uppercase',
@@ -268,7 +284,7 @@ export function SidebarNav({ model, onAddSource }: SidebarNavProps) {
         </div>
 
         {/* Search */}
-        {model.inboxes.length > 5 && (
+        {!inboxesCollapsed && model.inboxes.length > 5 && (
           <div style={{ padding: '0 8px', marginBottom: '6px' }}>
             <div style={{ position: 'relative' }}>
               <Search style={{
@@ -307,19 +323,22 @@ export function SidebarNav({ model, onAddSource }: SidebarNavProps) {
         )}
 
         {/* Virtualized list */}
-        <div ref={inboxesRef} style={{
-          overflowY: 'auto',
-          maxHeight: '300px',
-          display: 'flex',
-          flexDirection: 'column',
-          gap: '1px'
-        }}>
-          {visibleInboxes.map(renderRollup)}
-        </div>
+        {!inboxesCollapsed && (
+          <div ref={inboxesRef} style={{
+            overflowY: 'auto',
+            maxHeight: '300px',
+            display: 'flex',
+            flexDirection: 'column',
+            gap: '1px'
+          }} className="inboxes-scrollbar">
+            {visibleInboxes.map(renderRollup)}
+          </div>
+        )}
 
         {/* Add Source CTA */}
-        <div style={{ padding: '6px 8px 0' }}>
-          <button
+        {!inboxesCollapsed && (
+          <div style={{ padding: '6px 8px 0' }}>
+            <button
             onClick={onAddSource || (() => window.location.href = '/settings')}
             style={{
               width: '100%',
@@ -342,8 +361,9 @@ export function SidebarNav({ model, onAddSource }: SidebarNavProps) {
           >
             <Plus style={{ width: '14px', height: '14px', strokeWidth: 1.5 }} />
             <span>Add Inbox or Domain</span>
-          </button>
-        </div>
+            </button>
+          </div>
+        )}
       </div>
 
       {/* TOOLS Group */}
