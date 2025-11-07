@@ -1,4 +1,5 @@
 import { useState, useEffect, useRef } from "react";
+import { trpc } from "@/lib/trpc";
 import { Mail, Send, Archive, Trash2, Star, Clock, CheckCircle2, Pause, Home, Inbox, Calendar, Users, Settings, Plus, UserPlus, Search, Zap, Check, Pencil, ChevronDown, ChevronRight, Pin, Info, FileText, HardDrive, BarChart3, Palette, AlertCircle, FilePen, Reply, Forward, Bot } from "lucide-react";
 
 /**
@@ -33,6 +34,14 @@ export default function ClaudeRefinedDemo() {
   const [isResizing, setIsResizing] = useState(false);
   const [hoveredTooltip, setHoveredTooltip] = useState<{label: string, x: number, y: number} | null>(null);
   const [emailDetailWidth, setEmailDetailWidth] = useState(1000);
+
+  // Backend data hooks
+  const { data: notesData = [], refetch: refetchNotes } = trpc.notes.list.useQuery(undefined, { enabled: activeView === 'Notes' });
+  const { data: contactsData = [], refetch: refetchContacts } = trpc.contacts.list.useQuery(undefined, { enabled: activeView === 'Contacts' });
+  const { data: calendarData = [], refetch: refetchCalendar } = trpc.calendar.list.useQuery({}, { enabled: activeView === 'Calendar' });
+  const createNoteMutation = trpc.notes.create.useMutation({ onSuccess: () => refetchNotes() });
+  const createContactMutation = trpc.contacts.create.useMutation({ onSuccess: () => refetchContacts() });
+  const createEventMutation = trpc.calendar.create.useMutation({ onSuccess: () => refetchCalendar() });
   const [activeView, setActiveView] = useState('Inbox');
   const [showComposeModal, setShowComposeModal] = useState(false);
   const [showAIPanel, setShowAIPanel] = useState(false);
@@ -747,14 +756,112 @@ export default function ClaudeRefinedDemo() {
             {/* Notes View */}
             {activeView === 'Notes' && (
               <div style={{ padding: "20px" }}>
-                <p style={{ fontSize: "13px", color: "#666" }}>Notes feature - Coming soon</p>
+                <div style={{ marginBottom: "16px" }}>
+                  <button
+                    onClick={() => {
+                      const title = prompt('Note title:');
+                      if (title) {
+                        console.log('Create note:', title);
+                      }
+                    }}
+                    style={{
+                      padding: "8px 16px",
+                      background: "#D89880",
+                      color: "white",
+                      border: "none",
+                      borderRadius: "4px",
+                      cursor: "pointer",
+                      fontSize: "12px",
+                      fontWeight: 400
+                    }}
+                  >
+                    + New Note
+                  </button>
+                </div>
+                <div style={{ display: "grid", gap: "12px" }}>
+                  {notesData.map(note => (
+                    <div
+                      key={note.id}
+                      style={{
+                        padding: "12px",
+                        background: "white",
+                        border: "1px solid #F0EBE6",
+                        borderRadius: "6px",
+                        cursor: "pointer",
+                        transition: "all 0.2s ease"
+                      }}
+                      onMouseEnter={(e) => e.currentTarget.style.borderColor = "#D89880"}
+                      onMouseLeave={(e) => e.currentTarget.style.borderColor = "#F0EBE6"}
+                    >
+                      <div style={{ fontSize: "13px", fontWeight: 400, color: "#2A2A2A", marginBottom: "6px" }}>{note.title || 'Untitled Note'}</div>
+                      <div style={{ fontSize: "11px", color: "#666", marginBottom: "8px" }}>{note.content || 'No content'}</div>
+                      <div style={{ fontSize: "9px", color: "#999" }}>{new Date(note.updatedAt).toLocaleDateString()}</div>
+                    </div>
+                  ))}
+                </div>
               </div>
             )}
 
             {/* Contacts View */}
             {activeView === 'Contacts' && (
               <div style={{ padding: "20px" }}>
-                <p style={{ fontSize: "13px", color: "#666" }}>Contacts management - Coming soon</p>
+                <div style={{ marginBottom: "16px" }}>
+                  <button
+                    onClick={() => console.log('Add contact')}
+                    style={{
+                      padding: "8px 16px",
+                      background: "#D89880",
+                      color: "white",
+                      border: "none",
+                      borderRadius: "4px",
+                      cursor: "pointer",
+                      fontSize: "12px",
+                      fontWeight: 400
+                    }}
+                  >
+                    + Add Contact
+                  </button>
+                </div>
+                <div style={{ display: "grid", gap: "8px" }}>
+                  {contactsData.map(contact => (
+                    <div
+                      key={contact.id}
+                      style={{
+                        padding: "12px",
+                        background: "white",
+                        border: "1px solid #F0EBE6",
+                        borderRadius: "6px",
+                        cursor: "pointer",
+                        transition: "all 0.2s ease",
+                        display: "flex",
+                        alignItems: "center",
+                        gap: "12px"
+                      }}
+                      onMouseEnter={(e) => e.currentTarget.style.borderColor = "#D89880"}
+                      onMouseLeave={(e) => e.currentTarget.style.borderColor = "#F0EBE6"}
+                    >
+                      <div style={{
+                        width: "36px",
+                        height: "36px",
+                        borderRadius: "50%",
+                        background: "#D89880",
+                        color: "white",
+                        display: "flex",
+                        alignItems: "center",
+                        justifyContent: "center",
+                        fontSize: "12px",
+                        fontWeight: 400
+                      }}>
+                        {(contact.name || contact.email).split(' ').map((n: string) => n[0]).join('').toUpperCase().slice(0, 2)}
+                      </div>
+                      <div style={{ flex: 1 }}>
+                        <div style={{ fontSize: "13px", fontWeight: 400, color: "#2A2A2A" }}>{contact.name || 'No Name'}</div>
+                        <div style={{ fontSize: "11px", color: "#666" }}>{contact.email}</div>
+                        <div style={{ fontSize: "10px", color: "#999" }}>{contact.company || 'No Company'}</div>
+                      </div>
+                    </div>
+                  ))}
+                </div>
               </div>
             )}
 
