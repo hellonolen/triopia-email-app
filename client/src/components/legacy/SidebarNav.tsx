@@ -107,21 +107,44 @@ export function SidebarNav({ model, onAddSource }: SidebarNavProps) {
       <Link
         key={label}
         href={path}
-        className={`
-          flex items-center justify-between px-3 py-2 rounded-md transition-colors relative
-          ${isActive ? 'bg-triopia-peach/10' : 'hover:bg-triopia-cream/50'}
-        `}
+        style={{
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'space-between',
+          padding: '4px 8px',
+          fontSize: '11px',
+          fontWeight: 300,
+          color: isActive ? '#D89880' : '#999',
+          background: isActive ? '#FFFBF7' : 'transparent',
+          borderRadius: '3px',
+          textDecoration: 'none',
+          transition: 'all 0.15s',
+          position: 'relative'
+        }}
         data-testid={testId}
+        onMouseEnter={(e) => {
+          if (!isActive) e.currentTarget.style.background = '#FAFAFA';
+        }}
+        onMouseLeave={(e) => {
+          if (!isActive) e.currentTarget.style.background = 'transparent';
+        }}
       >
         {isActive && (
-          <div className="absolute left-0 top-0 bottom-0 w-0.5 bg-triopia-peach" />
+          <div style={{
+            position: 'absolute',
+            left: 0,
+            top: 0,
+            bottom: 0,
+            width: '2px',
+            background: '#D89880'
+          }} />
         )}
-        <div className="flex items-center gap-2">
-          <Icon className="w-4 h-4 text-triopia-dark/60" />
-          <span className="text-sm text-triopia-dark">{label}</span>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '6px', paddingLeft: isActive ? '6px' : '0' }}>
+          <Icon style={{ width: '14px', height: '14px', strokeWidth: 1.5, opacity: 0.6 }} />
+          <span>{label}</span>
         </div>
         {count !== undefined && count > 0 && (
-          <span className="text-xs text-triopia-peach font-medium">{count}</span>
+          <span style={{ fontSize: '10px', color: '#D89880', fontWeight: 400 }}>{count}</span>
         )}
       </Link>
     );
@@ -135,26 +158,39 @@ export function SidebarNav({ model, onAddSource }: SidebarNavProps) {
       <div key={source.id} data-testid={`sidebar-inbox-${source.id}`}>
         {/* Roll-up header */}
         <div
-          className="flex items-center justify-between px-3 py-2 cursor-pointer hover:bg-triopia-cream/50 rounded-md"
+          style={{
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'space-between',
+            padding: '4px 8px',
+            fontSize: '11px',
+            fontWeight: 300,
+            color: '#999',
+            cursor: 'pointer',
+            borderRadius: '3px',
+            transition: 'background 0.15s'
+          }}
           onClick={() => toggleExpanded(source.id)}
           data-testid={`sidebar-toggle-${source.id}`}
+          onMouseEnter={(e) => e.currentTarget.style.background = '#FAFAFA'}
+          onMouseLeave={(e) => e.currentTarget.style.background = 'transparent'}
         >
-          <div className="flex items-center gap-2">
+          <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
             {isExpanded ? (
-              <ChevronDown className="w-3.5 h-3.5 text-triopia-dark/40" />
+              <ChevronDown style={{ width: '12px', height: '12px', opacity: 0.4, strokeWidth: 1.5 }} />
             ) : (
-              <ChevronRight className="w-3.5 h-3.5 text-triopia-dark/40" />
+              <ChevronRight style={{ width: '12px', height: '12px', opacity: 0.4, strokeWidth: 1.5 }} />
             )}
-            <span className="text-sm text-triopia-dark">{source.label}</span>
+            <span>{source.label}</span>
           </div>
           {source.unread > 0 && (
-            <span className="text-xs text-triopia-peach font-medium">{source.unread}</span>
+            <span style={{ fontSize: '10px', color: '#D89880', fontWeight: 400 }}>{source.unread}</span>
           )}
         </div>
 
         {/* Child routes */}
         {isExpanded && (
-          <div className="ml-6 mt-1 space-y-0.5">
+          <div style={{ marginLeft: '18px', marginTop: '2px' }}>
             {childRoutes.map((child) => {
               const childPath = `/${child}/${sourceId}`;
               const isActive = location === childPath || location.includes(`sourceId=${sourceId}`);
@@ -165,14 +201,29 @@ export function SidebarNav({ model, onAddSource }: SidebarNavProps) {
                   key={child}
                   href={childPath}
                   onClick={() => saveLastSource(sourceId)}
-                  className={`
-                    flex items-center gap-2 px-3 py-1.5 rounded-md text-sm transition-colors
-                    ${isActive ? 'bg-triopia-peach/10 text-triopia-dark' : 'text-triopia-dark/70 hover:bg-triopia-cream/50'}
-                  `}
+                  style={{
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: '6px',
+                    padding: '3px 8px',
+                    fontSize: '11px',
+                    fontWeight: 300,
+                    color: isActive ? '#D89880' : '#999',
+                    background: isActive ? '#FFFBF7' : 'transparent',
+                    borderRadius: '3px',
+                    textDecoration: 'none',
+                    transition: 'all 0.15s'
+                  }}
                   data-testid={`sidebar-child-${source.id}-${child}`}
+                  onMouseEnter={(e) => {
+                    if (!isActive) e.currentTarget.style.background = '#FAFAFA';
+                  }}
+                  onMouseLeave={(e) => {
+                    if (!isActive) e.currentTarget.style.background = 'transparent';
+                  }}
                 >
-                  <Icon className="w-3.5 h-3.5" />
-                  <span className="capitalize">{child}</span>
+                  <Icon style={{ width: '12px', height: '12px', strokeWidth: 1.5, opacity: 0.5 }} />
+                  <span style={{ textTransform: 'capitalize' }}>{child}</span>
                 </Link>
               );
             })}
@@ -183,13 +234,19 @@ export function SidebarNav({ model, onAddSource }: SidebarNavProps) {
   };
 
   return (
-    <div className="flex flex-col h-full">
+    <div style={{ display: 'flex', flexDirection: 'column', height: '100%', fontSize: '11px' }}>
       {/* CORE Group */}
-      <div className="mb-4" data-testid="sidebar-group-core">
-        <div className="px-3 mb-2">
-          <span className="text-xs uppercase tracking-wide text-muted font-medium">Core</span>
+      <div style={{ marginBottom: '12px' }} data-testid="sidebar-group-core">
+        <div style={{ padding: '0 8px', marginBottom: '4px' }}>
+          <span style={{
+            fontSize: '9px',
+            textTransform: 'uppercase',
+            letterSpacing: '0.5px',
+            color: '#CCC',
+            fontWeight: 400
+          }}>Core</span>
         </div>
-        <div className="space-y-0.5">
+        <div style={{ display: 'flex', flexDirection: 'column', gap: '1px' }}>
           {model.core.map((label) => {
             const icon = coreIcons[label] || Inbox;
             const path = `/${label.toLowerCase().replace(/\s+/g, '-')}`;
@@ -198,25 +255,51 @@ export function SidebarNav({ model, onAddSource }: SidebarNavProps) {
         </div>
       </div>
 
-      <div className="border-t border-[var(--border)] my-2" />
-
       {/* INBOXES Group */}
-      <div className="flex-1 overflow-hidden" data-testid="sidebar-group-inboxes">
-        <div className="px-3 mb-2">
-          <span className="text-xs uppercase tracking-wide text-muted font-medium">Inboxes</span>
+      <div style={{ flex: 1, overflow: 'hidden', marginBottom: '12px' }} data-testid="sidebar-group-inboxes">
+        <div style={{ padding: '0 8px', marginBottom: '4px' }}>
+          <span style={{
+            fontSize: '9px',
+            textTransform: 'uppercase',
+            letterSpacing: '0.5px',
+            color: '#CCC',
+            fontWeight: 400
+          }}>Inboxes</span>
         </div>
 
         {/* Search */}
         {model.inboxes.length > 5 && (
-          <div className="px-3 mb-2">
-            <div className="relative">
-              <Search className="absolute left-2 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-muted" />
+          <div style={{ padding: '0 8px', marginBottom: '6px' }}>
+            <div style={{ position: 'relative' }}>
+              <Search style={{
+                position: 'absolute',
+                left: '6px',
+                top: '50%',
+                transform: 'translateY(-50%)',
+                width: '11px',
+                height: '11px',
+                color: '#CCC',
+                strokeWidth: 1.5
+              }} />
               <input
                 type="text"
                 placeholder="Search inboxes…"
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                className="w-full pl-8 pr-3 py-1.5 text-sm border border-[var(--border)] rounded-md focus:outline-none focus:ring-1 focus:ring-triopia-peach/40"
+                style={{
+                  width: '100%',
+                  paddingLeft: '24px',
+                  paddingRight: '6px',
+                  paddingTop: '3px',
+                  paddingBottom: '3px',
+                  fontSize: '10px',
+                  fontWeight: 300,
+                  border: '1px solid #F0F0F0',
+                  borderRadius: '3px',
+                  outline: 'none',
+                  background: 'white',
+                  color: '#666'
+                }}
                 data-testid="sidebar-inboxes-search"
               />
             </div>
@@ -224,31 +307,57 @@ export function SidebarNav({ model, onAddSource }: SidebarNavProps) {
         )}
 
         {/* Virtualized list */}
-        <div ref={inboxesRef} className="overflow-y-auto max-h-96 space-y-0.5 px-3">
+        <div ref={inboxesRef} style={{
+          overflowY: 'auto',
+          maxHeight: '300px',
+          display: 'flex',
+          flexDirection: 'column',
+          gap: '1px'
+        }}>
           {visibleInboxes.map(renderRollup)}
         </div>
 
         {/* Add Source CTA */}
-        <div className="px-3 mt-2">
+        <div style={{ padding: '6px 8px 0' }}>
           <button
             onClick={onAddSource || (() => window.location.href = '/settings')}
-            className="w-full flex items-center gap-2 px-3 py-2 text-sm text-triopia-dark/70 hover:bg-triopia-peach/10 rounded-md transition-colors"
+            style={{
+              width: '100%',
+              display: 'flex',
+              alignItems: 'center',
+              gap: '6px',
+              padding: '4px 8px',
+              fontSize: '11px',
+              fontWeight: 300,
+              color: '#999',
+              background: 'transparent',
+              border: 'none',
+              borderRadius: '3px',
+              cursor: 'pointer',
+              transition: 'background 0.15s'
+            }}
             data-testid="sidebar-add-source"
+            onMouseEnter={(e) => e.currentTarget.style.background = '#FAFAFA'}
+            onMouseLeave={(e) => e.currentTarget.style.background = 'transparent'}
           >
-            <Plus className="w-4 h-4" />
+            <Plus style={{ width: '14px', height: '14px', strokeWidth: 1.5 }} />
             <span>Add Inbox or Domain</span>
           </button>
         </div>
       </div>
 
-      <div className="border-t border-[var(--border)] my-2" />
-
       {/* TOOLS Group */}
-      <div className="mb-4" data-testid="sidebar-group-tools">
-        <div className="px-3 mb-2">
-          <span className="text-xs uppercase tracking-wide text-muted font-medium">Tools</span>
+      <div style={{ marginBottom: '12px' }} data-testid="sidebar-group-tools">
+        <div style={{ padding: '0 8px', marginBottom: '4px' }}>
+          <span style={{
+            fontSize: '9px',
+            textTransform: 'uppercase',
+            letterSpacing: '0.5px',
+            color: '#CCC',
+            fontWeight: 400
+          }}>Tools</span>
         </div>
-        <div className="space-y-0.5">
+        <div style={{ display: 'flex', flexDirection: 'column', gap: '1px' }}>
           {model.tools.map((label) => {
             const icon = toolIcons[label] || FileText;
             const path = `/${label.toLowerCase()}`;
@@ -257,14 +366,18 @@ export function SidebarNav({ model, onAddSource }: SidebarNavProps) {
         </div>
       </div>
 
-      <div className="border-t border-[var(--border)] my-2" />
-
       {/* SETTINGS Group */}
       <div data-testid="sidebar-group-settings">
-        <div className="px-3 mb-2">
-          <span className="text-xs uppercase tracking-wide text-muted font-medium">Settings</span>
+        <div style={{ padding: '0 8px', marginBottom: '4px' }}>
+          <span style={{
+            fontSize: '9px',
+            textTransform: 'uppercase',
+            letterSpacing: '0.5px',
+            color: '#CCC',
+            fontWeight: 400
+          }}>Settings</span>
         </div>
-        <div className="space-y-0.5">
+        <div style={{ display: 'flex', flexDirection: 'column', gap: '1px' }}>
           {model.settings.map((label) => {
             const icon = settingsIcons[label] || Settings;
             const path = `/${label.toLowerCase()}`;
