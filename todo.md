@@ -505,3 +505,9 @@
 - [ ] Check if Admin view content is being rendered
 - [ ] Fix any conditional logic preventing display
 - [ ] Test /admin route shows full dashboard
+
+## URL CLEANUP (URGENT)
+
+- [x] Remove automatic ?page=1&size=25 query params from homepage
+- [x] Only add URL params when user manually changes pagination
+- [x] Keep triopia.com clean without query string on initial load

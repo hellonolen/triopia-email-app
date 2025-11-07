@@ -115,13 +115,7 @@ export default function ClaudeRefinedDemo({ view = 'inbox' }: EmailInterfaceProp
     }
   }, []);
   
-  // Update URL when pagination changes
-  useEffect(() => {
-    const params = new URLSearchParams(window.location.search);
-    params.set('page', currentPage.toString());
-    params.set('size', pageSize.toString());
-    window.history.replaceState({}, '', `${window.location.pathname}?${params}`);
-  }, [currentPage, pageSize]);
+  // URL params removed - clean URLs by default
   const [selectedEmail, setSelectedEmail] = useState(mockEmails[0]);
   const [hoveredItem, setHoveredItem] = useState<string | null>(null);
   const [inboxesExpanded, setInboxesExpanded] = useState(false);
