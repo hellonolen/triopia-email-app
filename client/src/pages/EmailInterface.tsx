@@ -575,7 +575,7 @@ export default function ClaudeRefinedDemo() {
                 { icon: Trash2, label: "Delete", alwaysShow: false },
                 { icon: Pin, label: "Pin", alwaysShow: false },
                 { icon: Star, label: "Star", alwaysShow: false },
-              ].filter(action => action.alwaysShow || emailDetailWidth >= 500).map((action) => (
+              ].filter(action => action.alwaysShow || emailDetailWidth >= 700).map((action) => (
                 <button
                   key={action.label}
                   style={{
@@ -604,7 +604,7 @@ export default function ClaudeRefinedDemo() {
               </div>
               
               {/* Font Size Controls */}
-              {emailDetailWidth >= 500 && (
+              {emailDetailWidth >= 700 && (
               <div className="flex items-center gap-2">
                 <button
                   onClick={() => setEmailFontSize('small')}
