@@ -294,3 +294,19 @@
 - [x] Make Spam button functional - move email to Spam folder and remove from current view
 - [x] Add Unarchive button in Archive view to restore emails to Inbox
 - [x] Add Not Spam button in Spam view to restore emails to Inbox
+
+## File Attachments
+- [x] Add attachment button to compose interface
+- [x] Add attachment button to reply/forward interface
+- [x] File picker for selecting files to upload
+- [x] Show attachment list with file names and sizes in compose area
+- [x] Remove attachment button for each file
+- [x] Display attachments in received emails with download buttons
+- [x] Support multiple file types (documents, images, PDFs, etc.)
+
+## Email Search
+- [x] Make search bar functional in top toolbar
+- [x] Real-time search across subject, sender, email content
+- [x] Filter buttons: unread, starred, has attachments
+- [x] Clear search button
+- [ ] Highlight matching text in search results (optional enhancement)

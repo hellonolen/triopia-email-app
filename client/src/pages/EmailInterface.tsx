@@ -13,9 +13,9 @@ import SimpleRichTextEditor from "@/components/SimpleRichTextEditor";
  */
 
 const mockEmails = [
-  { id: 1, from: "Sarah Johnson", email: "sarah@startup.com", subject: "Welcome to your new chapter", preview: "Excited to have you on board! Let's schedule a kickoff call...", time: "Nov 6, 2:30 PM", unread: true, starred: false, tags: [2], folder: "inbox" }, // Meeting
-  { id: 2, from: "David Chen", email: "david@company.com", subject: "Q4 Marketing Strategy Review", preview: "I wanted to share the preliminary results from our Q4 marketing campaign...", time: "Nov 6, 1:15 PM", unread: true, starred: true, tags: [1, 7], folder: "inbox" }, // Urgent, Work
-  { id: 3, from: "Emily Rodriguez", email: "emily@agency.co", subject: "Project Update", preview: "Let me know if this works for you. Looking forward to our meeting...", time: "Nov 6, 12:48 PM", unread: false, starred: false, tags: [7], folder: "inbox" }, // Work
+  { id: 1, from: "Sarah Johnson", email: "sarah@startup.com", subject: "Welcome to your new chapter", preview: "Excited to have you on board! Let's schedule a kickoff call...", time: "Nov 6, 2:30 PM", unread: true, starred: false, tags: [2], folder: "inbox", attachments: [] }, // Meeting
+  { id: 2, from: "David Chen", email: "david@company.com", subject: "Q4 Marketing Strategy Review", preview: "I wanted to share the preliminary results from our Q4 marketing campaign...", time: "Nov 6, 1:15 PM", unread: true, starred: true, tags: [1, 7], folder: "inbox", attachments: [{name: "Q4_Report.pdf", size: "2.4 MB", url: "#"}] }, // Urgent, Work
+  { id: 3, from: "Emily Rodriguez", email: "emily@agency.co", subject: "Project Update", preview: "Let me know if this works for you. Looking forward to our meeting...", time: "Nov 6, 12:48 PM", unread: false, starred: false, tags: [7], folder: "inbox", attachments: [] }, // Work
 ];
 
 const mockAccounts = [
@@ -91,6 +91,8 @@ export default function ClaudeRefinedDemo() {
   const [emailSignature, setEmailSignature] = useState('Best regards,\nYour Name\nYour Title\nYour Company');
   const [showSignatureSelector, setShowSignatureSelector] = useState(false);
   const [signatureEnabled, setSignatureEnabled] = useState(true);
+  const [searchQuery, setSearchQuery] = useState('');
+  const [searchFilters, setSearchFilters] = useState({ unread: false, starred: false, hasAttachments: false });
   const signatures = [
     { id: 0, name: 'No Signature', content: '' },
     { id: 1, name: 'Work', content: 'Best regards,\nYour Name\nYour Title\nYour Company' },
@@ -759,16 +761,112 @@ export default function ClaudeRefinedDemo() {
                   >
                     <Mail style={{ width: "16px", height: "16px", color: "#666", strokeWidth: 1.5 }} />
                   </button>
-                  <button
-                    style={{
-                      background: "none",
-                      border: "none",
-                      cursor: "pointer",
-                      padding: 0
-                    }}
-                  >
-                    <Search style={{ width: "16px", height: "16px", color: "#666", strokeWidth: 1.5 }} />
-                  </button>
+                  {/* Search Bar */}
+                  <div style={{ position: "relative", flex: 1, maxWidth: "400px" }}>
+                    <input
+                      type="text"
+                      placeholder="Search emails..."
+                      value={searchQuery}
+                      onChange={(e) => setSearchQuery(e.target.value)}
+                      style={{
+                        width: "100%",
+                        padding: "6px 32px 6px 12px",
+                        fontSize: "12px",
+                        fontWeight: 300,
+                        border: "1px solid #F0EBE6",
+                        borderRadius: "4px",
+                        outline: "none",
+                        background: "white",
+                        color: "#2A2A2A",
+                        transition: "border 0.2s ease"
+                      }}
+                      onFocus={(e) => e.currentTarget.style.border = "1px solid #D89880"}
+                      onBlur={(e) => e.currentTarget.style.border = "1px solid #F0EBE6"}
+                    />
+                    <Search style={{ 
+                      position: "absolute", 
+                      right: "10px", 
+                      top: "50%", 
+                      transform: "translateY(-50%)",
+                      width: "14px", 
+                      height: "14px", 
+                      color: "#999", 
+                      strokeWidth: 1.5,
+                      pointerEvents: "none"
+                    }} />
+                    {searchQuery && (
+                      <button
+                        onClick={() => setSearchQuery('')}
+                        style={{
+                          position: "absolute",
+                          right: "30px",
+                          top: "50%",
+                          transform: "translateY(-50%)",
+                          padding: 0,
+                          background: "none",
+                          border: "none",
+                          color: "#999",
+                          fontSize: "16px",
+                          cursor: "pointer",
+                          lineHeight: 1
+                        }}
+                      >
+                        ×
+                      </button>
+                    )}
+                  </div>
+                  
+                  {/* Search Filters */}
+                  <div style={{ display: "flex", gap: "8px", alignItems: "center" }}>
+                    <button
+                      onClick={() => setSearchFilters(prev => ({ ...prev, unread: !prev.unread }))}
+                      style={{
+                        padding: "4px 8px",
+                        background: searchFilters.unread ? "#D89880" : "none",
+                        border: "1px solid #D89880",
+                        borderRadius: "3px",
+                        color: searchFilters.unread ? "white" : "#D89880",
+                        fontSize: "10px",
+                        fontWeight: 300,
+                        cursor: "pointer",
+                        transition: "all 0.2s ease"
+                      }}
+                    >
+                      Unread
+                    </button>
+                    <button
+                      onClick={() => setSearchFilters(prev => ({ ...prev, starred: !prev.starred }))}
+                      style={{
+                        padding: "4px 8px",
+                        background: searchFilters.starred ? "#D89880" : "none",
+                        border: "1px solid #D89880",
+                        borderRadius: "3px",
+                        color: searchFilters.starred ? "white" : "#D89880",
+                        fontSize: "10px",
+                        fontWeight: 300,
+                        cursor: "pointer",
+                        transition: "all 0.2s ease"
+                      }}
+                    >
+                      Starred
+                    </button>
+                    <button
+                      onClick={() => setSearchFilters(prev => ({ ...prev, hasAttachments: !prev.hasAttachments }))}
+                      style={{
+                        padding: "4px 8px",
+                        background: searchFilters.hasAttachments ? "#D89880" : "none",
+                        border: "1px solid #D89880",
+                        borderRadius: "3px",
+                        color: searchFilters.hasAttachments ? "white" : "#D89880",
+                        fontSize: "10px",
+                        fontWeight: 300,
+                        cursor: "pointer",
+                        transition: "all 0.2s ease"
+                      }}
+                    >
+                      Has Attachments
+                    </button>
+                  </div>
                   <button
                     onClick={() => setRightPanelMode('ai')}
                     style={{
@@ -836,7 +934,23 @@ export default function ClaudeRefinedDemo() {
 
           <div>
             {/* Inbox View */}
-            {activeView === 'Inbox' && emails.filter(e => e.folder === 'inbox').map((email) => (
+            {activeView === 'Inbox' && emails
+              .filter(e => e.folder === 'inbox')
+              .filter(e => {
+                if (!searchQuery) return true;
+                const query = searchQuery.toLowerCase();
+                return e.subject.toLowerCase().includes(query) ||
+                       e.from.toLowerCase().includes(query) ||
+                       e.preview.toLowerCase().includes(query) ||
+                       e.email.toLowerCase().includes(query);
+              })
+              .filter(e => {
+                if (searchFilters.unread && !e.unread) return false;
+                if (searchFilters.starred && !e.starred) return false;
+                if (searchFilters.hasAttachments && (!e.attachments || e.attachments.length === 0)) return false;
+                return true;
+              })
+              .map((email) => (
               <div
                 key={email.id}
                 onClick={() => {
@@ -1880,7 +1994,80 @@ export default function ClaudeRefinedDemo() {
                   />
                 </div>
                 
+                {/* Attachments List in Reply */}
+                {attachments.length > 0 && (
+                  <div style={{ marginBottom: "12px", padding: "12px", background: "#FFFBF7", borderRadius: "4px", border: "1px solid #F0EBE6" }}>
+                    <div style={{ fontSize: "11px", fontWeight: 400, color: "#2A2A2A", marginBottom: "8px" }}>
+                      {attachments.length} Attachment{attachments.length > 1 ? 's' : ''}
+                    </div>
+                    <div style={{ display: "flex", flexDirection: "column", gap: "6px" }}>
+                      {attachments.map((file, idx) => (
+                        <div key={idx} style={{ display: "flex", alignItems: "center", justifyContent: "space-between", padding: "6px 8px", background: "white", borderRadius: "3px" }}>
+                          <div style={{ display: "flex", alignItems: "center", gap: "6px" }}>
+                            <FileText style={{ width: "12px", height: "12px", color: "#999", strokeWidth: 1.5 }} />
+                            <span style={{ fontSize: "10px", fontWeight: 300, color: "#2A2A2A" }}>
+                              {file.name} ({(file.size / 1024).toFixed(1)} KB)
+                            </span>
+                          </div>
+                          <button
+                            onClick={() => setAttachments(prev => prev.filter((_, i) => i !== idx))}
+                            style={{
+                              padding: 0,
+                              background: "none",
+                              border: "none",
+                              color: "#999",
+                              fontSize: "10px",
+                              cursor: "pointer"
+                            }}
+                          >
+                            ×
+                          </button>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                )}
+                
                 <div style={{ display: "flex", gap: "16px", alignItems: "center", marginTop: "16px" }}>
+                  <input
+                    ref={fileInputRef}
+                    type="file"
+                    multiple
+                    style={{ display: "none" }}
+                    onChange={(e) => {
+                      if (e.target.files) {
+                        setAttachments(prev => [...prev, ...Array.from(e.target.files)]);
+                      }
+                    }}
+                  />
+                  <button
+                    onClick={() => fileInputRef.current?.click()}
+                    style={{
+                      padding: "4px 8px",
+                      background: "none",
+                      border: "1px solid #D89880",
+                      borderRadius: "3px",
+                      color: "#D89880",
+                      fontSize: "10px",
+                      fontWeight: 300,
+                      cursor: "pointer",
+                      display: "flex",
+                      alignItems: "center",
+                      gap: "4px",
+                      transition: "all 0.2s ease"
+                    }}
+                    onMouseEnter={(e) => {
+                      e.currentTarget.style.background = "#D89880";
+                      e.currentTarget.style.color = "white";
+                    }}
+                    onMouseLeave={(e) => {
+                      e.currentTarget.style.background = "none";
+                      e.currentTarget.style.color = "#D89880";
+                    }}
+                  >
+                    <Paperclip style={{ width: "12px", height: "12px", strokeWidth: 1.5 }} />
+                    Attach
+                  </button>
                   <button
                     style={{
                       padding: 0,
@@ -2079,6 +2266,76 @@ export default function ClaudeRefinedDemo() {
                 Save to Contacts
               </button>
             </div>
+
+            {/* Attachments Section */}
+            {selectedEmail.attachments && selectedEmail.attachments.length > 0 && (
+              <div style={{
+                marginBottom: "20px",
+                padding: "16px",
+                background: "#FFFBF7",
+                borderRadius: "8px",
+                border: "1px solid #F0EBE6"
+              }}>
+                <div style={{ display: "flex", alignItems: "center", gap: "8px", marginBottom: "12px" }}>
+                  <Paperclip style={{ width: "16px", height: "16px", color: "#D89880", strokeWidth: 1.5 }} />
+                  <span style={{ fontSize: "12px", fontWeight: 400, color: "#2A2A2A" }}>
+                    {selectedEmail.attachments.length} Attachment{selectedEmail.attachments.length > 1 ? 's' : ''}
+                  </span>
+                </div>
+                <div style={{ display: "flex", flexDirection: "column", gap: "8px" }}>
+                  {selectedEmail.attachments.map((attachment, idx) => (
+                    <div key={idx} style={{
+                      display: "flex",
+                      alignItems: "center",
+                      justifyContent: "space-between",
+                      padding: "8px 12px",
+                      background: "white",
+                      borderRadius: "4px",
+                      border: "1px solid #F0EBE6"
+                    }}>
+                      <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
+                        <FileText style={{ width: "14px", height: "14px", color: "#999", strokeWidth: 1.5 }} />
+                        <div>
+                          <div style={{ fontSize: "11px", fontWeight: 300, color: "#2A2A2A" }}>
+                            {attachment.name}
+                          </div>
+                          <div style={{ fontSize: "10px", color: "#999" }}>
+                            {attachment.size}
+                          </div>
+                        </div>
+                      </div>
+                      <button
+                        onClick={() => {
+                          // TODO: Download attachment
+                          console.log('Download:', attachment.name);
+                        }}
+                        style={{
+                          padding: "4px 8px",
+                          background: "none",
+                          border: "1px solid #D89880",
+                          borderRadius: "3px",
+                          color: "#D89880",
+                          fontSize: "10px",
+                          fontWeight: 300,
+                          cursor: "pointer",
+                          transition: "all 0.2s ease"
+                        }}
+                        onMouseEnter={(e) => {
+                          e.currentTarget.style.background = "#D89880";
+                          e.currentTarget.style.color = "white";
+                        }}
+                        onMouseLeave={(e) => {
+                          e.currentTarget.style.background = "none";
+                          e.currentTarget.style.color = "#D89880";
+                        }}
+                      >
+                        Download
+                      </button>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
 
             {/* Smart Reply Suggestions */}
             <div style={{
@@ -2373,6 +2630,40 @@ export default function ClaudeRefinedDemo() {
                   />
                 </div>
                 
+                {/* Attachments List */}
+                {attachments.length > 0 && (
+                  <div style={{ marginBottom: "12px", padding: "12px", background: "#FFFBF7", borderRadius: "4px", border: "1px solid #F0EBE6" }}>
+                    <div style={{ fontSize: "11px", fontWeight: 400, color: "#2A2A2A", marginBottom: "8px" }}>
+                      {attachments.length} Attachment{attachments.length > 1 ? 's' : ''}
+                    </div>
+                    <div style={{ display: "flex", flexDirection: "column", gap: "6px" }}>
+                      {attachments.map((file, idx) => (
+                        <div key={idx} style={{ display: "flex", alignItems: "center", justifyContent: "space-between", padding: "6px 8px", background: "white", borderRadius: "3px" }}>
+                          <div style={{ display: "flex", alignItems: "center", gap: "6px" }}>
+                            <FileText style={{ width: "12px", height: "12px", color: "#999", strokeWidth: 1.5 }} />
+                            <span style={{ fontSize: "10px", fontWeight: 300, color: "#2A2A2A" }}>
+                              {file.name} ({(file.size / 1024).toFixed(1)} KB)
+                            </span>
+                          </div>
+                          <button
+                            onClick={() => setAttachments(prev => prev.filter((_, i) => i !== idx))}
+                            style={{
+                              padding: 0,
+                              background: "none",
+                              border: "none",
+                              color: "#999",
+                              fontSize: "10px",
+                              cursor: "pointer"
+                            }}
+                          >
+                            ×
+                          </button>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                )}
+                
                 {/* Formatting toolbar */}
                 <div style={{ display: "flex", gap: "12px", marginTop: "12px", paddingTop: "12px", borderTop: "1px solid #F0EBE6" }}>
                   <input
@@ -2382,26 +2673,38 @@ export default function ClaudeRefinedDemo() {
                     style={{ display: "none" }}
                     onChange={(e) => {
                       if (e.target.files) {
-                        setAttachments(Array.from(e.target.files));
+                        setAttachments(prev => [...prev, ...Array.from(e.target.files)]);
                       }
                     }}
                   />
                   <button
                     onClick={() => fileInputRef.current?.click()}
                     style={{
-                      padding: 0,
+                      padding: "4px 8px",
                       background: "none",
-                      border: "none",
-                      cursor: "pointer"
+                      border: "1px solid #D89880",
+                      borderRadius: "3px",
+                      color: "#D89880",
+                      fontSize: "10px",
+                      fontWeight: 300,
+                      cursor: "pointer",
+                      display: "flex",
+                      alignItems: "center",
+                      gap: "4px",
+                      transition: "all 0.2s ease"
+                    }}
+                    onMouseEnter={(e) => {
+                      e.currentTarget.style.background = "#D89880";
+                      e.currentTarget.style.color = "white";
+                    }}
+                    onMouseLeave={(e) => {
+                      e.currentTarget.style.background = "none";
+                      e.currentTarget.style.color = "#D89880";
                     }}
                   >
-                    <Paperclip style={{ width: "16px", height: "16px", color: "#999", strokeWidth: 1.5 }} />
+                    <Paperclip style={{ width: "12px", height: "12px", strokeWidth: 1.5 }} />
+                    Attach Files
                   </button>
-                  {attachments.length > 0 && (
-                    <span style={{ fontSize: "11px", color: "#999", fontWeight: 300 }}>
-                      {attachments.length} file{attachments.length > 1 ? 's' : ''} attached
-                    </span>
-                  )}
                 </div>
                 
                 {/* Action buttons */}
