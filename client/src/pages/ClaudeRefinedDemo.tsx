@@ -31,6 +31,7 @@ export default function ClaudeRefinedDemo() {
   const [emailFontSize, setEmailFontSize] = useState<'small' | 'medium' | 'large'>('medium');
   const [emailListWidth, setEmailListWidth] = useState(420);
   const [isResizing, setIsResizing] = useState(false);
+  const [hoveredTooltip, setHoveredTooltip] = useState<{label: string, x: number, y: number} | null>(null);
 
   useEffect(() => {
     const handleMouseMove = (e: MouseEvent) => {
@@ -499,22 +500,25 @@ export default function ClaudeRefinedDemo() {
                   ].map((action) => (
                     <button
                       key={action.label}
-                      title={action.label}
                       onClick={(e) => { e.stopPropagation(); }}
                       style={{
                         background: "none",
                         border: "none",
                         cursor: "pointer",
                         padding: 0,
-                        transition: "all 0.2s ease"
+                        transition: "all 0.2s ease",
+                        position: "relative"
                       }}
                       onMouseEnter={(e) => {
                         const icon = e.currentTarget.querySelector('svg') as any;
                         if (icon) icon.style.color = "#D89880";
+                        const rect = e.currentTarget.getBoundingClientRect();
+                        setHoveredTooltip({ label: action.label, x: rect.left + rect.width / 2, y: rect.bottom + 8 });
                       }}
                       onMouseLeave={(e) => {
                         const icon = e.currentTarget.querySelector('svg') as any;
                         if (icon) icon.style.color = "#999";
+                        setHoveredTooltip(null);
                       }}
                     >
                       <action.icon style={{ width: "14px", height: "14px", color: "#999", strokeWidth: 1.5, transition: "color 0.2s ease" }} />
@@ -547,21 +551,24 @@ export default function ClaudeRefinedDemo() {
               ].map((action) => (
                 <button
                   key={action.label}
-                  title={action.label}
                   style={{
                     padding: 0,
                     background: "none",
                     border: "none",
                     cursor: "pointer",
-                    transition: "all 0.2s ease"
+                    transition: "all 0.2s ease",
+                    position: "relative"
                   }}
                   onMouseEnter={(e) => {
                     const icon = e.currentTarget.querySelector('svg') as any;
                     if (icon) icon.style.color = "#D89880";
+                    const rect = e.currentTarget.getBoundingClientRect();
+                    setHoveredTooltip({ label: action.label, x: rect.left + rect.width / 2, y: rect.bottom + 8 });
                   }}
                   onMouseLeave={(e) => {
                     const icon = e.currentTarget.querySelector('svg') as any;
                     if (icon) icon.style.color = "#999";
+                    setHoveredTooltip(null);
                   }}
                 >
                   <action.icon style={{ width: "16px", height: "16px", color: "#999", strokeWidth: 1.5, transition: "color 0.2s ease" }} />
@@ -710,21 +717,24 @@ export default function ClaudeRefinedDemo() {
               ].map((action) => (
                 <button
                   key={action.label}
-                  title={action.label}
                   style={{
                     padding: 0,
                     background: "none",
                     border: "none",
                     cursor: "pointer",
-                    transition: "all 0.2s ease"
+                    transition: "all 0.2s ease",
+                    position: "relative"
                   }}
                   onMouseEnter={(e) => {
                     const icon = e.currentTarget.querySelector('svg') as any;
                     if (icon) icon.style.color = "#D89880";
+                    const rect = e.currentTarget.getBoundingClientRect();
+                    setHoveredTooltip({ label: action.label, x: rect.left + rect.width / 2, y: rect.bottom + 8 });
                   }}
                   onMouseLeave={(e) => {
                     const icon = e.currentTarget.querySelector('svg') as any;
                     if (icon) icon.style.color = "#999";
+                    setHoveredTooltip(null);
                   }}
                 >
                   <action.icon style={{ width: "16px", height: "16px", color: "#999", strokeWidth: 1.5, transition: "color 0.2s ease" }} />
@@ -782,6 +792,27 @@ export default function ClaudeRefinedDemo() {
           </a>
         </div>
       </div>
+
+      {/* Custom Tooltip */}
+      {hoveredTooltip && (
+        <div style={{
+          position: "fixed",
+          left: `${hoveredTooltip.x}px`,
+          top: `${hoveredTooltip.y}px`,
+          transform: "translateX(-50%)",
+          background: "#2A2A2A",
+          color: "white",
+          padding: "4px 8px",
+          borderRadius: "4px",
+          fontSize: "11px",
+          fontWeight: 300,
+          pointerEvents: "none",
+          zIndex: 9999,
+          whiteSpace: "nowrap"
+        }}>
+          {hoveredTooltip.label}
+        </div>
+      )}
     </div>
   );
 }
