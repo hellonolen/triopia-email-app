@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { Mail, Send, Archive, Trash2, Star, Clock, CheckCircle2, Pause, Home, Inbox, Calendar, Users, Settings, Plus, UserPlus, Search, Zap, Check, Pencil, ChevronDown, ChevronRight, Pin, Info, FileText, HardDrive, BarChart3, Palette, AlertCircle, FilePen } from "lucide-react";
+import { Mail, Send, Archive, Trash2, Star, Clock, CheckCircle2, Pause, Home, Inbox, Calendar, Users, Settings, Plus, UserPlus, Search, Zap, Check, Pencil, ChevronDown, ChevronRight, Pin, Info, FileText, HardDrive, BarChart3, Palette, AlertCircle, FilePen, Reply, Forward } from "lucide-react";
 
 /**
  * Claude AI - DRAMATICALLY Refined
@@ -497,8 +497,8 @@ export default function ClaudeRefinedDemo() {
                 {/* Email action icons - consistent with top/bottom */}
                 <div className="flex items-center gap-2">
                   {[
-                    { icon: Send, label: "Reply" },
-                    { icon: Mail, label: "Forward" },
+                    { icon: Reply, label: "Reply" },
+                    { icon: Forward, label: "Forward" },
                     { icon: Archive, label: "Archive" },
                     { icon: AlertCircle, label: "Spam" },
                     { icon: Trash2, label: "Delete" },
@@ -549,8 +549,8 @@ export default function ClaudeRefinedDemo() {
             <div className="flex items-center justify-between mb-10">
               <div className="flex items-center gap-3">
               {[
-                { icon: Send, label: "Reply" },
-                { icon: Mail, label: "Forward" },
+                { icon: Reply, label: "Reply" },
+                { icon: Forward, label: "Forward" },
                 { icon: Archive, label: "Archive" },
                 { icon: AlertCircle, label: "Spam" },
                 { icon: Trash2, label: "Delete" },
@@ -589,7 +589,8 @@ export default function ClaudeRefinedDemo() {
                 <button
                   onClick={() => setEmailFontSize('small')}
                   style={{
-                    padding: "3px 6px",
+                    padding: "3px 0",
+                    width: "28px",
                     background: emailFontSize === 'small' ? "#FFFBF7" : "transparent",
                     border: "1px solid",
                     borderColor: emailFontSize === 'small' ? "#D89880" : "#F0EBE6",
@@ -607,12 +608,13 @@ export default function ClaudeRefinedDemo() {
                 <button
                   onClick={() => setEmailFontSize('medium')}
                   style={{
-                    padding: "3px 6px",
+                    padding: "3px 0",
+                    width: "28px",
                     background: emailFontSize === 'medium' ? "#FFFBF7" : "transparent",
                     border: "1px solid",
                     borderColor: emailFontSize === 'medium' ? "#D89880" : "#F0EBE6",
                     color: emailFontSize === 'medium' ? "#D89880" : "#999",
-                    fontSize: "10px",
+                    fontSize: "9px",
                     fontWeight: 300,
                     letterSpacing: "0.02em",
                     cursor: "pointer",
@@ -625,12 +627,13 @@ export default function ClaudeRefinedDemo() {
                 <button
                   onClick={() => setEmailFontSize('large')}
                   style={{
-                    padding: "3px 6px",
+                    padding: "3px 0",
+                    width: "28px",
                     background: emailFontSize === 'large' ? "#FFFBF7" : "transparent",
                     border: "1px solid",
                     borderColor: emailFontSize === 'large' ? "#D89880" : "#F0EBE6",
                     color: emailFontSize === 'large' ? "#D89880" : "#999",
-                    fontSize: "11px",
+                    fontSize: "9px",
                     fontWeight: 300,
                     letterSpacing: "0.02em",
                     cursor: "pointer",
@@ -716,8 +719,8 @@ export default function ClaudeRefinedDemo() {
               gap: "12px"
             }}>
               {[
-                { icon: Send, label: "Reply" },
-                { icon: Mail, label: "Forward" },
+                { icon: Reply, label: "Reply" },
+                { icon: Forward, label: "Forward" },
                 { icon: Archive, label: "Archive" },
                 { icon: AlertCircle, label: "Spam" },
                 { icon: Trash2, label: "Delete" },
