@@ -478,3 +478,26 @@
 - [ ] No shaded backgrounds on buttons
 - [ ] Use lucide-react icons consistently
 - [ ] Keep font weights light (300)
+
+
+## AI-POWERED FEATURES (Nov 7, 2025) - User Priority
+
+### AI Contact Extraction
+- [x] Automatically extract contact information from email body
+- [x] Extract contact information from email signature
+- [x] Display extracted contact info in card below email
+- [x] Add "Save to Contacts" button for extracted info
+
+### Email Signature Management
+- [x] Allow users to create and save email signatures
+- [x] Insert signature automatically in replies
+- [x] Signature preview in reply compose area
+- [x] Multiple signature support (Work, Personal, Formal)
+- [x] Change signature dropdown selector
+
+### Email Templates
+- [x] Create email template system
+- [x] Template library with 4 templates (Meeting Request, Follow Up, Introduction, Thank You)
+- [x] Insert template into compose mode
+- [x] Use Template button in compose header
+- [x] Template grid selector UI

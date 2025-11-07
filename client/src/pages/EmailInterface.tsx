@@ -68,6 +68,20 @@ export default function ClaudeRefinedDemo() {
   const [composeBody, setComposeBody] = useState('');
   const [attachments, setAttachments] = useState<File[]>([]);
   const fileInputRef = useRef<HTMLInputElement>(null);
+  const [emailSignature, setEmailSignature] = useState('Best regards,\nYour Name\nYour Title\nYour Company');
+  const [showSignatureSelector, setShowSignatureSelector] = useState(false);
+  const signatures = [
+    { id: 1, name: 'Work', content: 'Best regards,\nYour Name\nYour Title\nYour Company' },
+    { id: 2, name: 'Personal', content: 'Cheers,\nYour Name' },
+    { id: 3, name: 'Formal', content: 'Sincerely,\nYour Full Name\nYour Title\nCompany Name\nPhone | Email' }
+  ];
+  const [showTemplateSelector, setShowTemplateSelector] = useState(false);
+  const emailTemplates = [
+    { id: 1, name: 'Meeting Request', subject: 'Meeting Request', body: 'Hi,\n\nI would like to schedule a meeting to discuss...\n\nBest regards' },
+    { id: 2, name: 'Follow Up', subject: 'Following Up', body: 'Hi,\n\nI wanted to follow up on our previous conversation...\n\nLooking forward to hearing from you.' },
+    { id: 3, name: 'Introduction', subject: 'Introduction', body: 'Hi,\n\nI hope this email finds you well. I wanted to introduce myself...\n\nBest regards' },
+    { id: 4, name: 'Thank You', subject: 'Thank You', body: 'Hi,\n\nThank you for taking the time to...\n\nI appreciate your help.' }
+  ];
 
   // Email action handlers
   const [isReplying, setIsReplying] = useState(false);
@@ -1388,6 +1402,51 @@ export default function ClaudeRefinedDemo() {
                 Best regards,<br />
                 {selectedEmail.from}
               </p>
+             </div>
+
+            {/* AI Contact Extraction */}
+            <div style={{
+              marginTop: "24px",
+              padding: "16px",
+              background: "#FFFBF7",
+              borderRadius: "8px",
+              border: "1px solid #F0EBE6"
+            }}>
+              <div style={{ display: "flex", alignItems: "center", gap: "12px", marginBottom: "12px" }}>
+                <Bot style={{ width: "16px", height: "16px", color: "#D89880", strokeWidth: 1.5 }} />
+                <span style={{ fontSize: "12px", fontWeight: 400, color: "#2A2A2A" }}>AI Detected Contact</span>
+              </div>
+              <div style={{ fontSize: "11px", fontWeight: 300, color: "#666", marginBottom: "8px" }}>
+                <div><strong>{selectedEmail.from}</strong></div>
+                <div>{selectedEmail.email}</div>
+              </div>
+              <button
+                onClick={() => {
+                  // TODO: Save to contacts
+                  console.log('Save contact:', selectedEmail.from, selectedEmail.email);
+                }}
+                style={{
+                  padding: "6px 12px",
+                  background: "none",
+                  border: "1px solid #D89880",
+                  borderRadius: "4px",
+                  color: "#D89880",
+                  fontSize: "11px",
+                  fontWeight: 300,
+                  cursor: "pointer",
+                  transition: "all 0.2s ease"
+                }}
+                onMouseEnter={(e) => {
+                  e.currentTarget.style.background = "#D89880";
+                  e.currentTarget.style.color = "white";
+                }}
+                onMouseLeave={(e) => {
+                  e.currentTarget.style.background = "none";
+                  e.currentTarget.style.color = "#D89880";
+                }}
+              >
+                Save to Contacts
+              </button>
             </div>
 
             {/* Bottom Email Actions - Icon Only */}
@@ -1492,6 +1551,75 @@ export default function ClaudeRefinedDemo() {
                   }}
                 />
                 
+                {/* Signature Preview */}
+                <div style={{
+                  padding: "12px 0",
+                  borderTop: "1px solid #F0EBE6",
+                  marginBottom: "16px"
+                }}>
+                  <div style={{ fontSize: "11px", fontWeight: 300, color: "#999", marginBottom: "8px" }}>Signature:</div>
+                  <div style={{ fontSize: "12px", fontWeight: 300, color: "#666", whiteSpace: "pre-line" }}>
+                    {emailSignature}
+                  </div>
+                  <button
+                    onClick={() => setShowSignatureSelector(!showSignatureSelector)}
+                    style={{
+                      marginTop: "8px",
+                      padding: 0,
+                      background: "none",
+                      border: "none",
+                      color: "#D89880",
+                      fontSize: "11px",
+                      fontWeight: 300,
+                      cursor: "pointer",
+                      transition: "color 0.2s ease"
+                    }}
+                    onMouseEnter={(e) => e.currentTarget.style.color = "#C88770"}
+                    onMouseLeave={(e) => e.currentTarget.style.color = "#D89880"}
+                  >
+                    Change Signature
+                  </button>
+                  
+                  {/* Signature Selector Dropdown */}
+                  {showSignatureSelector && (
+                    <div style={{
+                      marginTop: "8px",
+                      padding: "8px",
+                      background: "white",
+                      border: "1px solid #F0EBE6",
+                      borderRadius: "4px"
+                    }}>
+                      {signatures.map(sig => (
+                        <button
+                          key={sig.id}
+                          onClick={() => {
+                            setEmailSignature(sig.content);
+                            setShowSignatureSelector(false);
+                          }}
+                          style={{
+                            display: "block",
+                            width: "100%",
+                            padding: "8px",
+                            background: "none",
+                            border: "none",
+                            textAlign: "left",
+                            fontSize: "11px",
+                            fontWeight: 300,
+                            color: "#2A2A2A",
+                            cursor: "pointer",
+                            borderRadius: "4px",
+                            transition: "background 0.2s ease"
+                          }}
+                          onMouseEnter={(e) => e.currentTarget.style.background = "#FFFBF7"}
+                          onMouseLeave={(e) => e.currentTarget.style.background = "none"}
+                        >
+                          {sig.name}
+                        </button>
+                      ))}
+                    </div>
+                  )}
+                </div>
+                
                 <div style={{ display: "flex", gap: "16px", alignItems: "center" }}>
                   <button
                     style={{
@@ -1535,7 +1663,80 @@ export default function ClaudeRefinedDemo() {
             {/* Compose Mode */}
             {rightPanelMode === 'compose' && (
               <div style={{ display: "flex", flexDirection: "column", height: "100%" }}>
-                <h2 style={{ fontSize: "18px", fontWeight: 300, color: "#2A2A2A", marginBottom: "20px" }}>New Message</h2>
+                <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "20px" }}>
+                  <h2 style={{ fontSize: "18px", fontWeight: 300, color: "#2A2A2A" }}>New Message</h2>
+                  <button
+                    onClick={() => setShowTemplateSelector(!showTemplateSelector)}
+                    style={{
+                      padding: "6px 12px",
+                      background: "none",
+                      border: "1px solid #D89880",
+                      borderRadius: "4px",
+                      color: "#D89880",
+                      fontSize: "11px",
+                      fontWeight: 300,
+                      cursor: "pointer",
+                      transition: "all 0.2s ease"
+                    }}
+                    onMouseEnter={(e) => {
+                      e.currentTarget.style.background = "#D89880";
+                      e.currentTarget.style.color = "white";
+                    }}
+                    onMouseLeave={(e) => {
+                      e.currentTarget.style.background = "none";
+                      e.currentTarget.style.color = "#D89880";
+                    }}
+                  >
+                    Use Template
+                  </button>
+                </div>
+                
+                {/* Template Selector */}
+                {showTemplateSelector && (
+                  <div style={{
+                    marginBottom: "16px",
+                    padding: "12px",
+                    background: "#FFFBF7",
+                    border: "1px solid #F0EBE6",
+                    borderRadius: "4px"
+                  }}>
+                    <div style={{ fontSize: "11px", fontWeight: 300, color: "#999", marginBottom: "8px" }}>Select Template:</div>
+                    <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "8px" }}>
+                      {emailTemplates.map(template => (
+                        <button
+                          key={template.id}
+                          onClick={() => {
+                            setComposeSubject(template.subject);
+                            setComposeBody(template.body);
+                            setShowTemplateSelector(false);
+                          }}
+                          style={{
+                            padding: "8px",
+                            background: "white",
+                            border: "1px solid #F0EBE6",
+                            borderRadius: "4px",
+                            textAlign: "left",
+                            fontSize: "11px",
+                            fontWeight: 300,
+                            color: "#2A2A2A",
+                            cursor: "pointer",
+                            transition: "all 0.2s ease"
+                          }}
+                          onMouseEnter={(e) => {
+                            e.currentTarget.style.borderColor = "#D89880";
+                            e.currentTarget.style.background = "#FFFBF7";
+                          }}
+                          onMouseLeave={(e) => {
+                            e.currentTarget.style.borderColor = "#F0EBE6";
+                            e.currentTarget.style.background = "white";
+                          }}
+                        >
+                          {template.name}
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+                )}
                 
                 {/* To field */}
                 <div style={{ borderBottom: "1px solid #F0EBE6", paddingBottom: "8px", marginBottom: "8px", display: "flex", alignItems: "center", gap: "8px" }}>
