@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef } from "react";
 import { trpc } from "@/lib/trpc";
-import { Mail, Send, Archive, Trash2, Star, Clock, CheckCircle2, Pause, Home, Inbox, Calendar, Users, Settings, Plus, UserPlus, Search, Zap, Check, Pencil, ChevronDown, ChevronRight, Pin, Info, FileText, HardDrive, BarChart3, Palette, AlertCircle, FilePen, Reply, Forward, Bot } from "lucide-react";
+import { Mail, Send, Archive, Trash2, Star, Clock, CheckCircle2, Pause, Home, Inbox, Calendar, Users, Settings, Plus, UserPlus, Search, Zap, Check, Pencil, ChevronDown, ChevronRight, Pin, Info, FileText, HardDrive, BarChart3, Palette, AlertCircle, FilePen, Reply, Forward, Bot, User, Shield } from "lucide-react";
 
 /**
  * Claude AI - DRAMATICALLY Refined
@@ -442,6 +442,8 @@ export default function ClaudeRefinedDemo() {
               { icon: BarChart3, label: "Analytics" },
               { icon: Palette, label: "Appearance" },
               { icon: Settings, label: "Settings" },
+              { icon: User, label: "Profile" },
+              { icon: Shield, label: "Admin Dashboard" },
             ].map((item) => (
               <div
                 key={item.label}
@@ -987,6 +989,20 @@ export default function ClaudeRefinedDemo() {
             {activeView === 'Storage' && (
               <div style={{ padding: "20px" }}>
                 <p style={{ fontSize: "13px", color: "#666" }}>Storage management - Coming soon</p>
+              </div>
+            )}
+
+            {/* Profile View */}
+            {activeView === 'Profile' && (
+              <div style={{ padding: "20px" }}>
+                <p style={{ fontSize: "13px", color: "#666" }}>User profile - Coming soon</p>
+              </div>
+            )}
+
+            {/* Admin Dashboard View */}
+            {activeView === 'Admin Dashboard' && (
+              <div style={{ padding: "20px" }}>
+                <p style={{ fontSize: "13px", color: "#666" }}>Admin dashboard - Coming soon</p>
               </div>
             )}
           </div>
