@@ -1082,11 +1082,52 @@ export default function ClaudeRefinedDemo() {
             )}
 
             {/* Starred View */}
-            {activeView === 'Starred' && (
-              <div style={{ padding: "20px" }}>
-                <p style={{ fontSize: "13px", color: "#666" }}>Starred emails - Coming soon</p>
+            {activeView === 'Starred' && filteredEmails.filter(e => e.starred).map((email) => (
+              <div
+                key={email.id}
+                onClick={() => setSelectedEmail(email)}
+                style={{
+                  padding: "12px 16px",
+                  borderBottom: "1px solid #F8F6F4",
+                  borderLeft: selectedEmail?.id === email.id ? "3px solid #D89880" : "3px solid transparent",
+                  background: selectedEmail?.id === email.id ? "#FFFBF7" : "white",
+                  cursor: "pointer",
+                  transition: "all 0.3s ease"
+                }}
+                onMouseEnter={(e) => {
+                  if (selectedEmail?.id !== email.id) {
+                    e.currentTarget.style.background = "#FDF9F5";
+                    e.currentTarget.style.borderLeft = "3px solid #F0E6DC";
+                  }
+                }}
+                onMouseLeave={(e) => {
+                  if (selectedEmail?.id !== email.id) {
+                    e.currentTarget.style.background = "white";
+                    e.currentTarget.style.borderLeft = "3px solid transparent";
+                  }
+                }}
+              >
+                <div className="flex items-start justify-between mb-2">
+                  <div>
+                    <div style={{ fontSize: "12px", fontWeight: email.unread ? 400 : 300, color: "#2A2A2A", marginBottom: "2px", letterSpacing: "0.01em" }}>{email.from}</div>
+                    <div style={{ fontSize: "10px", fontWeight: 300, color: "#999" }}>{email.email}</div>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <Star style={{ width: "12px", height: "12px", color: "#D89880", fill: "#D89880", strokeWidth: 1.5 }} />
+                    <span style={{ fontSize: "9px", color: "#999", fontWeight: 300 }}>{email.time}</span>
+                  </div>
+                </div>
+                <div style={{ fontSize: "13px", fontWeight: email.unread ? 400 : 300, color: "#2A2A2A", marginBottom: "6px", lineHeight: "1.4", letterSpacing: "0.005em" }}>{email.subject}</div>
+                <div style={{ fontSize: "11px", fontWeight: 300, color: "#666", lineHeight: "1.5", letterSpacing: "0.005em", marginBottom: "8px" }}>{email.preview}</div>
+                <div className="flex items-center gap-2">
+                  {[{ icon: Reply, label: "Reply" }, { icon: Forward, label: "Forward" }, { icon: Archive, label: "Archive" }, { icon: AlertCircle, label: "Spam" }, { icon: Trash2, label: "Delete" }, { icon: Pin, label: "Pin" }, { icon: Star, label: "Unstar" }].map((action) => (
+                    <button key={action.label} onClick={(e) => { e.stopPropagation(); if (action.label === 'Reply') handleReply(email.id); else if (action.label === 'Forward') handleForward(email.id); else if (action.label === 'Archive') handleArchive(email.id); else if (action.label === 'Spam') handleSpam(email.id); else if (action.label === 'Delete') handleDelete(email.id); else if (action.label === 'Pin') handlePin(email.id); else if (action.label === 'Unstar') handleStar(email.id); }} style={{ background: "none", border: "none", cursor: "pointer", padding: 0, transition: "all 0.2s ease", position: "relative" }} onMouseEnter={(e) => { const icon = e.currentTarget.querySelector('svg') as any; if (icon) icon.style.color = "#D89880"; const rect = e.currentTarget.getBoundingClientRect(); setHoveredTooltip({ label: action.label, x: rect.left + rect.width / 2, y: rect.bottom + 8 }); }} onMouseLeave={(e) => { const icon = e.currentTarget.querySelector('svg') as any; if (icon) icon.style.color = "#999"; setHoveredTooltip(null); }}>
+                      <action.icon style={{ width: "14px", height: "14px", color: action.label === 'Unstar' ? "#D89880" : "#999", fill: action.label === 'Unstar' ? "#D89880" : "none", strokeWidth: 1.5, transition: "color 0.2s ease" }} />
+                    </button>
+                  ))}
+                </div>
               </div>
-            )}
+            ))}
 
             {/* Drafts View */}
             {activeView === 'Drafts' && (
