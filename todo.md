@@ -501,3 +501,31 @@
 - [x] Insert template into compose mode
 - [x] Use Template button in compose header
 - [x] Template grid selector UI
+
+
+## ADDITIONAL AI FEATURES (Nov 7, 2025) - User Priority
+
+### AI Email Thread Summary
+- [x] Automatically summarize key points of current email thread
+- [x] Display summary at top of email for quick reference
+- [x] Summary card with AI icon and key points
+- [x] Extract action items displayed in summary
+
+### Smart Reply
+- [x] AI-powered Smart Reply feature
+- [x] Suggest three context-aware responses
+- [x] Display suggestions below email content
+- [x] Click to insert suggestion into reply
+- [x] Context-aware suggestions based on email content
+
+### Auto-Tagging & Tag Management
+- [x] Automatically detect and tag emails by category
+- [x] Default categories: Urgent, Meeting, Receipt, Invoice, Newsletter, Personal, Work
+- [x] Display tags as colored badges on emails in inbox
+- [x] AI analyzes email content to determine category
+- [ ] Create custom tags (name + color picker)
+- [ ] Edit existing tags (rename, change color)
+- [ ] Delete tags from system
+- [ ] Apply/remove tags manually on emails
+- [ ] Tag management UI in Settings or as modal
+- [ ] Tag library showing all available tags

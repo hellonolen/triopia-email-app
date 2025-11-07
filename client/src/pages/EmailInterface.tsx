@@ -12,9 +12,9 @@ import { Mail, Send, Archive, Trash2, Star, Clock, CheckCircle2, Pause, Home, In
  */
 
 const mockEmails = [
-  { id: 1, from: "Sarah Johnson", email: "sarah@startup.com", subject: "Welcome to your new chapter", preview: "Excited to have you on board! Let's schedule a kickoff call...", time: "Nov 6, 2:30 PM", unread: true, starred: false },
-  { id: 2, from: "David Chen", email: "david@company.com", subject: "Q4 Marketing Strategy Review", preview: "I wanted to share the preliminary results from our Q4 marketing campaign...", time: "Nov 6, 1:15 PM", unread: true, starred: true },
-  { id: 3, from: "Emily Rodriguez", email: "emily@agency.co", subject: "Project Update", preview: "Let me know if this works for you. Looking forward to our meeting...", time: "Nov 6, 12:48 PM", unread: false, starred: false },
+  { id: 1, from: "Sarah Johnson", email: "sarah@startup.com", subject: "Welcome to your new chapter", preview: "Excited to have you on board! Let's schedule a kickoff call...", time: "Nov 6, 2:30 PM", unread: true, starred: false, tags: [2] }, // Meeting
+  { id: 2, from: "David Chen", email: "david@company.com", subject: "Q4 Marketing Strategy Review", preview: "I wanted to share the preliminary results from our Q4 marketing campaign...", time: "Nov 6, 1:15 PM", unread: true, starred: true, tags: [1, 7] }, // Urgent, Work
+  { id: 3, from: "Emily Rodriguez", email: "emily@agency.co", subject: "Project Update", preview: "Let me know if this works for you. Looking forward to our meeting...", time: "Nov 6, 12:48 PM", unread: false, starred: false, tags: [7] }, // Work
 ];
 
 const mockAccounts = [
@@ -82,6 +82,17 @@ export default function ClaudeRefinedDemo() {
     { id: 3, name: 'Introduction', subject: 'Introduction', body: 'Hi,\n\nI hope this email finds you well. I wanted to introduce myself...\n\nBest regards' },
     { id: 4, name: 'Thank You', subject: 'Thank You', body: 'Hi,\n\nThank you for taking the time to...\n\nI appreciate your help.' }
   ];
+  const [tags, setTags] = useState([
+    { id: 1, name: 'Urgent', color: '#FF4444' },
+    { id: 2, name: 'Meeting', color: '#4A90E2' },
+    { id: 3, name: 'Receipt', color: '#50C878' },
+    { id: 4, name: 'Invoice', color: '#FFA500' },
+    { id: 5, name: 'Newsletter', color: '#9B59B6' },
+    { id: 6, name: 'Personal', color: '#E91E63' },
+    { id: 7, name: 'Work', color: '#607D8B' }
+  ]);
+  const [showTagManager, setShowTagManager] = useState(false);
+  const [editingTag, setEditingTag] = useState<{id: number, name: string, color: string} | null>(null);
 
   // Email action handlers
   const [isReplying, setIsReplying] = useState(false);
@@ -756,6 +767,30 @@ export default function ClaudeRefinedDemo() {
                 }}>
                   {email.preview}
                 </div>
+                {/* AI Auto-Tags */}
+                {email.tags && email.tags.length > 0 && (
+                  <div style={{ display: "flex", gap: "4px", marginBottom: "8px", flexWrap: "wrap" }}>
+                    {email.tags.map(tagId => {
+                      const tag = tags.find(t => t.id === tagId);
+                      if (!tag) return null;
+                      return (
+                        <span
+                          key={tagId}
+                          style={{
+                            padding: "2px 8px",
+                            fontSize: "9px",
+                            fontWeight: 300,
+                            color: "white",
+                            background: tag.color,
+                            borderRadius: "3px"
+                          }}
+                        >
+                          {tag.name}
+                        </span>
+                      );
+                    })}
+                  </div>
+                )}
                 {/* Email action icons - consistent with top/bottom */}
                 <div className="flex items-center gap-2">
                   {[
@@ -1304,6 +1339,31 @@ export default function ClaudeRefinedDemo() {
               {selectedEmail.subject}
             </h1>
 
+            {/* AI Email Summary */}
+            <div style={{
+              marginBottom: "20px",
+              padding: "16px",
+              background: "#FFFBF7",
+              borderRadius: "8px",
+              border: "1px solid #F0EBE6"
+            }}>
+              <div style={{ display: "flex", alignItems: "center", gap: "8px", marginBottom: "12px" }}>
+                <Bot style={{ width: "16px", height: "16px", color: "#D89880", strokeWidth: 1.5 }} />
+                <span style={{ fontSize: "12px", fontWeight: 400, color: "#2A2A2A" }}>AI Summary</span>
+              </div>
+              <div style={{ fontSize: "12px", fontWeight: 300, color: "#666", lineHeight: "1.6" }}>
+                <strong>Key Points:</strong>
+                <ul style={{ marginTop: "8px", marginLeft: "16px", listStyle: "disc" }}>
+                  <li>Welcome message for new chapter and transition</li>
+                  <li>Team committed to providing support and resources</li>
+                  <li>Invitation to schedule kickoff call</li>
+                </ul>
+                <div style={{ marginTop: "8px" }}>
+                  <strong>Action Items:</strong> Schedule kickoff call
+                </div>
+              </div>
+            </div>
+            
             <div className="flex items-center gap-3 mb-8 pb-6" style={{ borderBottom: "1px solid #F0EBE6" }}>
               <div style={{
                 width: "32px",
@@ -1447,6 +1507,58 @@ export default function ClaudeRefinedDemo() {
               >
                 Save to Contacts
               </button>
+            </div>
+
+            {/* Smart Reply Suggestions */}
+            <div style={{
+              marginTop: "24px",
+              padding: "16px",
+              background: "#FFFBF7",
+              borderRadius: "8px",
+              border: "1px solid #F0EBE6"
+            }}>
+              <div style={{ display: "flex", alignItems: "center", gap: "8px", marginBottom: "12px" }}>
+                <Zap style={{ width: "16px", height: "16px", color: "#D89880", strokeWidth: 1.5 }} />
+                <span style={{ fontSize: "12px", fontWeight: 400, color: "#2A2A2A" }}>Smart Reply</span>
+              </div>
+              <div style={{ display: "flex", flexDirection: "column", gap: "8px" }}>
+                {[
+                  "Thanks for reaching out! I'd be happy to schedule a call. What times work best for you?",
+                  "I appreciate the warm welcome! Looking forward to working together.",
+                  "This sounds exciting! Let's set up a time to discuss the details."
+                ].map((suggestion, idx) => (
+                  <button
+                    key={idx}
+                    onClick={() => {
+                      setIsReplying(true);
+                      // TODO: Insert suggestion into reply textarea
+                    }}
+                    style={{
+                      padding: "12px",
+                      background: "white",
+                      border: "1px solid #F0EBE6",
+                      borderRadius: "4px",
+                      textAlign: "left",
+                      fontSize: "12px",
+                      fontWeight: 300,
+                      color: "#2A2A2A",
+                      cursor: "pointer",
+                      transition: "all 0.2s ease",
+                      lineHeight: "1.5"
+                    }}
+                    onMouseEnter={(e) => {
+                      e.currentTarget.style.borderColor = "#D89880";
+                      e.currentTarget.style.background = "#FFFBF7";
+                    }}
+                    onMouseLeave={(e) => {
+                      e.currentTarget.style.borderColor = "#F0EBE6";
+                      e.currentTarget.style.background = "white";
+                    }}
+                  >
+                    {suggestion}
+                  </button>
+                ))}
+              </div>
             </div>
 
             {/* Bottom Email Actions - Icon Only */}
