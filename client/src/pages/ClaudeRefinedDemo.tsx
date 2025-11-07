@@ -80,15 +80,7 @@ export default function ClaudeRefinedDemo() {
           }}>
             TRIOPIA
           </h1>
-          <div style={{
-            fontSize: "9px",
-            fontWeight: 300,
-            color: "#999",
-            letterSpacing: "0.15em",
-            textTransform: "uppercase"
-          }}>
-            Claude Aesthetic
-          </div>
+
         </div>
       </div>
 
@@ -710,6 +702,53 @@ export default function ClaudeRefinedDemo() {
                 Best regards,<br />
                 {selectedEmail.from}
               </p>
+            </div>
+
+            {/* Bottom Email Actions */}
+            <div style={{
+              marginTop: "40px",
+              paddingTop: "24px",
+              borderTop: "1px solid #F0EBE6",
+              display: "flex",
+              gap: "16px"
+            }}>
+              {[
+                { icon: Send, label: "Reply" },
+                { icon: Mail, label: "Forward" },
+                { icon: Archive, label: "Archive" },
+                { icon: AlertCircle, label: "Spam" },
+                { icon: Trash2, label: "Delete" },
+              ].map((action) => (
+                <button
+                  key={action.label}
+                  style={{
+                    padding: "8px 16px",
+                    background: "transparent",
+                    border: "1px solid #F0EBE6",
+                    borderRadius: "6px",
+                    color: "#666",
+                    fontSize: "11px",
+                    fontWeight: 300,
+                    letterSpacing: "0.02em",
+                    cursor: "pointer",
+                    transition: "all 0.2s ease",
+                    display: "flex",
+                    alignItems: "center",
+                    gap: "6px"
+                  }}
+                  onMouseEnter={(e) => {
+                    e.currentTarget.style.borderColor = "#D89880";
+                    e.currentTarget.style.color = "#D89880";
+                  }}
+                  onMouseLeave={(e) => {
+                    e.currentTarget.style.borderColor = "#F0EBE6";
+                    e.currentTarget.style.color = "#666";
+                  }}
+                >
+                  <action.icon style={{ width: "14px", height: "14px", strokeWidth: 1.5 }} />
+                  {action.label}
+                </button>
+              ))}
             </div>
           </div>
         </div>
