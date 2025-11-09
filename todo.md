@@ -503,8 +503,8 @@
 - [x] Move email app back to root / route
 - [x] Update sidebar links to remove /app prefix
 - [x] Remove ALL pagination query params from code
-- [ ] Test triopia.com/ goes directly to email app
-- [ ] Test triopia.com/ shows NO query params
+- [x] Test triopia.com/ goes directly to email app
+- [x] Test triopia.com/ shows NO query params
 
 ## ADMIN PANEL NOT DISPLAYING (URGENT)
 
@@ -537,3 +537,11 @@
 - [ ] Remove ALL pagination query params from code
 - [ ] Test triopia.com/ goes directly to email app
 - [ ] Test triopia.com/ shows NO query params
+
+## TRULY DYNAMIC ROUTING (WordPress-style Clean URLs)
+
+- [ ] Remove ALL hard-coded path construction in SidebarNav
+- [ ] Make sidebar generate relative links (just the route name, no slashes)
+- [ ] Router should handle path construction, not the component
+- [ ] Links should be like `href={label}` not `href={/${label}}`
+- [ ] Test that URLs are truly clean and dynamic
